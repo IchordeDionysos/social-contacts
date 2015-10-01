@@ -1,0 +1,81 @@
+<dom-module id="books-section">
+  <style>
+    paper-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 44px;
+    }
+  </style>
+  <template>
+              
+    <book-add on-added-book="_addBook"></book-add>
+    
+    <paper-material>
+      <!--<template is="dom-if" if="{{books}}">-->
+        <table width="100%">
+          <tr>
+            <th>Buch-ID</th>
+            <th>Author</th>
+            <th>Originaltitel</th>
+            <th>Sprache</th>
+            <th>Status</th>
+          </tr>
+          <template is="dom-repeat" 
+                    items="{{data}}"
+                    as="book">
+            <tr on-tap="_openBookDialog">
+              <td>{{book.id}}</td>
+              <td>{{book.author}}</td>
+              <td>{{book.original}}</td>
+              <td>{{book.language}}</td>
+              <td>{{book.status}}</td>
+            </tr>
+          </template>
+        </table>
+      <!--</template>-->
+      <!--<template is="dom-if" if="{{!books}}">-->
+        <paper-item style="display:flex;">Noch keine Bücher eingetragen!</paper-item>
+        <paper-button on-tap="_openAddBookDialog" style="display:block;">Buch eintragen</paper-button>
+      <!--</template>-->
+    </paper-material>
+    <paper-fab icon="add" id="add" on-tap="_openAddBookDialog"></paper-fab>
+  </template>
+  <script>
+    Polymer({
+      is: 'books-section',
+      
+      properties: {
+        data: {
+          notify: true
+        }
+      },
+      
+      _openAddBookDialog: function() {
+        var dialog = document.getElementById("addBookDialog");
+        if(dialog) {
+          dialog.open();
+        }
+      },
+      
+      _addBook: function(e) {
+        
+        
+        this.push('data', {
+          author: e.detail.author,
+          original: e.detail.original,
+          title: e.detail.title,
+          language: e.detail.language,
+          tags: e.detail.tags,
+          price: e.detail.price,
+          dedication: e.detail.dedication
+        });
+        
+
+      },
+      
+      _openBookDialog: function() {
+        
+      }
+    });
+  </script>
+</dom-module>

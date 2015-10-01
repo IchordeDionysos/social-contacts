@@ -1,0 +1,84 @@
+<dom-module id="app-data">
+  <style>
+  
+  </style>
+  <template>
+    <firebase-auth id="auth" 
+                   user="{{user}}"
+                   location="{{location}}"
+                   provider="google">
+    </firebase-auth>
+    
+    <firebase-collection location="{{userLocation}}"
+                         ref="{{ref}}"
+                         data="{{fbData}}"
+                         on-firebase-value="_firebaseLoaded"
+                         log>
+    </firebase-collection>
+    <!--
+    <iron-localstorage name="social-contacts"
+                       on-iron-localstorage-load="_backupLoaded"
+                       value="{{backupData}}">
+    </iron-localstorage>
+    -->
+    <paper-dialog modal
+                  opened="{{!user}}"
+                  entry-animation="scale-up-animation"
+                  exit-animation="fade-out-animation"
+                  on-tap="signIn">
+      <h2>Oh hai! Meld dich bitte an</h2>
+      <div class="google-sign-in">
+        Google
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'app-data',
+      
+      properties: {
+        data: {
+          notify: true
+        },
+        user: {
+          observer: '_userChanged'
+        },
+        _firebaseConneted: {
+          value: false
+        }
+      },
+      
+      signIn: function() {
+        this.$.auth.login();
+        console.log('Logged in');
+      },
+      
+      signOut: function() {
+        this.ref.unauth();
+        this.user = null;
+      },
+      
+      _userChanged: function(user) {
+        if(user) {
+          this.userLocation = [this.location, 'users', this.user.uid].join('/');
+          console.log(this.userLocation);
+        }
+      },
+      
+      _firebaseLoaded: function() {
+        this._firebaseConnected = true;
+        this.data = this.fbData;
+        this.backupData = this.fbData;
+        this.linkPaths('fbData', 'data');
+        this.linkPaths('backupData', 'data');
+      },
+      
+      _backupLoaded: function() {
+        if(!this._firebaseConnected) {
+          this.data = this.backupData.slice();
+        }
+      }
+      
+    });
+  </script>
+</dom-module>

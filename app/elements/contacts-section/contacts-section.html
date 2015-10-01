@@ -1,0 +1,45 @@
+<link href="../contacts-list/contacts-list.html" rel="import">
+<dom-module id="contacts-section">
+  <style>
+    paper-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 44px;
+    }
+  </style>
+  <template>
+    <paper-material>
+      <!--<template is="dom-if" if="{{contacts}}">-->
+        <contact-list contacts="{{contacts}}"></contact-list>
+      <!--</template>-->
+      <!--<template is="dom-if" if="{{!contacts}}">-->
+        <paper-item style="display:flex;">Noch keine Kontakte eingetragen!</paper-item>
+        <paper-button on-tap="_addContact" 
+                      style="display:block;">Kontakt eintragen</paper-button>
+        <paper-button on-tap="_importContacts" 
+                      style="display:block;">Kontakte importieren</paper-button>
+      <!--</template>-->
+    </paper-material>
+    <paper-fab icon="add" id="add" on-tap="_addBook"></paper-fab>
+    </template>
+  <script>
+    Polymer({
+      is: 'contacts-section',
+      
+      properties: {
+        contacts: {
+          type: Object,
+          notify: true
+        }
+      },
+      
+      _addContact: function() {
+        
+      },
+      
+      _importContacts: function() {
+        
+      }
+    });
+  </script>
+</dom-module>

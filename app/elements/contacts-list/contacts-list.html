@@ -1,0 +1,30 @@
+<link href="../contacts-item/contacts-item.html" rel="import">
+<dom-module id="contacts-list">
+  <style>
+    
+  </style>
+  <template>
+    <template is="dom-repeat" items="{{contacts}}" as="{{contact}}">
+      <contact-item contact={{contact}} 
+                    on-tap="_openContactDialog">
+      </contact-item>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'contacts-list',
+      
+      properties: {
+        contacts: {
+          type: Object,
+          notify: true
+        }
+      },
+      
+      _addBook: function() {
+        
+      }
+
+    });
+  </script>
+</dom-module>
