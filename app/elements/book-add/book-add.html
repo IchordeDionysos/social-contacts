@@ -56,28 +56,28 @@
       },
       
       _clearDialog: function() {
-        this.author = "";
-        this.original = "";
-        this.title = "";
-        this.language = "";
-        this.tags = "";
-        this.amount = "";
-        this.price = "";
+        this.author = '';
+        this.original = '';
+        this.title = '';
+        this.language = '';
+        this.tags = '';
+        this.amount = '';
+        this.price = '';
         this.dedication = false;
       },
       
       _addBook: function() {
-        for(i=0; i<this.amount; i++) {
-          this.fire('added-book', {
-            author: this.author,
-            original: this.original,
-            title: this.title,
-            language: this.language,
-            tags: this.tags,
-            price: this.price,
-            dedication: this.dedication
-          });
-        }
+        this.fire('added-book', {
+          author: this.author,
+          original: this.original,
+          title: this.title,
+          language: this.language,
+          tags: this.tags,
+          price: this.price,
+          dedication: this.dedication,
+          amount: this.amount
+        });
+        this._clearDialog();
       }
       
     });

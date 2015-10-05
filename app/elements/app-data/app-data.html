@@ -45,6 +45,9 @@
         },
         _firebaseConneted: {
           value: false
+        },
+        directory: {
+          type: String
         }
       },
       
@@ -60,7 +63,10 @@
       
       _userChanged: function(user) {
         if(user) {
-          this.userLocation = [this.location, 'users', this.user.uid].join('/');
+          console.log(this.location);
+          console.log(this.directory);
+          console.log(this.user.uid);
+          this.userLocation = [this.location, this.directory, this.user.uid].join('/');
           console.log(this.userLocation);
         }
       },

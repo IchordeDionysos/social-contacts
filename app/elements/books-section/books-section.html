@@ -9,34 +9,8 @@
   <template>
               
     <book-add on-added-book="_addBook"></book-add>
-    
     <paper-material>
-      <!--<template is="dom-if" if="{{books}}">-->
-        <table width="100%">
-          <tr>
-            <th>Buch-ID</th>
-            <th>Author</th>
-            <th>Originaltitel</th>
-            <th>Sprache</th>
-            <th>Status</th>
-          </tr>
-          <template is="dom-repeat" 
-                    items="{{data}}"
-                    as="book">
-            <tr on-tap="_openBookDialog">
-              <td>{{book.id}}</td>
-              <td>{{book.author}}</td>
-              <td>{{book.original}}</td>
-              <td>{{book.language}}</td>
-              <td>{{book.status}}</td>
-            </tr>
-          </template>
-        </table>
-      <!--</template>-->
-      <!--<template is="dom-if" if="{{!books}}">-->
-        <paper-item style="display:flex;">Noch keine Bücher eingetragen!</paper-item>
-        <paper-button on-tap="_openAddBookDialog" style="display:block;">Buch eintragen</paper-button>
-      <!--</template>-->
+      <books-list books="{{books}}"></books-list>
     </paper-material>
     <paper-fab icon="add" id="add" on-tap="_openAddBookDialog"></paper-fab>
   </template>
@@ -45,32 +19,61 @@
       is: 'books-section',
       
       properties: {
-        data: {
+        books: {
           notify: true
+        },
+        id: {
+          type: Number
         }
       },
       
+      observers: [
+        '_booksChanged(books.*)'
+      ],
+      
+      _booksChanged: function(books) {
+        console.log(books);
+        var ID = this._computeID(this.books);
+        console.log('ID changed(' + ID + ')');
+        this.id = ID;
+      },
+      
+      _computeID: function(books) {
+        var id=1;
+        console.log('computing id:');
+        console.log(books);
+        for(var i=0; i<books.length; i++) {
+          console.log(books[i].id);
+          if(books[i].id>id) {
+            id = books[i].id;
+          }
+        }
+        id++;
+        console.log('ID: ' + id);
+    
+        return id;
+      },
+      
       _openAddBookDialog: function() {
-        var dialog = document.getElementById("addBookDialog");
+        var dialog = document.getElementById('addBookDialog');
         if(dialog) {
           dialog.open();
         }
       },
       
       _addBook: function(e) {
-        
-        
-        this.push('data', {
-          author: e.detail.author,
-          original: e.detail.original,
-          title: e.detail.title,
-          language: e.detail.language,
-          tags: e.detail.tags,
-          price: e.detail.price,
-          dedication: e.detail.dedication
-        });
-        
-
+        for(var i=0; i<e.detail.amount; i++) {
+          this.push('books', {
+            id: this.id,
+            author: e.detail.author,
+            original: e.detail.original,
+            title: e.detail.title,
+            language: e.detail.language,
+            tags: e.detail.tags,
+            price: e.detail.price,
+            dedication: e.detail.dedication
+          });
+        }
       },
       
       _openBookDialog: function() {

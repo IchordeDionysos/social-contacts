@@ -1,0 +1,44 @@
+<dom-module id="books-list">
+  <style>
+  </style>
+  <template>
+    <template is="dom-if" if="{{books}}">
+      <table width="100%">
+        <tr>
+          <th>Buch-ID</th>
+          <th>Author</th>
+          <th>Originaltitel</th>
+          <th>Sprache</th>
+          <th>Status</th>
+        </tr>
+        <template is="dom-repeat" 
+                  items="{{books}}"
+                  as="book">
+          <tr>
+            <td>{{book.id}}</td>
+            <td>{{book.author}}</td>
+            <td>{{book.original}}</td>
+            <td>{{book.language}}</td>
+            <td>{{book.status}}</td>
+          </tr>
+        </template>
+      </table>
+    </template>
+    <template is="dom-if" if="{{!books}}">
+      <paper-item style="display:flex;">Noch keine Bücher eingetragen!</paper-item>
+      <paper-button on-tap="_openAddBookDialog" style="display:block;">Buch eintragen</paper-button>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'books-list',
+      
+      properties: {
+        books: {
+          notify: true
+        }
+      }
+      
+    });
+  </script>
+</dom-module>
