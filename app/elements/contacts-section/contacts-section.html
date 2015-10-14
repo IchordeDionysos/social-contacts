@@ -1,4 +1,3 @@
-<link href="../contacts-list/contacts-list.html" rel="import">
 <dom-module id="contacts-section">
   <style>
     paper-fab {
@@ -8,37 +7,33 @@
     }
   </style>
   <template>
+    <contact-add on-added-contact="_addContact"></contact-add>
+    
     <paper-material>
-      <!--<template is="dom-if" if="{{contacts}}">-->
-        <contact-list contacts="{{contacts}}"></contact-list>
-      <!--</template>-->
-      <!--<template is="dom-if" if="{{!contacts}}">-->
-        <paper-item style="display:flex;">Noch keine Kontakte eingetragen!</paper-item>
-        <paper-button on-tap="_addContact" 
-                      style="display:block;">Kontakt eintragen</paper-button>
-        <paper-button on-tap="_importContacts" 
-                      style="display:block;">Kontakte importieren</paper-button>
-      <!--</template>-->
+      <contacts-list contacts="{{contacts}}"></contacts-list>
     </paper-material>
-    <paper-fab icon="add" id="add" on-tap="_addBook"></paper-fab>
-    </template>
+    <paper-fab icon="social:person-add" id="add" on-tap="_openAddContactDialog"></paper-fab>
+  </template>
   <script>
     Polymer({
       is: 'contacts-section',
       
       properties: {
         contacts: {
-          type: Object,
           notify: true
         }
       },
       
-      _addContact: function() {
-        
+      _openAddContactDialog: function() {
+        var dialog = document.getElementById('addContactDialog');
+        if(dialog) {
+          dialog.open();
+        }
       },
-      
-      _importContacts: function() {
-        
+      _addContact: function(e) {
+        this.push('contact', {
+          name: e.detail.name
+        });
       }
     });
   </script>

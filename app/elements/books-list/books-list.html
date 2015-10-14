@@ -1,28 +1,24 @@
 <dom-module id="books-list">
   <style>
+    span {
+      flex-basis: 100%;
+      margin: auto;
+    }
   </style>
   <template>
     <template is="dom-if" if="{{books}}">
-      <table width="100%">
-        <tr>
-          <th>Buch-ID</th>
-          <th>Author</th>
-          <th>Originaltitel</th>
-          <th>Sprache</th>
-          <th>Status</th>
-        </tr>
-        <template is="dom-repeat" 
-                  items="{{books}}"
-                  as="book">
-          <tr>
-            <td>{{book.id}}</td>
-            <td>{{book.author}}</td>
-            <td>{{book.original}}</td>
-            <td>{{book.language}}</td>
-            <td>{{book.status}}</td>
-          </tr>
-        </template>
-      </table>
+      <paper-item display="flex">
+        <span>Buch-ID</span>
+        <span>Author</span>
+        <span>Originaltitel</span>
+        <span>Sprache</span>
+        <span>Status</span>
+      </paper-item>
+      <template is="dom-repeat" 
+                items="{{books}}"
+                as="book">
+        <book-item book="{{book}}"></book-item>
+      </template>
     </template>
     <template is="dom-if" if="{{!books}}">
       <paper-item style="display:flex;">Noch keine Bücher eingetragen!</paper-item>

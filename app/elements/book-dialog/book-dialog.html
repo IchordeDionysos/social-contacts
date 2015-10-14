@@ -1,0 +1,32 @@
+<dom-module id="book-dialog">
+  <style>
+  </style>
+  <template>
+    <paper-dialog entry-animation="scale-up-animation"
+                  exit-animation="fade-out-animation"
+                  class="bookDialog"
+                  opened="{{opened}}">
+      <paper-item>{{book.id}}</paper-item>
+    </paper-dialog>
+                  
+  </template>
+  <script>
+    Polymer({
+      is: 'book-dialog',
+      
+      properties: {
+        book: {
+          notify: true
+        },
+        dialogId: {
+          type: String,
+          notify: true
+        },
+        opened: {
+          type: Boolean,
+          value: false
+        }
+      }
+    });
+  </script>
+</dom-module>

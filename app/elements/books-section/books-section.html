@@ -7,10 +7,10 @@
     }
   </style>
   <template>
-              
     <book-add on-added-book="_addBook"></book-add>
+    
     <paper-material>
-      <books-list books="{{books}}"></books-list>
+      <books-list on-open-book-dialog="_openBookDialog" books="{{books}}"></books-list>
     </paper-material>
     <paper-fab icon="add" id="add" on-tap="_openAddBookDialog"></paper-fab>
   </template>
