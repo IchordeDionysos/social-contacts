@@ -1,13 +1,108 @@
 <dom-module id="feedback-section">
   <style>
+    paper-checkbox.red {
+      --paper-checkbox-checked-color: #D50000; 
+    }
 
+    paper-checkbox.green {
+      --paper-checkbox-checked-color: #4CAF50; 
+    }
+
+    paper-checkbox.pink {
+      --paper-checkbox-checked-color: #E91E63; 
+    }
+
+    paper-checkbox.purple {
+      --paper-checkbox-checked-color: #AB47BC; 
+    }
+
+    paper-checkbox.blue {
+      --paper-checkbox-checked-color: #0D47A1; 
+    }
+
+    paper-checkbox.light-blue {
+      --paper-checkbox-checked-color: #03A9F4; 
+    }
+
+    paper-button {
+      margin-top: 10px;
+    }
+
+    paper-button.green {
+      color: #4CAF50;
+    }
   </style>
   <template>
+  	<paper-material>
+        <paper-item>Feedback</paper-item>
+        <paper-input label="Titel" value="{{params.title}}"></paper-input>
+        <paper-textarea label="Body" value="{{params.body}}"></paper-textarea>
+        <paper-item>Wähle alle passende Labels aus:</paper-item>
+        <paper-checkbox id="bug" class="red" value="bug">Bug</paper-checkbox>
+        <paper-checkbox id="help" class="green" value="help">Hilfe</paper-checkbox>
+        <paper-checkbox id="question" class="pink" value="question">Frage</paper-checkbox>
+        <paper-checkbox id="feature" class="purple" value="feature">Feature</paper-checkbox>
+        <paper-checkbox id="enhancement" class="blue" value="enhancement">Verbesserung</paper-checkbox>
+        <paper-checkbox id="design" class="light-blue" value="design">Design Vorschlag</paper-checkbox>
+        <paper-button class="green ripple" on-tap="submitIssue" raised>Absenden</paper-button>
+    </paper-material>
+  	<iron-ajax
+      id="githubIssues"
+  		url="https://api.github.com/repos/IchordeDionysos/social-contacts/issues"
+  		method="POST"
+  		params="[[params]]"
+      verbose
+      handle-as="json"
+  		on-response="showSuccess">
 
+  	</iron-ajax>
+  	<paper-toast id="issueCreated" text="Feedback send">
+  	</paper-toast>
   </template>
   <script>
     Polymer({
       is: 'feedback-section',
+
+      properties : {
+      	params: {
+      		notify: true,
+      		type: Object,
+          value: {
+            "title": "",
+            "body": "",
+            "assignee": "IchordeDionysos",
+            "access_token": "efd925cc3c8d593b720f0d6a88f3c36f593e063a",
+            "labels": ["0 - Backlog"]
+          }
+      	}
+      },
+
+      showSuccess: function () {
+      	this.$.issueCreated.show();
+      },
+
+      submitIssue: function() {
+        if (this.$.bug.checked) {
+          this.push('params.labels', 'bug');
+        };
+        if (this.$.help.checked) {
+          this.push('params.labels', 'help');
+        };
+        if (this.$.question.checked) {
+          this.push('params.labels', 'question');
+        };
+        if (this.$.feature.checked) {
+          this.push('params.labels', 'feature');
+        };
+        if (this.$.enhancement.checked) {
+          this.push('params.labels', 'enhancement');
+        };
+        if (this.$.design.checked) {
+          this.push('params.labels', 'design');
+        };
+        console.log(this.params);
+        this.$.githubIssues.generateRequest();
+      }
 
     });
   </script>
