@@ -14,15 +14,31 @@
         <span>Sprache</span>
         <span>Status</span>
       </paper-item>
-      <template is="dom-repeat" 
-                items="{{books}}"
-                as="book">
-        <book-item book="{{book}}"></book-item>
-      </template>
+      <iron-list items="{{books}}"
+                as="book"
+                selection-enabled
+                selected-item="{{selected}}">
+        <template>
+          <paper-item>
+            <span>{{book.id}}</span>
+            <span>{{book.author}}</span>
+            <span>{{book.original}}</span>
+            <span>{{book.language}}</span>
+            <span>{{book.status}}</span>
+          </paper-item>
+        </template>
+      </iron-list>
     </template>
     <template is="dom-if" if="{{!books}}">
-      <paper-item style="display:flex;">Noch keine Bücher eingetragen!</paper-item>
-      <paper-button on-tap="_openAddBookDialog" style="display:block;">Buch eintragen</paper-button>
+      <paper-item 
+          style="display:flex;">
+          Noch keine Bücher eingetragen!
+      </paper-item>
+      <paper-button 
+          on-tap="_openAddBookDialog" 
+          style="display:block;">
+          Buch eintragen
+      </paper-button>
     </template>
   </template>
   <script>
@@ -31,6 +47,9 @@
       
       properties: {
         books: {
+          notify: true
+        },
+        selected: {
           notify: true
         }
       }

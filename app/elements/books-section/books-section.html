@@ -9,8 +9,14 @@
   <template>
     <book-add on-added-book="_addBook"></book-add>
     
+    <book-dialog book="{{selected}}"></book-dialog>
+
     <paper-material>
-      <books-list on-open-book-dialog="_openBookDialog" books="{{books}}"></books-list>
+      <books-list 
+        on-open-book-dialog="_openBookDialog" 
+        books="{{books}}"
+        selected="{{selected}}">
+      </books-list>
     </paper-material>
     <paper-fab icon="add" id="add" on-tap="_openAddBookDialog"></paper-fab>
   </template>

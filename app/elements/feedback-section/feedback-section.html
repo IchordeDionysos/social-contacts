@@ -35,8 +35,8 @@
   <template>
   	<paper-material>
         <paper-item>Feedback</paper-item>
-        <paper-input label="Titel" value="{{params.title}}"></paper-input>
-        <paper-textarea label="Body" value="{{params.body}}"></paper-textarea>
+        <paper-input label="Titel" value="{{body.title}}"></paper-input>
+        <paper-textarea label="Body" value="{{body.body}}"></paper-textarea>
         <paper-item>Wähle alle passende Labels aus:</paper-item>
         <paper-checkbox id="bug" class="red" value="bug">Bug</paper-checkbox>
         <paper-checkbox id="help" class="green" value="help">Hilfe</paper-checkbox>
@@ -50,7 +50,8 @@
       id="githubIssues"
   		url="https://api.github.com/repos/IchordeDionysos/social-contacts/issues"
   		method="POST"
-  		params="[[params]]"
+  		body="[[body]]"
+      params='{"access_token": "efd925cc3c8d593b720f0d6a88f3c36f593e063a"}'
       verbose
       handle-as="json"
   		on-response="showSuccess">
@@ -64,14 +65,13 @@
       is: 'feedback-section',
 
       properties : {
-      	params: {
+      	body: {
       		notify: true,
       		type: Object,
           value: {
             "title": "",
             "body": "",
             "assignee": "IchordeDionysos",
-            "access_token": "efd925cc3c8d593b720f0d6a88f3c36f593e063a",
             "labels": ["0 - Backlog"]
           }
       	}
@@ -83,24 +83,24 @@
 
       submitIssue: function() {
         if (this.$.bug.checked) {
-          this.push('params.labels', 'bug');
+          this.push('body.labels', 'bug');
         };
         if (this.$.help.checked) {
-          this.push('params.labels', 'help');
+          this.push('body.labels', 'help');
         };
         if (this.$.question.checked) {
-          this.push('params.labels', 'question');
+          this.push('body.labels', 'question');
         };
         if (this.$.feature.checked) {
-          this.push('params.labels', 'feature');
+          this.push('body.labels', 'feature');
         };
         if (this.$.enhancement.checked) {
-          this.push('params.labels', 'enhancement');
+          this.push('body.labels', 'enhancement');
         };
         if (this.$.design.checked) {
-          this.push('params.labels', 'design');
+          this.push('body.labels', 'design');
         };
-        console.log(this.params);
+        console.log(this.body);
         this.$.githubIssues.generateRequest();
       }
 
