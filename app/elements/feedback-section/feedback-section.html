@@ -35,8 +35,8 @@
   <template>
   	<paper-material>
         <paper-item>Feedback</paper-item>
-        <paper-input label="Titel" value="{{body.title}}"></paper-input>
-        <paper-textarea label="Body" value="{{body.body}}"></paper-textarea>
+        <paper-input id="issueTitle" label="Titel" value="{{body.title}}"></paper-input>
+        <paper-textarea id="issueBody" label="Body" value="{{body.body}}"></paper-textarea>
         <paper-item>Wähle alle passende Labels aus:</paper-item>
         <paper-checkbox id="bug" class="red" value="bug">Bug</paper-checkbox>
         <paper-checkbox id="help" class="green" value="help">Hilfe</paper-checkbox>
@@ -53,12 +53,11 @@
   		body="[[body]]"
       params='{"access_token": "efd925cc3c8d593b720f0d6a88f3c36f593e063a"}'
       verbose
+      content-type="application/json"
       handle-as="json"
   		on-response="showSuccess">
 
   	</iron-ajax>
-  	<paper-toast id="issueCreated" text="Feedback send">
-  	</paper-toast>
   </template>
   <script>
     Polymer({
@@ -78,7 +77,22 @@
       },
 
       showSuccess: function () {
-      	this.$.issueCreated.show();
+      	document.querySelector('#issueCreated').show();
+        this.body.labels = ["0 - Backlog"];
+        //this.body.title = "";
+        this.$.issueTitle.value = "";
+        this.$.issueBody.value = "";
+        //this.body.body = "";
+        this.$.bug.checked = false;
+        this.$.help.checked = false;
+        this.$.question.checked = false;
+        this.$.feature.checked = false;
+        this.$.enhancement.checked = false;
+        this.$.design.checked = false;
+
+        console.log(this.body.title);
+        console.log(this.body.body);
+        console.log(this.body.labels);
       },
 
       submitIssue: function() {
