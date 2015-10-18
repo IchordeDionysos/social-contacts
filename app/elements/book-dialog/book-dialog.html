@@ -2,19 +2,18 @@
   <style>
   </style>
   <template>
-    <paper-dialog entry-animation="scale-up-animation"
-                  exit-animation="fade-out-animation"
-                  class="bookDialog"
-                  opened="{{opened}}"
-                  modal>
-            <paper-icon-button 
-                icon="back"
-                on-tap="closeDialog">
-              </paper-icon-button>
-    </paper-dialog>
-                  
+      <paper-dialog entry-animation="scale-up-animation"
+                    exit-animation="fade-out-animation"
+                    class="bookDialog"
+                    opened="{{opened}}"
+                    modal>
+              <paper-icon-button 
+                  icon="back"
+                  on-tap="closeDialog">
+                </paper-icon-button>
+      </paper-dialog>
   </template>
-  <script>
+  <script>s
     Polymer({
       is: 'book-dialog',
       
@@ -28,12 +27,12 @@
         },
         opened: {
           type: Boolean,
-          value: false
+          notify: true
         }
       },
 
       closeDialog: function () {
-        this.book = null;
+        this.opened = false;
       }
     });
   </script>

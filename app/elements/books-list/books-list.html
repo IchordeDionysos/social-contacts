@@ -6,18 +6,21 @@
     }
   </style>
   <template>
+    <book-dialog opened="{{bookDialog}}" book="{{selected}}"></book-dialog>
     <template is="dom-if" if="{{books}}">
       <paper-item display="flex">
-        <span>Buch-ID</span>
+        <span>{{selected.id}}</span>
         <span>Author</span>
         <span>Originaltitel</span>
         <span>Sprache</span>
         <span>Status</span>
       </paper-item>
-      <iron-list items="{{books}}"
-                as="book"
-                selection-enabled
-                selected-item="{{selected}}">
+      <iron-list
+            id="bookList"
+            items="{{books}}"
+            as="book"
+            selection-enabled
+            selected-item="{{selected}}">
         <template>
           <paper-item>
             <span>{{book.id}}</span>
@@ -50,7 +53,20 @@
           notify: true
         },
         selected: {
-          notify: true
+          notify: true,
+          obsever: '_selectionChanged'
+        },
+        opened: {
+          notify: true,
+          type: Boolean
+        }
+      },
+
+      _selectionChanged: function () {
+        if (this.$.bookList.selectedItem == "") {
+          this.opened = false;
+        } else {
+          this.opened = true;
         }
       }
       
