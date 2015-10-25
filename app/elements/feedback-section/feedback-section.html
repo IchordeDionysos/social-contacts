@@ -36,7 +36,8 @@
   	<paper-material>
         <paper-item>Feedback</paper-item>
         <paper-input id="issueTitle" label="Titel" value="{{body.title}}"></paper-input>
-        <paper-textarea id="issueBody" label="Body" value="{{body.body}}"></paper-textarea>
+        <paper-input id="issueEmail" label="Email (notwendig zur Kontaktaufnahme)" value="{{ghEmail}}"></paper-input>
+        <paper-textarea id="issueBody" label="Body" value="{{ghBody}}"></paper-textarea>
         <paper-item>Wähle alle passende Labels aus:</paper-item>
         <paper-checkbox id="bug" class="red" value="bug">Bug</paper-checkbox>
         <paper-checkbox id="help" class="green" value="help">Hilfe</paper-checkbox>
@@ -72,6 +73,18 @@
             "body": "",
             "assignee": "IchordeDionysos",
             "labels": ["0 - Backlog"]
+          },
+
+          ghBody: {
+            notify: true,
+            type: String,
+            value: ""
+          },
+
+          ghEmail: {
+            notify: true,
+            type: String,
+            value: ""
           }
       	}
       },
@@ -81,6 +94,7 @@
         this.body.labels = ["0 - Backlog"];
         //this.body.title = "";
         this.$.issueTitle.value = "";
+        this.$.issueEmail.value = "";
         this.$.issueBody.value = "";
         //this.body.body = "";
         this.$.bug.checked = false;
@@ -114,6 +128,11 @@
         if (this.$.design.checked) {
           this.push('body.labels', 'design');
         };
+
+        var body = this.ghBody + "\n" + "Email: " + this.ghEmail;
+
+        this.set('body.body', body);
+
         console.log(this.body);
         this.$.githubIssues.generateRequest();
       }
