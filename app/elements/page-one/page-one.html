@@ -1,0 +1,107 @@
+<dom-module id="page-one">
+  <style>
+    paper-card {
+      margin-top: 16px;
+      width: 400px;
+      visibility: hidden;
+    }
+  </style>
+  <template>
+      <paper-card id="card" heading="Allgemein">
+        <div class="card-content">
+          <p>&bull; geometrische Methode der Abstandsmessung</p>
+          <p>&bull; Berechnung durch genaue Winkelmessung</p>
+          <p>[[step]]</p>
+        </div>
+      </paper-card>
+      <paper-card id="card" heading="Trigonometrische Funktionen">
+        <div class="card-content">
+          <p>&bull; sin(&alpha;) = G/H</p>
+          <p>&bull; cos(&alpha;) = A/H</p>
+          <p>&bull; tan(&alpha;) = G/A</p>
+        </div>
+      </paper-card>
+      <paper-card id="card" heading="Prinzip">
+        <div class="card-content">
+          <p>&bull; 2 verschidene Stationen peilen Punkt P an</p>
+          <p>&rArr; Winkel &alpha; und &beta; mit Genauigkeit &Delta;&alpha; und &Delta;&beta;</p>
+          <p>&bull; Basislänge b bekannt </p>
+          <p>&rArr; relativen Koordinaten zum Ursprung</p>
+          <p>&bull; Betrag des Ortsvektors des Punktes P </p>
+          <p>= Abstand vom Ursprung</p>
+        </div>
+      </paper-card>
+      <paper-card id="card" heading="Skizze">
+        <div class="card-content">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Triangulation2d.png/330px-Triangulation2d.png">
+        </div>
+      </paper-card>
+      <paper-card id="card" heading="3D - Probleme">
+        <div class="card-content">
+          <p>Sichtgeraden der Basisstationen im Normalfall windschief.</p>
+          <p>Somit nicht eindeutig lösbar!</p>
+        </div>
+      </paper-card>
+      <paper-card id="card" heading="3D - Lösungsansatz">
+        <div class="card-content">
+          <p>Station 1: Weiterhin Berechnung des Richtungwinkels</p>
+          <p>Station 2: Berechnung der Winkelskomponente in der Ebene aus s1, s2 und P</p>
+          <p>Berechnung des Abstandes aus einer Ebene und einer Gerade (eindeutig lösbar)</p>
+        </div>
+      </paper-card>
+  </template>
+  <script>
+    Polymer({
+      is: 'page-one',
+
+      behaviors: [
+        Polymer.IronA11yKeysBehavior,
+        Polymer.NeonAnimationRunnerBehavior
+      ],
+      
+      properties: {
+        step: {
+          value: 0
+        },
+        keyEventTarget: {
+          type: Object,
+          value: function() {
+            return document.body;
+          }
+        },
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': [
+                // provided by neon-animation/animations/scale-up-animation.html
+                {name: 'slide-from-right-animation', node: this},
+                {animatable: this.$.card, type: 'entry'}
+              ],
+              'exit': {
+                // provided by neon-animation-animations/fade-out-animation.html
+                name: 'fade-out-animation',
+                node: this
+              }
+            }
+          }
+        }
+      },
+
+      keyBindings: {
+        'right space enter': '_next',
+        'left': '_prev'
+      },
+
+      _next: function (event) {
+        this.children[this.step].playAnimation('entry');
+        this.children[this.step].style.visibility = "visible";
+        this.step = this.step==6?6:this.step+1;
+      },
+
+      _prev: function (event) {
+        this.step = this.step==0?0:this.step-1;
+        this.children[this.step].style.visibility = "hidden";
+      }
+    });
+  </script>
+</dom-module>
