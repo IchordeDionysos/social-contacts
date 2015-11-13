@@ -6,10 +6,10 @@
     }
   </style>
   <template>
-    <book-dialog opened="{{bookDialog}}" book="{{selected}}"></book-dialog>
+    <book-dialog opened="{{opened}}" book="{{selected}}"></book-dialog>
     <template is="dom-if" if="{{books}}">
       <paper-item display="flex">
-        <span>{{selected.id}}</span>
+        <span>Buch-ID</span>
         <span>Author</span>
         <span>Originaltitel</span>
         <span>Sprache</span>
@@ -34,8 +34,10 @@
     </template>
     <template is="dom-if" if="{{!books}}">
       <paper-item 
-          style="display:flex;">
-          Noch keine Bücher eingetragen!
+          style="display:flex; ">
+          <p style="width: 100%;text-align: center;">
+            Noch keine Bücher eingetragen!
+          </p>
       </paper-item>
       <paper-button 
           on-tap="_openAddBookDialog" 
@@ -62,12 +64,20 @@
         }
       },
 
+      observers: [
+        '_selectionChanged(selected)'
+      ],
+
       _selectionChanged: function () {
-        if (this.$.bookList.selectedItem == "") {
-          this.opened = false;
+        if (this.get('selected.id') === '' || this.get('selected.id') === undefined) {
+          this.set('opened', false);
         } else {
-          this.opened = true;
+          this.set('opened', true);
         }
+      },
+
+      _openAddBookDialog: function () {
+        this.fire('add-book');
       }
       
     });
