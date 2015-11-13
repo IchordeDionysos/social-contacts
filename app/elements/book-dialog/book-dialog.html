@@ -4,47 +4,25 @@
   <template>
       <paper-dialog entry-animation="scale-up-animation"
                     exit-animation="fade-out-animation"
-                    id="bookDetailDialog"
                     class="bookDialog"
-                    opened="{{opened}}">
-        <paper-item style="padding-left: 11px;">
-          <paper-icon-button 
-                icon="icons:arrow-back" 
-                on-tap="closeDialog">
-          </paper-icon-button>
-          <span>Buch&nbsp;</span>
-          <span>[[book.id]]</span>
-          <span>&nbsp;-&nbsp;</span>
-          <span>[[book.status]]</span>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Author" value="{{book.author}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Originaltitel" value="{{book.original}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Titel" value="{{book.title}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Preis" value="{{book.price}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Verkaufspreis" value="{{book.retailprice}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-checkbox checked="{{book.dedication}}">Widmung</paper-checkbox>
-        </paper-item>
-        <paper-button raised>Verleihen</paper-button>
-        <paper-button raised>Verkaufen</paper-button>
+                    opened="{{opened}}"
+                    modal>
+              <paper-icon-button 
+                  icon="back"
+                  on-tap="closeDialog">
+                </paper-icon-button>
       </paper-dialog>
   </template>
-  <script>
+  <script>s
     Polymer({
       is: 'book-dialog',
       
       properties: {
         book: {
+          notify: true
+        },
+        dialogId: {
+          type: String,
           notify: true
         },
         opened: {
@@ -53,18 +31,8 @@
         }
       },
 
-      listeners: {
-        'iron-overlay-opened': 'open'
-      },
-
       closeDialog: function () {
         this.opened = false;
-        this.book = undefined;
-      },
-
-      open: function () {
-        var dialog = document.querySelector('#bookDetailDialog');
-        console.log(dialog.closingReason);
       }
     });
   </script>

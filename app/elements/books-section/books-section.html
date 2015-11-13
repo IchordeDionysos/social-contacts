@@ -7,11 +7,11 @@
     }
   </style>
   <template>
-    <book-add opened="{{opened}}" on-added-book="_addBook"></book-add>
+    <book-add on-added-book="_addBook"></book-add>
 
     <paper-material>
-      <books-list
-        on-add-book="_openAddBookDialog"
+      <books-list 
+        on-open-book-dialog="_openBookDialog" 
         books="{{books}}">
       </books-list>
     </paper-material>
@@ -28,34 +28,43 @@
         id: {
           type: Number
         },
-        opened: {
-          notify: true,
-          type: Boolean
+        selected: {
+          notify: true
         }
       },
-
+      
       observers: [
         '_booksChanged(books.*)'
       ],
       
       _booksChanged: function(books) {
-        var id = this._computeID(books.value);
-        this.id = id;
+        console.log(books);
+        var ID = this._computeID(this.books);
+        console.log('ID changed(' + ID + ')');
+        this.id = ID;
       },
       
       _computeID: function(books) {
         var id=1;
+        console.log('computing id:');
+        console.log(books);
         for(var i=0; i<books.length; i++) {
+          console.log(books[i].id);
           if(books[i].id>id) {
             id = books[i].id;
           }
         }
         id++;
+        console.log('ID: ' + id);
+    
         return id;
       },
       
       _openAddBookDialog: function() {
-        this.set('opened', true);
+        var dialog = document.getElementById('addBookDialog');
+        if(dialog) {
+          dialog.open();
+        }
       },
       
       _addBook: function(e) {
@@ -68,10 +77,13 @@
             language: e.detail.language,
             tags: e.detail.tags,
             price: e.detail.price,
-            status: 'Verfügbar',
             dedication: e.detail.dedication
           });
         }
+      },
+      
+      _openBookDialog: function() {
+        
       }
     });
   </script>
