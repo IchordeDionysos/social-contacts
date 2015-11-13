@@ -9,7 +9,6 @@
     }
   </style>
   <template>
-    <book-dialog book="{{book}}"></book-dialog>
     <paper-item>
       <span>{{book.id}}</span>
       <span>{{book.author}}</span>
@@ -25,31 +24,13 @@
       properties: {
         book: {
           notify: true
-        },
-        id: {
-          type: String,
-          notify: true,
-          value: 'undefined'
         }
       },
       
-      observers: [
-        '_bookIdChanged(book.*)'
-      ],
-      
-      _bookIdChanged: function(book) {
-        this.id = 'books-' + this.book.id + '-dialog';
-      },
-      
       _openBookDialog: function() {
-        console.log('Tapped on item:');
-        console.log(this.id);
         var dialog = document.querySelector(this.id);
-        console.log(dialog);
         dialog.opened = true;
       }
-      
-      
     });
   </script>
 </dom-module>

@@ -12,8 +12,7 @@
     <firebase-collection location="{{userLocation}}"
                          ref="{{ref}}"
                          data="{{fbData}}"
-                         on-firebase-value="_firebaseLoaded"
-                         log>
+                         on-firebase-value="_firebaseLoaded">
     </firebase-collection>
     <!--
     <iron-localstorage name="social-contacts"
@@ -53,7 +52,6 @@
       
       signIn: function() {
         this.$.auth.login();
-        console.log('Logged in');
       },
       
       signOut: function() {
@@ -63,11 +61,7 @@
       
       _userChanged: function(user) {
         if(user) {
-          console.log(this.location);
-          console.log(this.directory);
-          console.log(this.user.uid);
           this.userLocation = [this.location, this.directory, this.user.uid].join('/');
-          console.log(this.userLocation);
         }
       },
       

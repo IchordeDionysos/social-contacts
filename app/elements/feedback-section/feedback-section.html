@@ -69,34 +69,34 @@
       		notify: true,
       		type: Object,
           value: {
-            "title": "",
-            "body": "",
-            "assignee": "IchordeDionysos",
-            "labels": ["0 - Backlog"]
+            'title': '',
+            'body': '',
+            'assignee': 'IchordeDionysos',
+            'labels': ['0 - Backlog']
           },
 
           ghBody: {
             notify: true,
             type: String,
-            value: ""
+            value: ''
           },
 
           ghEmail: {
             notify: true,
             type: String,
-            value: ""
+            value: ''
           }
       	}
       },
 
       showSuccess: function () {
       	document.querySelector('#issueCreated').show();
-        this.body.labels = ["0 - Backlog"];
-        //this.body.title = "";
-        this.$.issueTitle.value = "";
-        this.$.issueEmail.value = "";
-        this.$.issueBody.value = "";
-        //this.body.body = "";
+        this.body.labels = ['0 - Backlog'];
+        //this.body.title = '';
+        this.$.issueTitle.value = '';
+        this.$.issueEmail.value = '';
+        this.$.issueBody.value = '';
+        //this.body.body = '';
         this.$.bug.checked = false;
         this.$.help.checked = false;
         this.$.question.checked = false;
@@ -129,7 +129,7 @@
           this.push('body.labels', 'design');
         };
 
-        var body = this.ghBody + "\n" + "Email: " + this.ghEmail;
+        var body = this.ghBody + '\n' + 'Email: ' + this.ghEmail;
 
         this.set('body.body', body);
 
