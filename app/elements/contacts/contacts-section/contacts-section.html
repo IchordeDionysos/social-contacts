@@ -1,0 +1,47 @@
+<dom-module id="contacts-section">
+<style>
+    paper-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 44px;
+    }
+  </style>
+  <template>
+    <contact-add opened="{{opened}}" on-added-contact="_addContact"></contact-add>
+
+    <paper-material>
+      <contacts-list
+        on-add-contact="_openAddContactDialog"
+        contacts="{{contacts}}">
+      </contacts-list>
+    </paper-material>
+    <paper-fab icon="add" on-tap="_openAddContactDialog"></paper-fab>
+  </template>
+  <script>
+    Polymer({
+      is: 'contacts-section',
+      
+      properties: {
+        contacts: {
+          notify: true
+        },
+        opened: {
+          notify: true,
+          type: Boolean
+        }
+      },
+
+      _openAddContactDialog: function() {
+        this.set('opened', true);
+      },
+      
+      _addContact: function(e) {
+        for(var i=0; i<e.detail.amount; i++) {
+          this.push('contacts', {
+            
+          });
+        }
+      }
+    });
+  </script>
+</dom-module>

@@ -65,10 +65,11 @@
       
       closeDialog: function () {
         this.opened = false;
-        this.book = undefined;
+        console.log(this.book);
       },
 
       open: function () {
+        console.log(this.book);
         var dialog = document.querySelector('#bookDetailDialog');
         console.log(dialog.closingReason);
       }
