@@ -7,6 +7,7 @@
   <template>
     <paper-dialog entry-animation="scale-up-animation"
                   exit-animation="fade-out-animation"
+                  opened="{{opened}}"
                   id="addBookDialog">
       <div id="pdpbd">
         <paper-icon-button icon="clear" 
@@ -51,6 +52,10 @@
         dedication: {
           type: Boolean,
           value: false,
+          notify: true
+        },
+        opened: {
+          type: Boolean,
           notify: true
         }
       },
