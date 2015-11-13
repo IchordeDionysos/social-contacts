@@ -34,11 +34,13 @@
   </style>
   <template>
   	<paper-material>
-        <paper-item>Feedback</paper-item>
+        <p>Feedback</p>
         <paper-input id="issueTitle" label="Titel" value="{{body.title}}"></paper-input>
-        <paper-input id="issueEmail" label="Email (notwendig zur Kontaktaufnahme)" value="{{ghEmail}}"></paper-input>
+        <paper-input id="issueEmail" label="Email (notwendig zur Kontaktaufnahme)" 
+                     value="{{ghEmail}}">
+        </paper-input>
         <paper-textarea id="issueBody" label="Body" value="{{ghBody}}"></paper-textarea>
-        <paper-item>Wähle alle passende Labels aus:</paper-item>
+        <p>Wähle alle passende Labels aus:</p>
         <paper-checkbox id="bug" class="red" value="bug">Bug</paper-checkbox>
         <paper-checkbox id="help" class="green" value="help">Hilfe</paper-checkbox>
         <paper-checkbox id="question" class="pink" value="question">Frage</paper-checkbox>

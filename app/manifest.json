@@ -1,6 +1,6 @@
 {
-  "name": "Entfernungsmessung Referat",
-  "short_name": "Entfernungsmessung",
+  "name": "Social Contacts",
+  "short_name": "Contacts",
   "version": "0.0.1",
   "icons": [{
         "src": "images/touch/icon-128x128.png",
