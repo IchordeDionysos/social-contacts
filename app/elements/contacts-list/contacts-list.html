@@ -14,7 +14,11 @@
       </template>
     </template>
     <template is="dom-if" if="{{!contacts}}">
-      <paper-item style="display:flex;">Noch keine Kontakte eingetragen!</paper-item>
+      <paper-item style="display:flex;">
+        <p style="width: 100%;text-align: center;">
+          Noch keine Bücher eingetragen!
+        </p>
+      </paper-item>
       <paper-button on-tap="_openAddContactDialog" style="display:block;">Kontakt eintragen</paper-button>
       <paper-button  style="display:block;">Kontakt importieren</paper-button>
     </template>
