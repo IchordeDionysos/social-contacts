@@ -1,0 +1,44 @@
+<dom-module id="main-slide">
+  <style>
+  </style>
+  <template>
+    <paper-header-panel shadow="true">
+      <paper-toolbar class="medium-tall">
+        <div style="font-size: x-large;">Entfernungsmessung <br></div>
+        <div class="middle">[[title]]</div>
+      </paper-toolbar>
+      <neon-animated-pages id="pages" class="flex" selected="[[selected]]" 
+                           entry-animation="slide-from-right-animation" 
+                           exit-animation="fade-out-animation">
+        <neon-animatable><page-one class="layout horizontal around-justified wrap"></page-one></neon-animatable>
+        <neon-animatable></neon-animatable>
+      </neon-animated-pages>
+    </paper-header-panel>
+  </template>
+  <script>
+    Polymer({
+      is: 'main-slide',
+      
+      properties: {
+        selected: {
+          value: 0,
+          observer: '_updatePageTitle'
+        },
+        title: {
+          type: String,
+          value: 'Triangulation'
+        }
+      },
+
+      _updatePageTitle: function(newVal, oldVal) {
+        switch(newVal) {
+          case 0: this.title = 'Triangulation'; break;
+          case 1: this.title = 'Laufzeitmessung'; break;
+          case 2: this.title = 'Interferometer'; break;
+          case 3: this.title = 'Parallaxe'; break;
+          case 4: this.title = 'Rotverschiebung'; break;
+        }
+      }
+    });
+  </script>
+</dom-module>
