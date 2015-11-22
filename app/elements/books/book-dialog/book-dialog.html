@@ -1,78 +1,123 @@
 <dom-module id="book-dialog">
-  <style>
-  </style>
-  <template>
-      <paper-dialog entry-animation="scale-up-animation"
-                    exit-animation="fade-out-animation"
-                    id="bookDetailDialog"
-                    class="bookDialog"
-                    opened="{{opened}}">
-        <paper-item style="padding-left: 11px;">
-          <paper-icon-button 
-                icon="icons:arrow-back" 
-                on-tap="closeDialog">
-          </paper-icon-button>
-          <span>Buch&nbsp;</span>
-          <span>[[book.id]]</span>
-          <span>&nbsp;-&nbsp;</span>
-          <span>[[book.status]]</span>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Author" value="{{book.author}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Originaltitel" value="{{book.original}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Titel" value="{{book.title}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Preis" value="{{book.price}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-input label="Verkaufspreis" value="{{book.retailprice}}"></paper-input>
-        </paper-item>
-        <paper-item>
-            <paper-checkbox checked="{{book.dedication}}">Widmung</paper-checkbox>
-        </paper-item>
-        <paper-item>
-          <paper-button raised>Verleihen</paper-button>
-          <paper-button raised>Verkaufen</paper-button>
-        </paper-item>
-      </paper-dialog>
-  </template>
-  <script>
-    Polymer({
-      is: 'book-dialog',
-      
-      properties: {
-        book: {
-          notify: true
-        },
-        dialogId: {
-          type: String,
-          notify: true
-        },
-        opened: {
-          type: Boolean,
-          notify: true
-        }
-      },
+	<style>
+	</style>
+	<template>
+			<paper-dialog entry-animation="scale-up-animation"
+										exit-animation="fade-out-animation"
+										id="bookDetailDialog"
+										class="bookDialog"
+										opened="{{opened}}">
+				<paper-item style="padding-left: 11px;">
+					<paper-icon-button 
+								icon="icons:arrow-back" 
+								on-tap="closeDialog">
+					</paper-icon-button>
+					<span>Buch&nbsp;</span>
+					<span>[[book.id]]</span>
+					<span>&nbsp;-&nbsp;</span>
+					<span>[[book.status]]</span>
+				</paper-item>
+				<book-general hidden$="{{!generalView}}" on-book-lend="lend" 
+											on-book-back="back" on-book-sell="sell" book="{{book}}">
+				</book-general>
+				<book-lend hidden$="{{!lendView}}" on-book-lent="lent" on-lent-abort="lendAbort"></book-lend>
+				<book-sell hidden$="{{!sellView}}"  on-book-sold="sold" on-sold-abort="sellAbort"></book-sell>
+			</paper-dialog>
+	</template>
+	<script>
+		Polymer({
+			is: 'book-dialog',
+			
+			properties: {
+				book: Object,
+				dialogId: {
+					type: String,
+					notify: true
+				},
+				opened: {
+					type: Boolean,
+					notify: true
+				},
+				lendView: {
+					type: Boolean,
+					value: false
+				},
+				sellView: {
+					type: Boolean,
+					value: false
+				},
+				generalView: {
+					type: Boolean,
+					computed: 'computeGeneralView(lendView, sellView)'
+				}
+			},
 
-       listeners: {
-        'iron-overlay-opened': 'open'
-      },
-      
-      closeDialog: function () {
-        this.opened = false;
-        console.log(this.book);
-      },
+			listeners: {
+				'iron-overlay-closed': '_updateBook'
+			},
 
-      open: function () {
-        console.log(this.book);
-        var dialog = document.querySelector('#bookDetailDialog');
-        console.log(dialog.closingReason);
-      }
-    });
-  </script>
+			sold: function(e) {
+				this.set('book.sale', e.detail);
+				this.set('book.status', 'Verkauft');
+				this.set('sellView', false);
+				this.set('opened', false);
+			},
+
+			sell: function() {
+				this.set('sellView', true);
+				this.$.bookDetailDialog.center();
+			},
+
+			sellAbort: function() {
+				this.set('sellView', false);
+			},
+
+			back: function() {
+				this.set('book.status', 'Verfügbar');
+				this.set('book.lending', null);
+				this.set('book.sale', null);
+				this.$.bookDetailDialog.center();
+			},
+
+			lent: function(e) {
+				var date = e.detail.till;
+				var day = date.getDate();
+				var month = date.getMonth();
+				var year = date.getFullYear();
+				var dateString = day + '.' + month + '.' + year;
+				this.set('book.lending', {
+					name: e.detail.name,
+					till: dateString
+				});
+				this.set('book.status', 'Verliehen');
+				this.set('lendView', false);
+				this.set('opened', false);
+			},
+
+			lendAbort: function() {
+				this.set('lendView', false);
+			},
+
+			lend: function() {
+				this.set('lendView', true);
+				this.$.bookDetailDialog.center();
+			},
+
+			computeGeneralView: function(lendView, sellView) {
+				return !(lendView || sellView);
+			},
+
+			_updateBook: function() { 
+				this.set('lendView', false);
+				this.set('sellView', false);
+				this.fire('book-changed', {
+					book: this.book
+				});
+			},
+			
+			closeDialog: function () {
+				this.opened = false;
+			}
+		});
+	</script>
 </dom-module>

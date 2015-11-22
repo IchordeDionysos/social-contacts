@@ -1,0 +1,78 @@
+<dom-module id="book-general">
+	<template>
+		<style>
+			:host {
+				display: block;
+				margin: 8px;
+			}
+		</style>
+		<paper-input hidden$="{{!lent}}" label="An" value="[[book.lending.name]]" disabled></paper-input>
+		<paper-input hidden$="{{!lent}}" label="Bis" value="[[book.lending.till]]" disabled></paper-input>
+		<paper-input hidden$="{{!sold}}" label="An" value="[[book.sale.name]]" disabled></paper-input>
+		<paper-input hidden$="{{!sold}}" label="Preis" value="[[book.sale.price]]" disabled><div suffix>€</div></paper-input>
+		<paper-input label="Author" value="{{book.author}}"></paper-input>
+		<paper-input label="Originaltitel" value="{{book.original}}"></paper-input>
+		<paper-input label="Titel" value="{{book.title}}"></paper-input>
+		<paper-input label="Sprache" value"{{book.language}}"></paper-input>
+		<paper-input label="Preis" value="{{book.price}}"></paper-input>
+		<paper-input label="Tags" value="{{book.tags}}"></paper-input>
+		<paper-checkbox checked="{{book.dedication}}">Widmung</paper-checkbox>
+		<paper-button on-tap="lend" hidden$="{{!available}}" raised>Verleihen</paper-button>
+		<paper-button on-tap="back" hidden$="{{available}}" raised>Buch zurück</paper-button>
+		<paper-button on-tap="sell" hidden$="{{sold}}" raised>Verkaufen</paper-button>
+	</template>
+	<script>
+		Polymer({
+			is: 'book-general',
+
+			properties: {
+				book: {
+					type: Object,
+					notify: true
+				},
+				lent: {
+					type: Boolean,
+					computed: 'computeLent(book.status)'
+				},
+				sold: {
+					type: Boolean,
+					computed: 'computeSold(book.status)'
+				},
+				available: {
+					type: Boolean,
+					computed: 'computeAvailable(book.status)'
+				}
+			},
+
+			computeAvailable: function(status) {
+				if (status === 'Verfügbar')
+					return true;
+				return false;
+			},
+
+			computeLent: function(status) {
+				if (status === 'Verliehen')
+					return true;
+				return false;
+			},
+
+			computeSold: function(status) {
+				if (status === 'Verkauft')
+					return true;
+				return false;
+			},
+
+			back: function() {
+				this.fire('book-back');
+			},
+
+			lend: function() {
+				this.fire('book-lend');
+			},
+
+			sell: function() {
+				this.fire('book-sell');
+			}
+		});
+	</script>
+</dom-module>

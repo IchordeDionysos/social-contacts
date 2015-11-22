@@ -3,10 +3,11 @@
     span {
       flex-basis: 100%;
       margin: auto;
+      text-align: center;
     }
   </style>
   <template>
-    <book-dialog opened="{{opened}}" book="{{selected}}"></book-dialog>
+    <book-dialog opened="{{opened}}" book="{{selected}}" on-book-changed="_bookChanged"></book-dialog>
     <template is="dom-if" if="{{books}}">
       <paper-item display="flex">
         <span>Buch-ID</span>
@@ -15,23 +16,18 @@
         <span>Sprache</span>
         <span>Status</span>
       </paper-item>
-      <iron-list
-            id="bookList"
-            items="{{books}}"
-            as="book"
-            selection-enabled
-            selected-item="{{selected}}">
-        <template>
-          <paper-item>
-            <span>{{book.id}}</span>
-            <span>{{book.author}}</span>
-            <span>{{book.original}}</span>
-            <span>{{book.language}}</span>
-            <span>{{book.status}}</span>
-          </paper-item>
+      <template is="dom-repeat" items={{books}} as="book" id="bookList">
+        <paper-item on-tap="select">
+          <span>{{book.id}}</span>
+          <span>{{book.author}}</span>
+          <span>{{book.original}}</span>
+          <span>{{book.language}}</span>
+          <span>{{book.status}}</span>
+        </paper-item>
         </template>
       </iron-list>
     </template>
+
     <template is="dom-if" if="{{!books}}">
       <paper-item 
           style="display:flex; ">
@@ -52,34 +48,56 @@
       
       properties: {
         books: {
+          type: Object,
           notify: true
         },
         selected: {
-          notify: true,
-          obsever: '_selectionChanged'
+          type: Object,
+          notify: true
         },
+        oldSpySelection: Object,
         opened: {
           notify: true,
           type: Boolean
         }
       },
 
-      observers: [
-        '_selectionChanged(selected)'
-      ],
-      
-      _selectionChanged: function () {
-        if (this.get('selected.id') === '' || this.get('selected.id') === undefined) {
-          this.set('opened', false);
-        } else {
-          this.set('opened', true);
+      select: function(e) {
+        var item = document.querySelector('#bookList').itemForElement(e.target);
+        this.set('oldSpySelection', item.__firebaseKey__);
+        this._updateSelection(this.oldSpySelection);
+      },
+
+      _updateSelection: function(key) {
+        var selected;
+        var opened = this.books.some(function(book) {
+          if (book.__firebaseKey__ === key) {
+            selected = book;
+            return true;
+          }
+        });
+        this.set('selected', selected);
+        this.set('opened', opened);
+      },
+
+      _bookChanged: function(e) {
+        var book = e.detail.book;
+        var i = 0;
+        if (book) {
+          this.books.some(function(b) {
+            if (b.__firebaseKey__ === book.__firebaseKey__) {
+              return true;
+            }
+            i++;
+          });
+          this.set('books.' + i, book);
         }
       },
 
       _openAddBookDialog: function () {
         this.fire('add-book');
       }
-      
+    
     });
   </script>
 </dom-module>
