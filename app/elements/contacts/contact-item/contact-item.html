@@ -1,11 +1,12 @@
 <dom-module id="contact-item">
   <style>
-    
   </style>
   <template>
-    <div>
-      <img src="{{contact.img}}">
-    </div>
+    <paper-item>
+      <span>[[contact.fullname]]</span>
+      <selector-email emails="[[contact.emails]]"></selector-email>
+      <selector-phone phones="[[contact.phones]]"></selector-phone>
+    </paper-item>
   </template>
   <script>
     Polymer({
@@ -16,12 +17,7 @@
           type: Object,
           notify: true
         }
-      },
-      
-      _addBook: function() {
-        
       }
-
     });
   </script>
 </dom-module>

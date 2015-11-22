@@ -24,10 +24,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var script = document.createElement('script');
     script.async = true;
     script.src = 'webcomponents-lite.min.js';
-    script.onload = finishLazyLoading();
+    //script.onload = finishLazyLoading();
     document.head.appendChild(script);
   } else {
-    finishLazyLoading();
+    //finishLazyLoading();
   }
 
   app.displayInstalledToast = function() {
@@ -83,7 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   // Scroll page to top and expand header
   app.scrollPageToTop = function() {
-    document.getElementById('mainContainer').scrollTop = 0;
+    //document.getElementById('mainContainer').scrollTop = 0;
   };
 
 })(document);

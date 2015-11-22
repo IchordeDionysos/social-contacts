@@ -10,7 +10,7 @@
       <template is="dom-repeat" 
                 items="{{contacts}}"
                 as="contact">
-        <book-item book="{{contact}}"></book-item>
+        <contact-item contact="{{contact}}"></contact-item>
       </template>
     </template>
     <template is="dom-if" if="{{!contacts}}">
@@ -20,7 +20,7 @@
         </p>
       </paper-item>
       <paper-button on-tap="_openAddContactDialog" style="display:block;">Kontakt eintragen</paper-button>
-      <paper-button  style="display:block;">Kontakt importieren</paper-button>
+      <paper-button style="display:block;">Kontakte importieren</paper-button>
     </template>
   </template>
   <script>

@@ -1,0 +1,59 @@
+<dom-module id="selector-phone">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			#phonePreview {
+				width: 165px;
+			}
+		</style>
+		<paper-dropdown-menu id="phonePreview" label="Keine Telefone" no-label-float>
+			<paper-menu class="dropdown-content">
+				<template is="dom-repeat" items={{_tempPhones}} 
+					as="phone">
+					<paper-item>[[phone]]</paper-item>
+				</template>
+			</paper-menu>
+		</paper-dropdown-menu>
+	</template>
+	<script>
+		Polymer({
+			is: 'selector-phone',
+
+			properties: {
+				phones: {
+					observer: '_updatePhones',
+					type: Object
+				},
+				_tempPhones: Array
+			},
+
+			attached: function() {
+				this.$.phonePreview.disabled = true;
+				if (this._tempPhones === undefined)
+					return;
+				if (this._tempPhones.length !== 0)
+					this.$.phonePreview.disabled = false;
+			},
+
+			_updatePhones: function(newVal, oldVal) {
+				var arr = [];
+				for (var prop in this.phones) {
+					arr.push(this.phones[prop]);
+				}
+				this.$.phonePreview.label = arr[arr.length-1];
+				this.set('_tempPhones', arr);
+
+				if (this._tempPhones === undefined) {
+					this.$.emailPreview.label = 'Keine Telefone';
+					return;
+				}
+				if (this._tempPhones.length === 0)
+					this.$.emailPreview.label = 'Keine Telefone';
+				if (this._tempPhones.length !== 0)
+					this.$.phonePreview.disabled = false;
+			}
+		});
+	</script>
+</dom-module>

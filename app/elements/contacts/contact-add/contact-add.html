@@ -23,23 +23,10 @@
         </paper-button>
       </div>
       <div id="pdpid">
-        <paper-input value="{{name}}" label="Name"></paper-input>
-        <paper-input value="{{original}}" label="Originaltitel"></paper-input>
-        <paper-input value="{{title}}" label="Buchtitel"></paper-input>
-        <paper-input value="{{language}}" label="Sprache"></paper-input>
-        <paper-input value="{{tags}}" label="Tags"></paper-input>
-        <paper-input value="{{amount}}" label="Menge" 
-                     type="number" min="1" 
-                     error-message="Nur natürliche Zahlen" 
-                     auto-validate>
-        </paper-input>
-        <paper-input value="{{price}}" label="Preis" 
-                     type="number" min="0" step="0.01"
-                     error-message="Nur gültige Geldbeträge" 
-                     auto-validate>
-          <div suffix>€</div>
-        </paper-input>
-        <paper-checkbox id="in-dedication" checked="{{dedication}}">Widmung</paper-checkbox>
+        <paper-input value="{{fullname}}" label="Namen hinzufügen"></paper-input>
+        <gold-email-input class="email" value="{{email}}" label="Email hinzufügen"></gold-email-input>
+        <gold-phone-input class="phone" value="{{phone}}" label="Telefon hinzufügen"></gold-phone-input>
+        <paper-input class="address" value="{{address}}" label="Addresse hinzufügen"></paper-input>
       </div>
     </paper-dialog>
                   
@@ -49,42 +36,101 @@
       is: 'contact-add',
       
       properties: {
-        dedication: {
-          type: Boolean,
-          value: false,
-          notify: true
+        emails: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+        phones: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+        addresses: {
+          type: Array,
+          value: function() {
+            return [];
+          }
         },
         opened: {
           type: Boolean,
           notify: true
         }
       },
+
+      listeners: {
+        'change': '_changeEvent'
+      },
+
+      observers: [
+        
+      ],
+
+      _changeEvent: function(e) {
+        var t = e.target;
+        if (_findClass(t.classList, 'email')) {
+          var emails = document.getElementsByClassName('email');
+          for (var i = 0; i < emails.length-1; i++) {
+            if(emails[i].value === '') {
+              emails[i].remove();
+              emails.splice(i, 1);
+            }
+          }
+          if (emails[emails.length-1].value !== '') {
+            
+          };
+        }
+      },
+
+      _arrayChanged: function(emails, phones, addresses) {
+        if (this.emails !== undefined) {
+          var arr = this.emails;
+          if (arr[arr.length-1] !== '') {
+            arr.push('');
+          }
+          console.log(arr);
+          this.set('emails', arr);
+          this.notifyPath('emails', arr);
+          console.log(this.emails);
+        }
+        if (this.phones !== undefined) {
+          if (this.phones[this.phones.length-1] !== '') {
+            this.push('phones', '');
+          }
+        }
+        if (this.addresses !== undefined) {
+          if (this.addresses[this.addresses.length-1] !== '') {
+            this.push('addresses', '');
+          }
+        }
+      },
       
       _clearDialog: function() {
-        this.author = '';
-        this.original = '';
-        this.title = '';
-        this.language = '';
-        this.tags = '';
-        this.amount = '';
-        this.price = '';
-        this.dedication = false;
+        this.fullname = '';
+        this.emails = [''];
+        this.phones = [''];
+        this.addresses = [''];
       },
       
       _addContact: function() {
         this.fire('added-contact', {
-          author: this.author,
-          original: this.original,
-          title: this.title,
-          language: this.language,
-          tags: this.tags,
-          price: this.price,
-          dedication: this.dedication,
-          amount: this.amount
+          fullname: this.fullname,
+          emails: this.emails,
+          phones: this.phones,
+          addresses: this.addresses
         });
         this._clearDialog();
-      }
-      
+      },
+
+      _findClass: function(classes, target) {
+        for (var i = 0; i < classes.length; i++) {
+          if(classes[i] === target)
+            return true;
+        }
+        return false;
+      }      
     });
   </script>
 </dom-module>

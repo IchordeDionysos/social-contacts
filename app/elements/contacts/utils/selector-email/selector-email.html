@@ -1,0 +1,59 @@
+<dom-module id="selector-email">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			#emailPreview {
+				width: 260px;
+			}
+		</style>
+		<paper-dropdown-menu id="emailPreview" label="Keine Emails" no-label-float>
+			<paper-menu class="dropdown-content">
+				<template is="dom-repeat" items={{_tempEmails}} 
+					as="email">
+					<paper-item>[[email]]</paper-item>
+				</template>
+			</paper-menu>
+		</paper-dropdown-menu>
+	</template>
+	<script>
+		Polymer({
+			is: 'selector-email',
+
+			properties: {
+				emails: {
+					observer: '_updateEmails',
+					type: Object
+				},
+				_tempEmails: Array
+			},
+
+			attached: function() {
+				this.$.emailPreview.disabled = true;
+				if (this._tempEmails === undefined)
+					return;
+				if (this._tempEmails.length !== 0)
+					this.$.emailPreview.disabled = false;
+			},
+
+			_updateEmails: function(newVal, oldVal) {
+				var arr = [];
+				for (var prop in this.emails) {
+					arr.push(this.emails[prop]);
+				}
+				this.$.emailPreview.label = arr[arr.length-1];
+				this.set('_tempEmails', arr);
+				this.$.emailPreview.disabled = true;
+				if (this._tempEmails === undefined) {
+					this.$.emailPreview.label = 'Keine Emails';
+					return;
+				}
+				if (this._tempEmails.length === 0) 
+					this.$.emailPreview.label = 'Keine Emails';
+				if (this._tempEmails.length !== 0)
+					this.$.emailPreview.disabled = false;
+			}
+		});
+	</script>
+</dom-module>
