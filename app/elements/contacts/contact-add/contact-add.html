@@ -24,9 +24,15 @@
       </div>
       <div id="pdpid">
         <paper-input value="{{fullname}}" label="Namen hinzufügen"></paper-input>
-        <gold-email-input class="email" value="{{email}}" label="Email hinzufügen"></gold-email-input>
-        <gold-phone-input class="phone" value="{{phone}}" label="Telefon hinzufügen"></gold-phone-input>
-        <paper-input class="address" value="{{address}}" label="Addresse hinzufügen"></paper-input>
+        <div id="addEmails">
+          <gold-email-input class="email" label="Email"></gold-email-input>
+        </div>
+        <div id="addPhones">
+          <gold-phone-input class="phone" label="Telefon"></gold-phone-input>
+        </div>
+        <div id="addAddresses">
+          <paper-input class="address" label="Addresse"></paper-input>
+        </div>
       </div>
     </paper-dialog>
                   
@@ -36,24 +42,6 @@
       is: 'contact-add',
       
       properties: {
-        emails: {
-          type: Array,
-          value: function() {
-            return [];
-          }
-        },
-        phones: {
-          type: Array,
-          value: function() {
-            return [];
-          }
-        },
-        addresses: {
-          type: Array,
-          value: function() {
-            return [];
-          }
-        },
         opened: {
           type: Boolean,
           notify: true
@@ -61,16 +49,13 @@
       },
 
       listeners: {
-        'change': '_changeEvent'
+        'input': '_changeEvent'
       },
-
-      observers: [
-        
-      ],
 
       _changeEvent: function(e) {
         var t = e.target;
-        if (_findClass(t.classList, 'email')) {
+
+        if (this._findClass(t.classList, 'gold-email-input')) {
           var emails = document.getElementsByClassName('email');
           for (var i = 0; i < emails.length-1; i++) {
             if(emails[i].value === '') {
@@ -79,30 +64,42 @@
             }
           }
           if (emails[emails.length-1].value !== '') {
-            
-          };
+            var email = document.createElement('gold-email-input');
+            email.label = 'Email';
+            email.classList.add('email');
+            this.$.addEmails.appendChild(email);
+          }
         }
-      },
 
-      _arrayChanged: function(emails, phones, addresses) {
-        if (this.emails !== undefined) {
-          var arr = this.emails;
-          if (arr[arr.length-1] !== '') {
-            arr.push('');
+        if (this._findClass(t.classList, 'gold-phone-input')) {
+          var phones = document.getElementsByClassName('phone');
+          for (var i = 0; i < phones.length-1; i++) {
+            if(phones[i].value === '') {
+              phones[i].remove();
+              phones.splice(i, 1);
+            }
           }
-          console.log(arr);
-          this.set('emails', arr);
-          this.notifyPath('emails', arr);
-          console.log(this.emails);
-        }
-        if (this.phones !== undefined) {
-          if (this.phones[this.phones.length-1] !== '') {
-            this.push('phones', '');
+          if (phones[phones.length-1].value !== '') {
+            var phone = document.createElement('gold-phone-input');
+            phone.label = 'Telefon';
+            phone.classList.add('phone');
+            this.$.addPhones.appendChild(phone);
           }
         }
-        if (this.addresses !== undefined) {
-          if (this.addresses[this.addresses.length-1] !== '') {
-            this.push('addresses', '');
+
+        if (this._findClass(t.classList, 'paper-input')) {
+          var addresses = document.getElementsByClassName('address');
+          for (var i = 0; i < addresses.length-1; i++) {
+            if(addresses[i].value === '') {
+              addresses[i].remove();
+              addresses.splice(i, 1);
+            }
+          }
+          if (addresses[addresses.length-1].value !== '') {
+            var address = document.createElement('paper-input');
+            address.label = 'Addresse';
+            address.classList.add('address');
+            this.$.addAddresses.appendChild(address);
           }
         }
       },
@@ -125,6 +122,8 @@
       },
 
       _findClass: function(classes, target) {
+        console.log(classes);
+        console.log(target);
         for (var i = 0; i < classes.length; i++) {
           if(classes[i] === target)
             return true;
