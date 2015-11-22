@@ -1,128 +1,172 @@
 <dom-module id="social-contacts">
   <style>
-      
+      body {
+        background: #fafafa;
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #333;
+      }
+
+      paper-drawer-panel:not([narrow]) #menu-arrow-back {
+          display: none;
+      }
+
+      paper-material {
+        padding: 20px;
+      }
+
+      paper-checkbox {
+        display: block;
+        margin: 5px;
+      }
+
+      #profileImage {
+        height: 60px;
+        border-radius: 50%;
+        position: absolute;
+          top: 2px;
+          right: 8px;
+      }
   </style>
   <template>
-    <paper-drawer-panel id="paperDrawerPanel">
-      <!-- Drawer Scroll Header Panel -->
-      <paper-scroll-header-panel drawer fixed>
-        <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">
-          <paper-icon-button icon="arrow-back" 
-              id="menu-arrow-back" 
-              paper-drawer-toggle></paper-icon-button>
-          <span class="paper-font-title">Menu</span>
-        </paper-toolbar>
+    <link rel="stylesheet" type="text/css" href="../../styles/app-theme.html">
+    <template is="dom-bind" id="app">
+      <paper-drawer-panel id="paperDrawerPanel"
+                          responsive-width="940px">
+        <!-- Drawer Scroll Header Panel -->
+        <paper-scroll-header-panel drawer fixed>
+          <!-- Drawer Toolbar -->
+          <paper-toolbar id="drawerToolbar">
+            <paper-icon-button icon="arrow-back" 
+                id="menu-arrow-back" 
+                paper-drawer-toggle></paper-icon-button>
+            <span class="paper-font-title">Menu</span>
+            <profile-img user="{{user}}"></profile-img>
+          </paper-toolbar>
 
-        <!-- Drawer Content -->
-        <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="contacts" href="/" on-click="onDataRouteClick">
-            <iron-icon icon="communication:contacts"></iron-icon>
-            <span>Kontakte</span>
-          </a>
+          <!-- Drawer Content -->
+          <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
+            <a data-route="contacts" href="/" on-click="onDataRouteClick">
+              <iron-icon icon="communication:contacts"></iron-icon>
+              <span>Kontakte</span>
+            </a>
 
-          <a data-route="groups" href="/groups" on-click="onDataRouteClick">
-            <iron-icon icon="social:group"></iron-icon>
-            <span>Gruppen</span>
-          </a>
+            <a data-route="groups" href="/groups" on-click="onDataRouteClick">
+              <iron-icon icon="social:group"></iron-icon>
+              <span>Gruppen</span>
+            </a>
 
-          <a data-route="books" href="/books" on-click="onDataRouteClick">
-            <iron-icon icon="av:library-books"></iron-icon>
-            <span>Bücher</span>
-          </a>
-          
-          <a data-route="settings" href="/settings" on-click="onDataRouteClick">
-            <iron-icon icon="settings"></iron-icon>
-            <span>Einstellungen</span>
-          </a>
-          
-          <a data-route="feedback" href="/feedback" on-click="onDataRouteClick">
-            <iron-icon icon="feedback"></iron-icon>
-            <span>Hilfe / Feedback geben</span>
-          </a>
-        </paper-menu>
-      </paper-scroll-header-panel>
-
-      <!-- Main Area -->
-      <paper-scroll-header-panel main condenses>
-
-        <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar" class="tall">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-          <span class="flex"></span>
-
-          <!-- Toolbar icons -->
-          <paper-icon-button icon="search"></paper-icon-button>
-
-          <!-- Application name -->
-          <div class="middle middle-container center horizontal layout">
-            <div class="app-name">Social Contacts</div>
-          </div>
-
-          <!-- Application sub title -->
-          <div class="bottom bottom-container center horizontal layout">
-            <div class="bottom-title paper-font-subhead">The future of managing your social interaction</div>
-          </div>
-
-        </paper-toolbar>
-
-        <!-- Main Content -->
-        <div class="content">
-           <app-data location="https://social-contacts.firebaseio.com"
-              user="{{user}}"
-              ref="books"
-              data="{{data}}"></app-data>
-              
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
-
-            <section data-route="contacts">
-              <contacts-section></contacts-section>
-            </section>
-
-            <section data-route="groups">
-              <paper-material>
-                Gruppen
-              </paper-material>
-            </section>
-
-            <section data-route="books">
-              <books-section></books-section>
-            </section>
-
-            <section data-route="settings">
-              <paper-material>
-                Einstellungen
-              </paper-material>
-            </section>
-
-            <section data-route="feedback">
-              <paper-material>
-                Feedback
-              </paper-material>
-            </section>
+            <a data-route="books" href="/books" on-click="onDataRouteClick">
+              <iron-icon icon="av:library-books"></iron-icon>
+              <span>Bücher</span>
+            </a>
             
-          </iron-pages>
-        </div>
-      </paper-scroll-header-panel>
-    </paper-drawer-panel>
+            <a data-route="settings" href="/settings" on-click="onDataRouteClick">
+              <iron-icon icon="settings"></iron-icon>
+              <span>Einstellungen</span>
+            </a>
+            
+            <a data-route="feedback" href="/feedback" on-click="onDataRouteClick">
+              <iron-icon icon="feedback"></iron-icon>
+              <span>Hilfe / Feedback geben</span>
+            </a>
+          </paper-menu>
+        </paper-scroll-header-panel>
 
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
-    <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
-    </paper-toast>
+        <!-- Main Area -->
+        <paper-scroll-header-panel main condenses keep-condensed-header>
 
-    <platinum-sw-register auto-register
-                          clients-claim
-                          skip-waiting
-                          on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="fastest"
-                         cache-config-file="cache-config.json">
-      </platinum-sw-cache>
-    </platinum-sw-register>
-    -->
-    
+          <!-- Main Toolbar -->
+          <paper-toolbar id="mainToolbar" class="tall">
+            <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+            <span class="flex"></span>
+
+            <!-- Toolbar icons -->
+            <paper-icon-button icon="search"></paper-icon-button>
+
+            <!-- Application name -->
+            <div class="middle middle-container center horizontal layout">
+              <div class="app-name">Social Contacts</div>
+            </div>
+
+            <!-- Application sub title -->
+            <div class="bottom bottom-container center horizontal layout">
+              <div class="bottom-title paper-font-subhead">The future of managing your social interaction</div>
+            </div>
+
+          </paper-toolbar>
+
+          <!-- Main Content -->
+          <div class="content">
+            <iron-pages attr-for-selected="data-route" selected="{{route}}">
+
+              <section data-route="contacts">
+                <contacts-section contacts="{{contacts}}"></contacts-section>
+              </section>
+
+              <section data-route="groups">
+                <paper-material>
+                  Gruppen
+                </paper-material>
+              </section>
+
+              <section data-route="books">
+                <books-section books="{{books}}"></books-section>
+              </section>
+
+              <section data-route="settings">
+                <paper-material>
+                  Einstellungen
+                </paper-material>
+              </section>
+
+              <section data-route="feedback">
+                <feedback-section></feedback-section>
+              </section>
+              
+            </iron-pages>
+          </div>
+        </paper-scroll-header-panel>
+      </paper-drawer-panel>
+      
+      <paper-toast id="issueCreated" text="Feedback send">
+      </paper-toast>
+      
+      <app-data location="https://social-contacts.firebaseio.com"
+                directory="usersBooks"
+                authData="{{authData}}"
+                data="{{books}}">
+      </app-data>
+      
+      <app-data location="https://social-contacts.firebaseio.com"
+                directory="usersContacts"
+                authData="{{authData}}"
+                data="{{contacts}}">
+      </app-data>
+      
+      <app-data location="https://social-contacts.firebaseio.com"
+                directory="users"
+                authData="{{authData}}"
+                data="{{user}}">
+      </app-data>
+
+      <!-- Uncomment next block to enable Service Worker support (1/2) -->
+      <paper-toast id="caching-complete"
+                   duration="6000"
+                   text="Caching complete! This app will work offline.">
+      </paper-toast>
+
+      <platinum-sw-register auto-register
+                            clients-claim
+                            skip-waiting
+                            on-service-worker-installed="displayInstalledToast">
+        <platinum-sw-cache default-cache-strategy="fastest"
+                           cache-config-file="cache-config.json">
+        </platinum-sw-cache>
+      </platinum-sw-register>
+    </template>
+    <!-- build:js scripts/app.js -->
+    <script src="../../scripts/app.js"></script>
+    <!-- endbuild-->
   </template>
   <script>
     Polymer({

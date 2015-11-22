@@ -70,6 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               id="menu-arrow-back" 
               paper-drawer-toggle></paper-icon-button>
           <span class="paper-font-title">Menu</span>
+          <profile-img user="{{user}}"></profile-img>
         </paper-toolbar>
 
         <!-- Drawer Content -->
@@ -156,27 +157,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>
+
+    <all-data user="{{user}}" contacts="{{contacts}}" books="{{books}}"
     
     <paper-toast id="issueCreated" text="Feedback send">
     </paper-toast>
-    
-    <app-data location="https://social-contacts.firebaseio.com"
-              directory="usersBooks"
-              user="{{user}}"
-              data="{{books}}">
-    </app-data>
-    
-    <app-data location="https://social-contacts.firebaseio.com"
-              directory="usersContacts"
-              user="{{user}}"
-              data="{{contacts}}">
-    </app-data>
-    
-    <app-data location="https://social-contacts.firebaseio.com"
-              directory="users"
-              user="{{user}}"
-              data="{{dev}}">
-    </app-data>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     <paper-toast id="caching-complete"

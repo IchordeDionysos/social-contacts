@@ -35,7 +35,7 @@
   </style>
   <template>
     <firebase-auth id="auth" 
-                   user="{{user}}"
+                   user="{{authData}}"
                    location="{{location}}"
                    provider="google">
     </firebase-auth>
@@ -52,7 +52,7 @@
     </iron-localstorage>
     -->
     <paper-dialog modal
-                  opened="{{!user}}"
+                  opened="{{!authData}}"
                   entry-animation="scale-up-animation"
                   exit-animation="fade-out-animation">
       <h2>Oh hai! Please sign in</h2>
@@ -74,8 +74,8 @@
         data: {
           notify: true
         },
-        user: {
-          observer: '_userChanged'
+        authData: {
+          observer: '_authDataChanged'
         },
         _firebaseConneted: {
           value: false
@@ -91,12 +91,12 @@
       
       signOut: function() {
         this.ref.unauth();
-        this.user = null;
+        this.authData = null;
       },
       
-      _userChanged: function(user) {
-        if(user) {
-          this.userLocation = [this.location, this.directory, this.user.uid].join('/');
+      _authDataChanged: function(authData) {
+        if(authData) {
+          this.userLocation = [this.location, this.directory, this.authData.uid].join('/');
         }
       },
       

@@ -1,0 +1,60 @@
+<dom-module id="all-data">
+	<template>
+		<style>
+		</style>
+		<app-data location="https://social-contacts.firebaseio.com"
+			  directory="usersBooks"
+			  authData="{{authData}}"
+			  data="{{books}}">
+		</app-data>
+		
+		<app-data location="https://social-contacts.firebaseio.com"
+				  directory="usersContacts"
+				  authData="{{authData}}"
+				  data="{{contacts}}">
+		</app-data>
+		
+		<app-data location="https://social-contacts.firebaseio.com"
+				  directory="users"
+				  authData="{{authData}}"
+				  data="{{user}}">
+		</app-data>
+	</template>
+	<script>
+		Polymer({
+			is: 'all-data',
+
+			properties: {
+				authData: {
+					notify: true,
+					observer: 'authDataChanged'
+				},
+				user: {
+					notify: true
+				},
+				contacts: {
+					notify: true
+				},
+				books: {
+					notify: true
+				}
+			},
+
+			observers: [
+				'dataChanged(authData.*, user.*, contacts.*, books.*)'
+			],
+
+			dataChanged: function(authData, user, contacts, books) {
+				console.log(this.authData);
+				console.log(this.user);
+				console.log(this.contacts);
+				console.log(this.books);
+			},
+
+			authDataChanged: function(newVal, oldVal) {
+				console.log(newVal.google.cachedUserProfile);
+				this.set('user', newVal.google.cachedUserProfile);
+			}
+		});
+	</script>
+</dom-module>
