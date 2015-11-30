@@ -9,7 +9,9 @@
 		<paper-input hidden$="{{!lent}}" label="An" value="[[book.lending.name]]" disabled></paper-input>
 		<paper-input hidden$="{{!lent}}" label="Bis" value="[[book.lending.till]]" disabled></paper-input>
 		<paper-input hidden$="{{!sold}}" label="An" value="[[book.sale.name]]" disabled></paper-input>
-		<paper-input hidden$="{{!sold}}" label="Preis" value="[[book.sale.price]]" disabled><div suffix>€</div></paper-input>
+		<paper-input hidden$="{{!sold}}" label="Preis" value="[[book.sale.price]]" disabled>
+			<div suffix>€</div>
+		</paper-input>
 		<paper-input label="Author" value="{{book.author}}"></paper-input>
 		<paper-input label="Originaltitel" value="{{book.original}}"></paper-input>
 		<paper-input label="Titel" value="{{book.title}}"></paper-input>
@@ -17,10 +19,12 @@
 		<paper-input label="Preis" value="{{book.price}}"></paper-input>
 		<paper-input label="Tags" value="{{book.tags}}"></paper-input>
 		<paper-checkbox checked="{{book.dedication}}">Widmung</paper-checkbox>
-		<paper-button on-tap="lend" hidden$="{{!available}}" raised>Verleihen</paper-button>
-		<paper-button on-tap="back" hidden$="{{available}}" raised>Buch zurück</paper-button>
-		<paper-button on-tap="sell" hidden$="{{sold}}" raised>Verkaufen</paper-button>
-	</template>
+		<div class="buttons">
+			<paper-button on-tap="lend" hidden$="{{!available}}" raised>Verleihen</paper-button>
+			<paper-button on-tap="back" hidden$="{{available}}" raised>Buch zurück</paper-button>
+			<paper-button on-tap="sell" hidden$="{{sold}}" raised>Verkaufen</paper-button>
+		</div>
+</template>
 	<script>
 		Polymer({
 			is: 'book-general',

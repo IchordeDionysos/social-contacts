@@ -1,12 +1,15 @@
 <dom-module id="book-dialog">
 	<style>
+		#pdpid {
+			margin: 0;
+		}
 	</style>
 	<template>
 			<paper-dialog entry-animation="scale-up-animation"
-										exit-animation="fade-out-animation"
-										id="bookDetailDialog"
-										class="bookDialog"
-										opened="{{opened}}">
+						  exit-animation="fade-out-animation"
+						  id="bookDetailDialog"
+						  class="bookDialog"
+						  opened="{{opened}}">
 				<paper-item style="padding-left: 11px;">
 					<paper-icon-button 
 								icon="icons:arrow-back" 
@@ -17,10 +20,9 @@
 					<span>&nbsp;-&nbsp;</span>
 					<span>[[book.status]]</span>
 				</paper-item>
-				<book-general hidden$="{{!generalView}}" on-book-lend="lend" 
-											on-book-back="back" on-book-sell="sell" book="{{book}}">
+				<book-general hidden$="{{!generalView}}" on-book-lend="lend" on-book-back="back" on-book-sell="sell" book="{{book}}">
 				</book-general>
-				<book-lend hidden$="{{!lendView}}" on-book-lent="lent" on-lent-abort="lendAbort"></book-lend>
+				<book-lend hidden$="{{!lendView}}" date-picker="{{datePicker}}" on-book-lent="lent" on-lent-abort="lendAbort"></book-lend>
 				<book-sell hidden$="{{!sellView}}"  on-book-sold="sold" on-sold-abort="sellAbort"></book-sell>
 			</paper-dialog>
 	</template>
@@ -30,10 +32,6 @@
 			
 			properties: {
 				book: Object,
-				dialogId: {
-					type: String,
-					notify: true
-				},
 				opened: {
 					type: Boolean,
 					notify: true
@@ -49,6 +47,10 @@
 				generalView: {
 					type: Boolean,
 					computed: 'computeGeneralView(lendView, sellView)'
+				},
+				datePicker: {
+					type: Boolean,
+					value: false
 				}
 			},
 
@@ -108,7 +110,9 @@
 			},
 
 			_updateBook: function() { 
-				this.set('lendView', false);
+				if(!this.datePicker) this.set('lendView', false);
+
+				this.set('datePicker', false);
 				this.set('sellView', false);
 				this.fire('book-changed', {
 					book: this.book

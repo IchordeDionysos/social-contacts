@@ -3,6 +3,7 @@
 		<style>
 			:host {
 				display: block;
+				margin: 8px;
 			}
 		</style>
 		<paper-input value="{{name}}" label="Verkaufen an"></paper-input>
@@ -12,8 +13,10 @@
                      auto-validate>
           <div suffix>€</div>
         </paper-input>
-		<paper-button on-tap="sold" raised>Verkaufen</paper-button>
-		<paper-button on-tap="abort" raised>Abbrechen</paper-button>
+        <div class="buttons">
+			<paper-button on-tap="sold" raised>Verkaufen</paper-button>
+			<paper-button on-tap="abort" raised>Abbrechen</paper-button>
+		</div>
 	</template>
 	<script>
 		Polymer({

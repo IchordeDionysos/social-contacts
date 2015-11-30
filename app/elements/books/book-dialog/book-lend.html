@@ -1,0 +1,89 @@
+<dom-module id="book-lend">
+	<template>
+		<style>
+			:host {
+				display: block;
+				margin: 8px;
+			}
+
+			#dateButton {
+				--paper-button-ink-color: var(--accent-color);
+				color: var(--accent-color);
+			}
+		</style>
+		<paper-item>Verleihen an:</paper-item>
+		<paper-input value="{{name}}" label="Name"></paper-input>
+		<paper-item>Bis:&nbsp;<span>[[dateString]]</span></paper-item>
+		<div style="text-align: center;">
+			<paper-button id="dateButton" on-tap="openDatePicker" raised>Datum auswählen</paper-button>
+		</div>
+
+		<paper-dialog id="datePicker" style="min-height: 335px;">
+			<paper-date-picker style="display: block; margin-bottom: 8px;"
+							   date="{{date}}"
+						   	   min-date="[[minDate]]">
+			</paper-date-picker>
+			<div class="buttons">
+				<paper-button on-tap="selectDate" raised>Select</paper-button>
+			</div>
+		</paper-dialog>
+
+		<div class="buttons">
+			<paper-button on-tap="lent" raised>Verleihen</paper-button>
+			<paper-button on-tap="abort" raised>Abbrechen</paper-button>
+		</div>
+	</template>
+	<script>
+		Polymer({
+			is: 'book-lend',
+
+			properties: {
+				date: Date,
+				minDate: {
+					type: Date,
+					readOnly: true,
+					value: function () {
+						var date = new Date();
+						date.setDate(date.getDate()-1);
+						return date;
+					}
+				},
+				datePicker: {
+					type: Boolean,
+					notify: true
+				},
+				dateString: {
+					type: String,
+					computed: 'computeDateString(date)'
+				}
+			},
+
+			lent: function() {
+				this.fire('book-lent', {
+					name: this.name,
+					till: this.date
+				});
+			},
+
+			abort: function() {
+				this.fire('lent-abort');
+			},
+
+			openDatePicker: function() {
+				this.$.datePicker.open();
+				this.set('datePicker', true);
+			},
+
+			selectDate: function() {
+				this.$.datePicker.close();
+			},
+
+			computeDateString: function(date) {
+				var day = date.getDate();
+				var month = date.getMonth();
+				var year = date.getFullYear();
+				return dateString = day + '.' + month + '.' + year;
+			}
+		});
+	</script>
+</dom-module>
