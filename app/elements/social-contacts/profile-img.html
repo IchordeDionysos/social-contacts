@@ -1,0 +1,31 @@
+<dom-module id="profile-img">
+	<template>
+		<style>
+			:host {
+				display: inline-block;
+				position: absolute;
+			    right: 4px;
+			}
+			#profileImage {
+				height: 110px;
+				border-radius: 50%;
+			}
+		</style>
+		<img id="profileImage" 
+			 src="https://lh4.googleusercontent.com/-uH28KM0s1zw/AAAAAAAAAAI/AAAAAAAAHaU/SKGXaX5aBiw/photo.jpg">
+	</template>
+	<script>
+		Polymer({
+			is: 'profile-img',
+
+			properties: {
+				user: Object,
+				observer: 'changed'
+			},
+
+			changed: function(newVal, oldVal) {
+				console.log(this.user);
+			}
+		});
+	</script>
+</dom-module>

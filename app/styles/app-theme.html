@@ -136,13 +136,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* Breakpoints */
 
   /* Small */
-  @media (max-width: 600px) {
+  @media (max-width: 680px) {
 
     paper-material {
       --menu-container-display: none;
       width: calc(97.33% - 32px);
-      padding-left: 16px;
-      padding-right: 16px;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    paper-item {
+      padding: 0;
     }
 
     paper-toolbar.tall .app-name {
@@ -165,7 +169,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   /* Tablet+ */
-  @media (min-width: 601px) {
+  @media (min-width: 681px) {
 
     paper-material {
       width: calc(98% - 46px);
