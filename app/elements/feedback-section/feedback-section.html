@@ -34,111 +34,80 @@
   </style>
   <template>
   	<paper-material>
+      <form is="iron-form" id="form" method="post" action="../../scripts/feedback.php">
         <p>Feedback</p>
-        <paper-input id="issueTitle" label="Titel" value="{{body.title}}"></paper-input>
-        <paper-input id="issueEmail" label="Email (notwendig zur Kontaktaufnahme)" 
-                     value="{{ghEmail}}">
+        <paper-input id="issueTitle" 
+                     label="Titel" 
+                     name="title"
+                     required>
         </paper-input>
-        <paper-textarea id="issueBody" label="Body" value="{{ghBody}}"></paper-textarea>
+        <paper-input id="issueEmail" 
+                     label="Email (notwendig zur Kontaktaufnahme)" 
+                     name="email">
+        </paper-input>
+        <paper-textarea id="issueBody" 
+                        label="Body" 
+                        name="body">
+        </paper-textarea>
         <p>Wähle alle passende Labels aus:</p>
-        <paper-checkbox id="bug" class="red" value="bug">Bug</paper-checkbox>
-        <paper-checkbox id="help" class="green" value="help">Hilfe</paper-checkbox>
-        <paper-checkbox id="question" class="pink" value="question">Frage</paper-checkbox>
-        <paper-checkbox id="feature" class="purple" value="feature">Feature</paper-checkbox>
-        <paper-checkbox id="enhancement" class="blue" value="enhancement">Verbesserung</paper-checkbox>
-        <paper-checkbox id="design" class="light-blue" value="design">Design Vorschlag</paper-checkbox>
-        <paper-button class="green ripple" on-tap="submitIssue" raised>Absenden</paper-button>
+        <paper-checkbox id="bug" 
+                        class="red" 
+                        name="labels"
+                        value="bug">
+          Bug
+        </paper-checkbox>
+        <paper-checkbox id="help" 
+                        class="green" 
+                        name="labels"
+                        value="help">
+          Hilfe
+        </paper-checkbox>
+        <paper-checkbox id="question" 
+                        class="pink"
+                        name="labels" 
+                        value="question">
+          Frage
+        </paper-checkbox>
+        <paper-checkbox id="feature" 
+                        class="purple"
+                        name="labels"
+                        value="feature">
+          Feature
+        </paper-checkbox>
+        <paper-checkbox id="enhancement" 
+                        class="blue"
+                        name="labels"
+                        value="enhancement">
+          Verbesserung
+        </paper-checkbox>
+        <paper-checkbox id="design" 
+                        class="light-blue" 
+                        name="labels"
+                        value="design">
+          Design Vorschlag
+        </paper-checkbox>
+        <paper-button class="green ripple" onclick="submitHandler(event)" raised>Absenden</paper-button>
+      </form>
     </paper-material>
-  	<iron-ajax
-      id="githubIssues"
-  		url="https://api.github.com/repos/IchordeDionysos/social-contacts/issues"
-  		method="POST"
-  		body="[[body]]"
-      params='{"access_token": "efd925cc3c8d593b720f0d6a88f3c36f593e063a"}'
-      verbose
-      content-type="application/json"
-      handle-as="json"
-  		on-response="showSuccess">
-
-  	</iron-ajax>
   </template>
   <script>
     Polymer({
-      is: 'feedback-section',
-
-      properties : {
-      	body: {
-      		notify: true,
-      		type: Object,
-          value: {
-            'title': '',
-            'body': '',
-            'assignee': 'IchordeDionysos',
-            'labels': ['0 - Backlog']
-          },
-
-          ghBody: {
-            notify: true,
-            type: String,
-            value: ''
-          },
-
-          ghEmail: {
-            notify: true,
-            type: String,
-            value: ''
-          }
-      	}
-      },
-
-      showSuccess: function () {
-      	document.querySelector('#issueCreated').show();
-        this.body.labels = ['0 - Backlog'];
-        //this.body.title = '';
-        this.$.issueTitle.value = '';
-        this.$.issueEmail.value = '';
-        this.$.issueBody.value = '';
-        //this.body.body = '';
-        this.$.bug.checked = false;
-        this.$.help.checked = false;
-        this.$.question.checked = false;
-        this.$.feature.checked = false;
-        this.$.enhancement.checked = false;
-        this.$.design.checked = false;
-
-        console.log(this.body.title);
-        console.log(this.body.body);
-        console.log(this.body.labels);
-      },
-
-      submitIssue: function() {
-        if (this.$.bug.checked) {
-          this.push('body.labels', 'bug');
-        };
-        if (this.$.help.checked) {
-          this.push('body.labels', 'help');
-        };
-        if (this.$.question.checked) {
-          this.push('body.labels', 'question');
-        };
-        if (this.$.feature.checked) {
-          this.push('body.labels', 'feature');
-        };
-        if (this.$.enhancement.checked) {
-          this.push('body.labels', 'enhancement');
-        };
-        if (this.$.design.checked) {
-          this.push('body.labels', 'design');
-        };
-
-        var body = this.ghBody + '\n' + 'Email: ' + this.ghEmail;
-
-        this.set('body.body', body);
-
-        console.log(this.body);
-        this.$.githubIssues.generateRequest();
-      }
-
+      is: 'feedback-section'      	
     });
+
+    function submitHandler(event) {
+      console.log('fire post request');
+      Polymer.dom(event).localTarget.parentElement.submit();
+      document.querySelector('#issueTitle').value = '';
+      document.querySelector('#issueEmail').value = '';
+      document.querySelector('#issueBody').value = '';
+      document.querySelector('#issueCreated').show();
+      document.querySelector('#bug').checked = false;
+      document.querySelector('#help').checked = false;
+      document.querySelector('#question').checked = false;
+      document.querySelector('#feature').checked = false;
+      document.querySelector('#enhancement').checked = false;
+      document.querySelector('#design').checked = false;
+    }
   </script>
 </dom-module>
