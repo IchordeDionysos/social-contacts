@@ -36,11 +36,12 @@
       },
       
       _addContact: function(e) {
-        for(var i=0; i<e.detail.amount; i++) {
-          this.push('contacts', {
-            
-          });
-        }
+        this.push('contacts', {
+          fullname: e.detail.fullname,
+          emails: e.detail.emails,
+          phones: e.detail.phones,
+          addresses: e.detail.addresses
+        });
       }
     });
   </script>

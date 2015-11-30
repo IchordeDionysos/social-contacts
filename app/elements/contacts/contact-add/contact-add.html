@@ -1,7 +1,7 @@
 <dom-module id="contact-add">
   <style>
     #pdpid {
-     padding-top: 30px;
+     margin-top: 63px;
     }
   </style>
   <template>
@@ -23,19 +23,20 @@
         </paper-button>
       </div>
       <div id="pdpid">
-        <paper-input value="{{fullname}}" label="Namen hinzufügen"></paper-input>
-        <div id="addEmails">
-          <gold-email-input class="email" label="Email"></gold-email-input>
-        </div>
-        <div id="addPhones">
-          <gold-phone-input class="phone" label="Telefon"></gold-phone-input>
-        </div>
-        <div id="addAddresses">
-          <paper-input class="address" label="Addresse"></paper-input>
-        </div>
+        <paper-dialog-scrollable>
+          <paper-input value="{{fullname}}" label="Namen hinzufügen"></paper-input>
+          <div id="addEmails">
+            <gold-email-input class="email" label="Email"></gold-email-input>
+          </div>
+          <div id="addPhones">
+            <gold-phone-input country-code="49" class="phone" label="Telefon"></gold-phone-input>
+          </div>
+          <div id="addAddresses">
+            <paper-input class="address" label="Addresse"></paper-input>
+          </div>
+        </paper-dialog-scrollable>
       </div>
-    </paper-dialog>
-                  
+    </paper-dialog>           
   </template>
   <script>
     Polymer({
@@ -83,6 +84,7 @@
             var phone = document.createElement('gold-phone-input');
             phone.label = 'Telefon';
             phone.classList.add('phone');
+            phone.countryCode = 49;
             this.$.addPhones.appendChild(phone);
           }
         }
@@ -102,28 +104,61 @@
             this.$.addAddresses.appendChild(address);
           }
         }
+        this.$.addContactDialog.notifyResize();
       },
       
       _clearDialog: function() {
         this.fullname = '';
-        this.emails = [''];
-        this.phones = [''];
-        this.addresses = [''];
+        this.set('emails', ['']);
+        this.set('phones', ['']);
+        this.set('addresses', ['']);
       },
       
       _addContact: function() {
+        this.getEmails();
         this.fire('added-contact', {
           fullname: this.fullname,
-          emails: this.emails,
-          phones: this.phones,
-          addresses: this.addresses
+          emails: this.getEmails(),
+          phones: this.getPhones(),
+          addresses: this.getAddresses()
         });
         this._clearDialog();
       },
 
+      getEmails: function() {
+        var emailElements = document.getElementsByClassName('email');
+        var emails = [];
+        for (var i = 0; i < emailElements.length; i++) {
+          if (emailElements[i].value !== "") {
+            emails.push(emailElements[i].value);
+          }
+        }
+        return emails;
+      },
+
+      getPhones: function() {
+        var phoneElements = document.getElementsByClassName('phone');
+        var phones = [];
+        for (var i = 0; i < phoneElements.length; i++) {
+          if (phoneElements[i].value !== "") {
+            phones.push(phoneElements[i].value);
+          }
+        }
+        return phones;
+      },
+
+      getAddresses: function() {
+        var addressElements = document.getElementsByClassName('address');
+        var addresses = [];
+        for (var i = 0; i < addressElements.length; i++) {
+          if (addressElements[i].value !== "") {
+            addresses.push(addressElements[i].value);
+          }
+        }
+        return addresses;
+      },
+
       _findClass: function(classes, target) {
-        console.log(classes);
-        console.log(target);
         for (var i = 0; i < classes.length; i++) {
           if(classes[i] === target)
             return true;
