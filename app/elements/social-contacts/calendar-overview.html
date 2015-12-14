@@ -1,0 +1,150 @@
+<dom-module id="calendar-overview">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			paper-item {
+				font-size: small;
+			}
+			a {
+				color: inherit;
+				text-decoration: inherit;
+			}
+			#date {
+				font-weight: 600;
+			}
+		</style>
+		<google-client-loader id="calendar"
+  							  name="calendar"
+  							  version="v3"
+  							  on-google-api-load="apiLoaded">
+  		</google-client-loader>
+		<template is="dom-if" if={{loggedIn}}>
+			<paper-dropdown-menu label="Wähle Kalendar" selected-item="{{activeCalendar}}">
+				<paper-menu class="dropdown-content">	
+					<paper-item></paper-item>			
+					<template is="dom-repeat" id="calendarList" items={{calendars}} 
+						as="calendar">
+						<paper-item>[[calendar.summary]]</paper-item>
+					</template>
+				</paper-menu>
+			</paper-dropdown-menu>
+			<template is="dom-repeat" items={{upComingEvents}} as="event">
+				<paper-item>
+					<a href="[[event.htmlLink]]" target="_blank">
+						<span id="date">[[_computeDate(event.start)]]</span>&nbsp;<span>[[event.summary]]</span>
+					</a>
+				</paper-item>
+			</template>
+		</template>
+		<br>
+		<google-signin client-id="699732304446-e45ap2fr5flavps567q6a23dqh35oe13.apps.googleusercontent.com" 
+					   scopes="https://www.googleapis.com/auth/calendar.readonly"
+					   api-key="AIzaSyDoVBLsoq9t59oDMiKi38BTGABFZbkrF2I"
+					   is-authorized="{{loggedIn}}">
+		</google-signin>
+	</template>
+	<script>
+		Polymer({
+			is: 'calendar-overview',
+
+			properties: {
+				calendars: {
+					type: Array
+				},
+				activeCalendar: {
+					type: Object
+				},
+				activeCalendarId: {
+					type: String,
+					observer: 'calendarIdChanged'
+				},
+				upComingEvents: {
+					type: Array
+				}
+			},
+
+			observers: [
+				'activeCalendarChanged(activeCalendar.*)'
+			],
+
+			activeCalendarChanged: function(newVal) {
+				var object = document.querySelector('#calendarList').itemForElement(newVal.value);
+				if (object !== undefined)
+					this.activeCalendarId = document.querySelector('#calendarList').itemForElement(newVal.value).id;
+				else 
+					this.activeCalendarId = undefined;
+			},
+
+			calendarIdChanged: function(newVal) {
+				if (newVal === undefined) {
+					this.upComingEvents = undefined;
+					return;
+				}
+				var request = this.$.calendar.api.events.list({
+					'calendarId': newVal,
+					'orderBy': 'startTime',
+					'singleEvents': true,
+					'maxResults': 10,
+					'timeMin': new Date().toISOString()
+				});
+
+				request.execute(function(resp) {
+		          if (resp.error) {
+		            console.error("Error with calendarList.list", resp.message)
+		          } else {
+		            this.upComingEvents = resp.items;
+		          }
+		        }.bind(this));
+			},
+
+			apiLoaded: function() {
+				var request = this.$.calendar.api.calendarList.list({"key": ""});
+
+		        request.execute(function(resp) {
+		          if (resp.error) {
+		            console.error("Error with calendarList.list", resp.message)
+		          } else {
+		            this.calendars = resp.items;
+		          }
+		        }.bind(this));
+			},
+
+			_computeDate: function(start) {
+				if (start.dateTime !== undefined) 
+					var d = new Date(start.dateTime);
+				else if(start.date !== undefined)
+					var d = new Date(start.date);
+				else
+					return;
+				var dayInt = d.getDay();
+				var date = d.getDate();
+				var month = d.getMonth() + 1;
+				var day;
+
+				switch(dayInt) {
+					case 0: day = 'Mo'; break;
+					case 1: day = 'Di'; break;
+					case 2: day = 'Mi'; break;
+					case 3: day = 'Do'; break;
+					case 4: day = 'Fr'; break;
+					case 5: day = 'Sa'; break;
+					case 6: day = 'So'; break;
+				}
+
+				if(date < 10)
+					var dateStr = '0' + date;
+				else
+					var dateStr = date;
+
+				if(date < 10)
+					var monthStr = '0' + month;
+				else
+					var monthStr = month;
+
+				return day + ', ' + dateStr + '.' + month + ': ';
+			}
+		});
+	</script>
+</dom-module>

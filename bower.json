@@ -11,7 +11,9 @@
     "firebase-element": "GoogleWebComponents/firebase-element#~1.0.7",
     "gold-phone-input": "PolymerElements/gold-phone-input#~1.0.6",
     "gold-email-input": "PolymerElements/gold-email-input#~1.0.5",
-    "paper-date-picker": "polymer-paper-date-picker#~1.1.2"
+    "paper-date-picker": "polymer-paper-date-picker#~1.1.2",
+    "google-signin": "GoogleWebComponents/google-signin#~1.2.0",
+    "google-calendar": "GoogleWebComponents/google-calendar#~1.0.1"
   },
   "devDependencies": {
     "web-component-tester": "*",
