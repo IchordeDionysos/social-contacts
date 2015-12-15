@@ -5,6 +5,11 @@
       bottom: 24px;
       right: 44px;
     }
+    @media (max-width: 380px) {
+      paper-material {
+        padding: 10px;
+      }
+    }
   </style>
   <template>
     <book-add opened="{{opened}}" on-added-book="_addBook"></book-add>

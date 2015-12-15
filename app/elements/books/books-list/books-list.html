@@ -10,27 +10,42 @@
         display: none;
       }
     }
-    .title {
+    @media (max-width: 680px) {
+      paper-item: {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+    }
+    .small {
+      flex-basis: 120px;
+    }
+    .large {
       flex-basis: 1000px;
+    }
+    .middle {
+      flex-basis: 500px;
+    }
+    .divider {
+      border-top: 1px solid var(--divider-color);
     }
   </style>
   <template>
     <book-dialog opened="{{opened}}" book="{{selected}}" on-book-changed="_bookChanged"></book-dialog>
     <template is="dom-if" if="{{books}}">
       <paper-item display="flex">
-        <span>ID</span>
-        <span class="hide">Author</span>
-        <span class="title">Originaltitel</span>
-        <span class="hide">Sprache</span>
-        <span>Status</span>
+        <span class="small">ID</span>
+        <span class="hide middle">Author</span>
+        <span class="large">Originaltitel</span>
+        <span class="hide middle">Sprache</span>
+        <span class="middle">Status</span>
       </paper-item>
       <template is="dom-repeat" items={{books}} as="book" id="bookList">
-        <paper-item display="flex" on-tap="select">
-          <span>{{book.id}}</span>
-          <span class="hide">{{book.author}}</span>
-          <span class="title">{{book.original}}</span>
-          <span class="hide">{{book.language}}</span>
-          <span>{{book.status}}</span>
+        <paper-item class="divider" display="flex" on-tap="select">
+          <span class="small">{{book.id}}</span>
+          <span class="hide middle">{{book.author}}</span>
+          <span class="large">{{book.original}}</span>
+          <span class="hide middle">{{book.language}}</span>
+          <span class="middle">{{book.status}}</span>
         </paper-item>
       </template>
     </template>
