@@ -12,19 +12,20 @@
 			}
 		</style>
 		<img id="profileImage" 
-			 src="https://lh4.googleusercontent.com/-uH28KM0s1zw/AAAAAAAAAAI/AAAAAAAAHaU/SKGXaX5aBiw/photo.jpg">
+			 src="{{img}}">
 	</template>
 	<script>
 		Polymer({
 			is: 'profile-img',
 
 			properties: {
-				user: Object,
-				observer: 'changed'
+				user: Object
 			},
 
-			changed: function(newVal, oldVal) {
-				console.log(this.user);
+			observers: ['userChanged(user.*)'],
+
+			userChanged: function(changeRecord) {
+				
 			}
 		});
 	</script>

@@ -31,11 +31,11 @@
 				</paper-menu>
 			</paper-dropdown-menu>
 			<template is="dom-repeat" items={{upComingEvents}} as="event">
-				<paper-item>
-					<a href="[[event.htmlLink]]" target="_blank">
+				<a href="[[event.htmlLink]]" target="_blank">
+					<paper-item>
 						<span id="date">[[_computeDate(event.start)]]</span>&nbsp;<span>[[event.summary]]</span>
-					</a>
-				</paper-item>
+					</paper-item>
+				</a>
 			</template>
 		</template>
 		<br>

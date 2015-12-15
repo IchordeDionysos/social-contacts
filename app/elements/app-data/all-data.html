@@ -41,7 +41,8 @@
 			},
 
 			observers: [
-				'dataChanged(authData.*, user.*, contacts.*, books.*)'
+				'dataChanged(authData.*, user.*, contacts.*, books.*)',
+				'authDataChanged(authData.*)'
 			],
 
 			dataChanged: function(authData, user, contacts, books) {
