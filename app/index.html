@@ -67,9 +67,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Drawer Toolbar -->
         <paper-toolbar id="drawerToolbar">
           <paper-icon-button icon="arrow-back" 
-              id="menu-arrow-back" 
+              id="menu-arrow-back"
+              style="color: white;"
               paper-drawer-toggle></paper-icon-button>
-          <span class="paper-font-title">Menu</span>
+          <span class="paper-font-title" style="color: white;">Menu</span>
           <profile-img user="{{user}}"></profile-img>
         </paper-toolbar>
 
@@ -101,7 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </a>
         </paper-menu>
 
-        <calendar-overview></calendar-overview>
+        <calendar-overview signed-in="[[signedIn]]"></calendar-overview>
       </paper-scroll-header-panel>
 
       <!-- Main Area -->
@@ -114,6 +115,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- Toolbar icons -->
           <paper-icon-button icon="search"></paper-icon-button>
+
+          <social-contacts-login signed-in="{{signedIn}}"></social-contacts-login>
 
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
@@ -146,9 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="settings">
-              <paper-material>
-                Einstellungen
-              </paper-material>
+              <settings-section settings="{{settings}}"></settings-section>
             </section>
 
             <section data-route="feedback">
