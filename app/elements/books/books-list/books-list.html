@@ -5,23 +5,31 @@
       margin: auto;
       text-align: center;
     }
+    @media (max-width: 680px) {
+      .hide {
+        display: none;
+      }
+    }
+    .title {
+      flex-basis: 1000px;
+    }
   </style>
   <template>
     <book-dialog opened="{{opened}}" book="{{selected}}" on-book-changed="_bookChanged"></book-dialog>
     <template is="dom-if" if="{{books}}">
       <paper-item display="flex">
-        <span>Buch-ID</span>
-        <span>Author</span>
-        <span>Originaltitel</span>
-        <span>Sprache</span>
+        <span>ID</span>
+        <span class="hide">Author</span>
+        <span class="title">Originaltitel</span>
+        <span class="hide">Sprache</span>
         <span>Status</span>
       </paper-item>
       <template is="dom-repeat" items={{books}} as="book" id="bookList">
-        <paper-item on-tap="select">
+        <paper-item display="flex" on-tap="select">
           <span>{{book.id}}</span>
-          <span>{{book.author}}</span>
-          <span>{{book.original}}</span>
-          <span>{{book.language}}</span>
+          <span class="hide">{{book.author}}</span>
+          <span class="title">{{book.original}}</span>
+          <span class="hide">{{book.language}}</span>
           <span>{{book.status}}</span>
         </paper-item>
       </template>
