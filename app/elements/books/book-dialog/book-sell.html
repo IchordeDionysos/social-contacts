@@ -8,12 +8,12 @@
 		</style>
 		<paper-input value="{{name}}" label="Verkaufen an"></paper-input>
 		<paper-input value="{{price}}" label="Verkaufpreis" 
-                     type="number" min="0" step="0.01"
-                     error-message="Nur gültige Geldbeträge" 
-                     auto-validate>
-          <div suffix>€</div>
-        </paper-input>
-        <div class="buttons">
+					 type="number" min="0" step="0.01"
+					 error-message="Nur gültige Geldbeträge" 
+					 auto-validate>
+		  <div suffix>€</div>
+		</paper-input>
+		<div class="buttons">
 			<paper-button on-tap="sold" raised>Verkaufen</paper-button>
 			<paper-button on-tap="abort" raised>Abbrechen</paper-button>
 		</div>

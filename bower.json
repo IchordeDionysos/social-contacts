@@ -1,28 +1,28 @@
 {
-  "name": "social-contacts",
-  "private": true,
-  "dependencies": {
-    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
-    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
-    "page": "visionmedia/page.js#~1.6.3",
-    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
-    "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
-    "polymer": "Polymer/polymer#^1.1.0",
-    "firebase-element": "GoogleWebComponents/firebase-element#~1.0.9",
-    "gold-phone-input": "PolymerElements/gold-phone-input#~1.0.6",
-    "gold-email-input": "PolymerElements/gold-email-input#~1.0.5",
-    "paper-date-picker": "polymer-paper-date-picker#~1.1.2",
-    "google-signin": "GoogleWebComponents/google-signin#~1.2.0",
-    "google-calendar": "GoogleWebComponents/google-calendar#~1.0.1",
-    "firebase-element-extended": "~1.0.0"
-  },
-  "devDependencies": {
-    "web-component-tester": "*",
-    "test-fixture": "PolymerElements/test-fixture#^1.0.0"
-  },
-  "resolutions": {
-    "polymer": "^1.2.0",
-    "webcomponentsjs": "^0.7.2",
-    "firebase-element": "61-kschaaf-local-key"
-  }
+	"name": "social-contacts",
+	"private": true,
+	"dependencies": {
+		"iron-elements": "PolymerElements/iron-elements#^1.0.0",
+		"neon-elements": "PolymerElements/neon-elements#^1.0.0",
+		"page": "visionmedia/page.js#~1.6.3",
+		"paper-elements": "PolymerElements/paper-elements#^1.0.1",
+		"platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
+		"polymer": "Polymer/polymer#^1.1.0",
+		"firebase-element": "GoogleWebComponents/firebase-element#~1.0.9",
+		"gold-phone-input": "PolymerElements/gold-phone-input#~1.0.6",
+		"gold-email-input": "PolymerElements/gold-email-input#~1.0.5",
+		"paper-date-picker": "polymer-paper-date-picker#~1.1.2",
+		"google-signin": "GoogleWebComponents/google-signin#~1.2.0",
+		"google-calendar": "GoogleWebComponents/google-calendar#~1.0.1",
+		"firebase-element-extended": "~1.0.0"
+	},
+	"devDependencies": {
+		"web-component-tester": "*",
+		"test-fixture": "PolymerElements/test-fixture#^1.0.0"
+	},
+	"resolutions": {
+		"polymer": "^1.2.0",
+		"webcomponentsjs": "^0.7.2",
+		"firebase-element": "61-kschaaf-local-key"
+	}
 }

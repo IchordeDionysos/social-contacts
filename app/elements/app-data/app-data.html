@@ -1,107 +1,107 @@
 <dom-module id="app-data">
-  <style>
-    paper-dialog {
-      padding: 32px;
-    }
-    .google-sign-in {
-      display: inline-block;
-      background: #4285f4;
-      color: white;
-      width: 190px;
-      border-radius: 5px;
-      white-space: nowrap;
-    }
-    .google-sign-in:hover {
-      cursor: pointer;
-    }
-    .google-sign-in-icon {
-      background: url('/images/google-sign-in/g-normal.png') transparent 5px 50% no-repeat;
-      display: inline-block;
-      vertical-align: middle;
-      width: 42px;
-      height: 42px;
-      border-right: #2265d4 1px solid;
-    }
-    .google-sign-in-label {
-      display: inline-block;
-      vertical-align: middle;
-      padding-left: 42px;
-      padding-right: 42px;
-      font-size: 14px;
-      font-weight: bold;
-      /* Use the Roboto font that is loaded in the <head> */
-      font-family: 'Roboto', sans-serif;
-    }
-  </style>
-  <template>
-    <firebase-auth id="auth" 
-                   user="{{authData}}"
-                   location="{{location}}"
-                   provider="google"
-                   on-logout="logout">
-    </firebase-auth>
-    
-    <firebase-collection location="{{userLocation}}"
-                         ref="{{ref}}"
-                         data="{{fbData}}"
-                         on-firebase-value="_firebaseLoaded">
-    </firebase-collection>
-    <!--
-    <iron-localstorage name="social-contacts"
-                       on-iron-localstorage-load="_backupLoaded"
-                       value="{{backupData}}">
-    </iron-localstorage>
-    -->
-  </template>
-  <script>
-    Polymer({
-      is: 'app-data',
-      
-      properties: {
-        data: {
-          notify: true
-        },
-        authData: {
-          observer: '_authDataChanged',
-          notify: true
-        },
-        _firebaseConneted: {
-          value: false
-        },
-        directory: {
-          type: String
-        }
-      },
-      
-      signIn: function() {
-        this.$.auth.login();
-      },
-      
-      logout: function() {
-        this.$.auth.logout();
-        this.data = null;
-      },
-      
-      _authDataChanged: function(authData) {
-        if(authData) {
-          this.userLocation = [this.location, this.directory, this.authData.uid].join('/');
-        }
-      },
-      
-      _firebaseLoaded: function() {
-        this._firebaseConnected = true;
-        this.data = this.fbData;
-        this.backupData = this.fbData;
-        this.linkPaths('fbData', 'data');
-        this.linkPaths('backupData', 'data');
-      },
-      
-      _backupLoaded: function() {
-        if(!this._firebaseConnected) {
-          this.data = this.backupData.slice();
-        }
-      }
-      
-    });
-  </script>
+	<style>
+		paper-dialog {
+			padding: 32px;
+		}
+		.google-sign-in {
+			display: inline-block;
+			background: #4285f4;
+			color: white;
+			width: 190px;
+			border-radius: 5px;
+			white-space: nowrap;
+		}
+		.google-sign-in:hover {
+			cursor: pointer;
+		}
+		.google-sign-in-icon {
+			background: url('/images/google-sign-in/g-normal.png') transparent 5px 50% no-repeat;
+			display: inline-block;
+			vertical-align: middle;
+			width: 42px;
+			height: 42px;
+			border-right: #2265d4 1px solid;
+		}
+		.google-sign-in-label {
+			display: inline-block;
+			vertical-align: middle;
+			padding-left: 42px;
+			padding-right: 42px;
+			font-size: 14px;
+			font-weight: bold;
+			/* Use the Roboto font that is loaded in the <head> */
+			font-family: 'Roboto', sans-serif;
+		}
+	</style>
+	<template>
+		<firebase-auth id="auth" 
+									 user="{{authData}}"
+									 location="{{location}}"
+									 provider="google"
+									 on-logout="logout">
+		</firebase-auth>
+		
+		<firebase-collection location="{{userLocation}}"
+												 ref="{{ref}}"
+												 data="{{fbData}}"
+												 on-firebase-value="_firebaseLoaded">
+		</firebase-collection>
+		<!--
+		<iron-localstorage name="social-contacts"
+											 on-iron-localstorage-load="_backupLoaded"
+											 value="{{backupData}}">
+		</iron-localstorage>
+		-->
+	</template>
+	<script>
+		Polymer({
+			is: 'app-data',
+			
+			properties: {
+				data: {
+					notify: true
+				},
+				authData: {
+					observer: '_authDataChanged',
+					notify: true
+				},
+				_firebaseConneted: {
+					value: false
+				},
+				directory: {
+					type: String
+				}
+			},
+			
+			signIn: function() {
+				this.$.auth.login();
+			},
+			
+			logout: function() {
+				this.$.auth.logout();
+				this.data = null;
+			},
+			
+			_authDataChanged: function(authData) {
+				if(authData) {
+					this.userLocation = [this.location, this.directory, this.authData.uid].join('/');
+				}
+			},
+			
+			_firebaseLoaded: function() {
+				this._firebaseConnected = true;
+				this.data = this.fbData;
+				this.backupData = this.fbData;
+				this.linkPaths('fbData', 'data');
+				this.linkPaths('backupData', 'data');
+			},
+			
+			_backupLoaded: function() {
+				if(!this._firebaseConnected) {
+					this.data = this.backupData.slice();
+				}
+			}
+			
+		});
+	</script>
 </dom-module>

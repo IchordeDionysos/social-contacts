@@ -1,31 +1,31 @@
 <dom-module id="book-item">
-  <style>
-    paper-item {
-      display: flex;
-    }
-    span {
-      flex-basis: 100%; 
-      margin: auto;
-    }
-  </style>
-  <template>
-    <paper-item>
-      <span>{{book.id}}</span>
-      <span>{{book.author}}</span>
-      <span>{{book.original}}</span>
-      <span>{{book.language}}</span>
-      <span>{{book.status}}</span>
-    </paper-item>
-  </template>
-  <script>
-    Polymer({
-      is: 'book-item',
-      
-      properties: {
-        book: {
-          notify: true
-        }
-      }
-    });
-  </script>
+	<style>
+		paper-item {
+			display: flex;
+		}
+		span {
+			flex-basis: 100%; 
+			margin: auto;
+		}
+	</style>
+	<template>
+		<paper-item>
+			<span>{{book.id}}</span>
+			<span>{{book.author}}</span>
+			<span>{{book.original}}</span>
+			<span>{{book.language}}</span>
+			<span>{{book.status}}</span>
+		</paper-item>
+	</template>
+	<script>
+		Polymer({
+			is: 'book-item',
+			
+			properties: {
+				book: {
+					notify: true
+				}
+			}
+		});
+	</script>
 </dom-module>

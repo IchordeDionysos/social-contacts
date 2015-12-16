@@ -96,54 +96,54 @@
 				console.log(e.target);
 
 				if (this._findClass(t.classList, 'gold-email-input')) {
-				  var emails = document.querySelectorAll('.email');
-				  console.log(emails);
-				  for (var i = 0; i < emails.length-1; i++) {
-				  	console.log(emails[i]);
-					if(emails[i].value === '') {
-					  emails[i].remove();
-					  console.log(emails);
-					  emails.splice(i, 1);
+					var emails = document.querySelectorAll('.email');
+					console.log(emails);
+					for (var i = 0; i < emails.length-1; i++) {
+						console.log(emails[i]);
+						if(emails[i].value === '') {
+							emails[i].remove();
+							console.log(emails);
+							emails.splice(i, 1);
+						}
 					}
-				  }
-				  if (emails[emails.length-1].value !== '') {
-					var email = document.createElement('gold-email-input');
-					email.label = 'Email';
-					email.classList.add('email');
-					this.$.addEmails.appendChild(email);
-				  }
+					if (emails[emails.length-1].value !== '') {
+						var email = document.createElement('gold-email-input');
+						email.label = 'Email';
+						email.classList.add('email');
+						this.$.addEmails.appendChild(email);
+					}
 				}
 
 				if (this._findClass(t.classList, 'gold-phone-input')) {
-				  var phones = document.getElementsByClassName('phone');
-				  for (var i = 0; i < phones.length-1; i++) {
-					if(phones[i].value === '') {
-					  phones[i].remove();
-					  phones.splice(i, 1);
+					var phones = document.getElementsByClassName('phone');
+					for (var i = 0; i < phones.length-1; i++) {
+						if(phones[i].value === '') {
+							phones[i].remove();
+							phones.splice(i, 1);
+						}
 					}
-				  }
-				  if (phones[phones.length-1].value !== '') {
-					var phone = document.createElement('gold-phone-input');
-					phone.label = 'Telefon';
-					phone.classList.add('phone');
-					this.$.addPhones.appendChild(phone);
-				  }
+					if (phones[phones.length-1].value !== '') {
+						var phone = document.createElement('gold-phone-input');
+						phone.label = 'Telefon';
+						phone.classList.add('phone');
+						this.$.addPhones.appendChild(phone);
+					}
 				}
 
 				if (this._findClass(t.classList, 'paper-input')) {
-				  var addresses = document.getElementsByClassName('address');
-				  for (var i = 0; i < addresses.length-1; i++) {
-					if(addresses[i].value === '') {
-					  addresses[i].remove();
-					  addresses.splice(i, 1);
+					var addresses = document.getElementsByClassName('address');
+					for (var i = 0; i < addresses.length-1; i++) {
+						if(addresses[i].value === '') {
+							addresses[i].remove();
+							addresses.splice(i, 1);
+						}
 					}
-				  }
-				  if (addresses[addresses.length-1].value !== '') {
-					var address = document.createElement('paper-input');
-					address.label = 'Addresse';
-					address.classList.add('address');
-					this.$.addAddresses.appendChild(address);
-				  }
+					if (addresses[addresses.length-1].value !== '') {
+						var address = document.createElement('paper-input');
+						address.label = 'Addresse';
+						address.classList.add('address');
+						this.$.addAddresses.appendChild(address);
+					}
 				}
 			},
 

@@ -1,28 +1,28 @@
 <dom-module id="contact-item">
-  <style>
-    @media (max-width: 600px) {
-      selector-phone {
-        display: none;
-      }
-    }
-  </style>
-  <template>
-    <paper-item>
-      <span>[[contact.fullname]]</span>
-      <selector-email emails="[[contact.emails]]"></selector-email>
-      <selector-phone phones="[[contact.phones]]"></selector-phone>
-    </paper-item>
-  </template>
-  <script>
-    Polymer({
-      is: 'contact-item',
-      
-      properties: {
-        contact: {
-          type: Object,
-          notify: true
-        }
-      }
-    });
-  </script>
+	<style>
+		@media (max-width: 600px) {
+			selector-phone {
+				display: none;
+			}
+		}
+	</style>
+	<template>
+		<paper-item>
+			<span>[[contact.fullname]]</span>
+			<selector-email emails="[[contact.emails]]"></selector-email>
+			<selector-phone phones="[[contact.phones]]"></selector-phone>
+		</paper-item>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-item',
+			
+			properties: {
+				contact: {
+					type: Object,
+					notify: true
+				}
+			}
+		});
+	</script>
 </dom-module>

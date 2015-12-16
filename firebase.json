@@ -1,9 +1,9 @@
 {
-  "firebase": "social-contacts",
-  "public": "dist",
-  "ignore": [
-    "firebase.json",
-    "**/.*",
-    "**/node_modules/**"
-  ]
+	"firebase": "social-contacts",
+	"public": "dist",
+	"ignore": [
+		"firebase.json",
+		"**/.*",
+		"**/node_modules/**"
+	]
 }

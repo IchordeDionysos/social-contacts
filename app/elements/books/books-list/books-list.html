@@ -1,127 +1,127 @@
 <dom-module id="books-list">
-  <style>
-    span {
-      flex-basis: 100%;
-      margin: auto;
-      text-align: center;
-      padding: 2px;
-    }
-    @media (max-width: 680px) {
-      .hide {
-        display: none;
-      }
-    }
-    @media (max-width: 680px) {
-      paper-item: {
-        padding-left: 8px;
-        padding-right: 8px;
-      }
-    }
-    .small {
-      flex-basis: 120px;
-    }
-    .large {
-      flex-basis: 1000px;
-    }
-    .middle {
-      flex-basis: 500px;
-    }
-    .divider {
-      border-top: 1px solid var(--divider-color);
-    }
-  </style>
-  <template>
-    <book-dialog opened="{{opened}}" book="{{selected}}" on-book-changed="_bookChanged"></book-dialog>
-    <template is="dom-if" if="{{books}}">
-      <paper-item display="flex">
-        <span class="small">ID</span>
-        <span class="hide middle">Author</span>
-        <span class="large">Originaltitel</span>
-        <span class="hide middle">Sprache</span>
-        <span class="middle">Status</span>
-      </paper-item>
-      <template is="dom-repeat" items={{books}} as="book" id="bookList">
-        <paper-item class="divider" display="flex" on-tap="select">
-          <span class="small">{{book.id}}</span>
-          <span class="hide middle">{{book.author}}</span>
-          <span class="large">{{book.original}}</span>
-          <span class="hide middle">{{book.language}}</span>
-          <span class="middle">{{book.status}}</span>
-        </paper-item>
-      </template>
-    </template>
+	<style>
+		span {
+			flex-basis: 100%;
+			margin: auto;
+			text-align: center;
+			padding: 2px;
+		}
+		@media (max-width: 680px) {
+			.hide {
+				display: none;
+			}
+		}
+		@media (max-width: 680px) {
+			paper-item: {
+				padding-left: 8px;
+				padding-right: 8px;
+			}
+		}
+		.small {
+			flex-basis: 120px;
+		}
+		.large {
+			flex-basis: 1000px;
+		}
+		.middle {
+			flex-basis: 500px;
+		}
+		.divider {
+			border-top: 1px solid var(--divider-color);
+		}
+	</style>
+	<template>
+		<book-dialog opened="{{opened}}" book="{{selected}}" on-book-changed="_bookChanged"></book-dialog>
+		<template is="dom-if" if="{{books}}">
+			<paper-item display="flex">
+				<span class="small">ID</span>
+				<span class="hide middle">Author</span>
+				<span class="large">Originaltitel</span>
+				<span class="hide middle">Sprache</span>
+				<span class="middle">Status</span>
+			</paper-item>
+			<template is="dom-repeat" items={{books}} as="book" id="bookList">
+				<paper-item class="divider" display="flex" on-tap="select">
+					<span class="small">{{book.id}}</span>
+					<span class="hide middle">{{book.author}}</span>
+					<span class="large">{{book.original}}</span>
+					<span class="hide middle">{{book.language}}</span>
+					<span class="middle">{{book.status}}</span>
+				</paper-item>
+			</template>
+		</template>
 
-    <template is="dom-if" if="{{!books}}">
-      <!-- TODO: display when not logged in instead of no book registered -->
-      <paper-item 
-          style="display:flex; ">
-          <p style="width: 100%;text-align: center;">
-            Noch keine Bücher eingetragen!
-          </p>
-      </paper-item>
-      <paper-button 
-          on-tap="_openAddBookDialog" 
-          style="display:block;">
-          Buch eintragen
-      </paper-button>
-    </template>
-  </template>
-  <script>
-    Polymer({
-      is: 'books-list',
-      
-      properties: {
-        books: {
-          type: Object,
-          notify: true
-        },
-        selected: {
-          type: Object,
-          notify: true
-        },
-        oldSpySelection: Object,
-        opened: {
-          notify: true,
-          type: Boolean
-        }
-      },
+		<template is="dom-if" if="{{!books}}">
+			<!-- TODO: display when not logged in instead of no book registered -->
+			<paper-item 
+					style="display:flex; ">
+					<p style="width: 100%;text-align: center;">
+						Noch keine Bücher eingetragen!
+					</p>
+			</paper-item>
+			<paper-button 
+					on-tap="_openAddBookDialog" 
+					style="display:block;">
+					Buch eintragen
+			</paper-button>
+		</template>
+	</template>
+	<script>
+		Polymer({
+			is: 'books-list',
+			
+			properties: {
+				books: {
+					type: Object,
+					notify: true
+				},
+				selected: {
+					type: Object,
+					notify: true
+				},
+				oldSpySelection: Object,
+				opened: {
+					notify: true,
+					type: Boolean
+				}
+			},
 
-      select: function(e) {
-        var item = document.querySelector('#bookList').itemForElement(e.target);
-        this.set('oldSpySelection', item.__firebaseKey__);
-        this._updateSelection(this.oldSpySelection);
-      },
+			select: function(e) {
+				var item = document.querySelector('#bookList').itemForElement(e.target);
+				this.set('oldSpySelection', item.__firebaseKey__);
+				this._updateSelection(this.oldSpySelection);
+			},
 
-      _updateSelection: function(key) {
-        var selected;
-        var opened = this.books.some(function(book) {
-          if (book.__firebaseKey__ === key) {
-            selected = book;
-            return true;
-          }
-        });
-        this.set('selected', selected);
-        this.set('opened', opened);
-      },
+			_updateSelection: function(key) {
+				var selected;
+				var opened = this.books.some(function(book) {
+					if (book.__firebaseKey__ === key) {
+						selected = book;
+						return true;
+					}
+				});
+				this.set('selected', selected);
+				this.set('opened', opened);
+			},
 
-      _bookChanged: function(e) {
-        var book = e.detail.book;
-        var i = 0;
-        if (book) {
-          this.books.some(function(b) {
-            if (b.__firebaseKey__ === book.__firebaseKey__) {
-              return true;
-            }
-            i++;
-          });
-          this.set('books.' + i, book);
-        }
-      },
+			_bookChanged: function(e) {
+				var book = e.detail.book;
+				var i = 0;
+				if (book) {
+					this.books.some(function(b) {
+						if (b.__firebaseKey__ === book.__firebaseKey__) {
+							return true;
+						}
+						i++;
+					});
+					this.set('books.' + i, book);
+				}
+			},
 
-      _openAddBookDialog: function () {
-        this.fire('add-book');
-      }
-    
-    });
-  </script>
+			_openAddBookDialog: function () {
+				this.fire('add-book');
+			}
+		
+		});
+	</script>
 </dom-module>

@@ -1,170 +1,170 @@
 <dom-module id="contact-add">
-  <style>
-    #pdpid {
-     margin-top: 63px;
-    }
-  </style>
-  <template>
-    <paper-dialog entry-animation="scale-up-animation"
-                  exit-animation="fade-out-animation"
-                  opened="{{opened}}"
-                  id="addContactDialog">
-      <div id="pdpbd">
-        <paper-icon-button icon="clear" 
-                           on-tap="_clearDialog" 
-                           dialog-dismiss 
-                           style="float: left;">
-        </paper-icon-button>
-        <paper-button dialog-confirm 
-                      on-tap="_addContact" 
-                      style="float: right;"
-                      raised>
-          Add
-        </paper-button>
-      </div>
-      <div id="pdpid">
-        <paper-dialog-scrollable>
-          <paper-input value="{{fullname}}" label="Namen hinzufügen"></paper-input>
-          <div id="addEmails">
-            <gold-email-input class="email" label="Email"></gold-email-input>
-          </div>
-          <div id="addPhones">
-            <gold-phone-input country-code="49" class="phone" label="Telefon"></gold-phone-input>
-          </div>
-          <div id="addAddresses">
-            <paper-input class="address" label="Addresse"></paper-input>
-          </div>
-        </paper-dialog-scrollable>
-      </div>
-    </paper-dialog>           
-  </template>
-  <script>
-    Polymer({
-      is: 'contact-add',
-      
-      properties: {
-        opened: {
-          type: Boolean,
-          notify: true
-        }
-      },
+	<style>
+		#pdpid {
+		 margin-top: 63px;
+		}
+	</style>
+	<template>
+		<paper-dialog entry-animation="scale-up-animation"
+									exit-animation="fade-out-animation"
+									opened="{{opened}}"
+									id="addContactDialog">
+			<div id="pdpbd">
+				<paper-icon-button icon="clear" 
+													 on-tap="_clearDialog" 
+													 dialog-dismiss 
+													 style="float: left;">
+				</paper-icon-button>
+				<paper-button dialog-confirm 
+											on-tap="_addContact" 
+											style="float: right;"
+											raised>
+					Add
+				</paper-button>
+			</div>
+			<div id="pdpid">
+				<paper-dialog-scrollable>
+					<paper-input value="{{fullname}}" label="Namen hinzufügen"></paper-input>
+					<div id="addEmails">
+						<gold-email-input class="email" label="Email"></gold-email-input>
+					</div>
+					<div id="addPhones">
+						<gold-phone-input country-code="49" class="phone" label="Telefon"></gold-phone-input>
+					</div>
+					<div id="addAddresses">
+						<paper-input class="address" label="Addresse"></paper-input>
+					</div>
+				</paper-dialog-scrollable>
+			</div>
+		</paper-dialog>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-add',
+			
+			properties: {
+				opened: {
+					type: Boolean,
+					notify: true
+				}
+			},
 
-      listeners: {
-        'input': '_changeEvent'
-      },
+			listeners: {
+				'input': '_changeEvent'
+			},
 
-      _changeEvent: function(e) {
-        var t = e.target;
+			_changeEvent: function(e) {
+				var t = e.target;
 
-        if (this._findClass(t.classList, 'gold-email-input')) {
-          var emails = document.getElementsByClassName('email');
-          for (var i = 0; i < emails.length-1; i++) {
-            if(emails[i].value === '') {
-              emails[i].remove();
-              emails.splice(i, 1);
-            }
-          }
-          if (emails[emails.length-1].value !== '') {
-            var email = document.createElement('gold-email-input');
-            email.label = 'Email';
-            email.classList.add('email');
-            this.$.addEmails.appendChild(email);
-          }
-        }
+				if (this._findClass(t.classList, 'gold-email-input')) {
+					var emails = document.getElementsByClassName('email');
+					for (var i = 0; i < emails.length-1; i++) {
+						if(emails[i].value === '') {
+							emails[i].remove();
+							emails.splice(i, 1);
+						}
+					}
+					if (emails[emails.length-1].value !== '') {
+						var email = document.createElement('gold-email-input');
+						email.label = 'Email';
+						email.classList.add('email');
+						this.$.addEmails.appendChild(email);
+					}
+				}
 
-        if (this._findClass(t.classList, 'gold-phone-input')) {
-          var phones = document.getElementsByClassName('phone');
-          for (var i = 0; i < phones.length-1; i++) {
-            if(phones[i].value === '') {
-              phones[i].remove();
-              phones.splice(i, 1);
-            }
-          }
-          if (phones[phones.length-1].value !== '') {
-            var phone = document.createElement('gold-phone-input');
-            phone.label = 'Telefon';
-            phone.classList.add('phone');
-            phone.countryCode = 49;
-            this.$.addPhones.appendChild(phone);
-          }
-        }
+				if (this._findClass(t.classList, 'gold-phone-input')) {
+					var phones = document.getElementsByClassName('phone');
+					for (var i = 0; i < phones.length-1; i++) {
+						if(phones[i].value === '') {
+							phones[i].remove();
+							phones.splice(i, 1);
+						}
+					}
+					if (phones[phones.length-1].value !== '') {
+						var phone = document.createElement('gold-phone-input');
+						phone.label = 'Telefon';
+						phone.classList.add('phone');
+						phone.countryCode = 49;
+						this.$.addPhones.appendChild(phone);
+					}
+				}
 
-        if (this._findClass(t.classList, 'paper-input')) {
-          var addresses = document.getElementsByClassName('address');
-          for (var i = 0; i < addresses.length-1; i++) {
-            if(addresses[i].value === '') {
-              addresses[i].remove();
-              addresses.splice(i, 1);
-            }
-          }
-          if (addresses[addresses.length-1].value !== '') {
-            var address = document.createElement('paper-input');
-            address.label = 'Addresse';
-            address.classList.add('address');
-            this.$.addAddresses.appendChild(address);
-          }
-        }
-        this.$.addContactDialog.notifyResize();
-      },
-      
-      _clearDialog: function() {
-        this.fullname = '';
-        this.set('emails', ['']);
-        this.set('phones', ['']);
-        this.set('addresses', ['']);
-      },
-      
-      _addContact: function() {
-        this.getEmails();
-        this.fire('added-contact', {
-          fullname: this.fullname,
-          emails: this.getEmails(),
-          phones: this.getPhones(),
-          addresses: this.getAddresses()
-        });
-        this._clearDialog();
-      },
+				if (this._findClass(t.classList, 'paper-input')) {
+					var addresses = document.getElementsByClassName('address');
+					for (var i = 0; i < addresses.length-1; i++) {
+						if(addresses[i].value === '') {
+							addresses[i].remove();
+							addresses.splice(i, 1);
+						}
+					}
+					if (addresses[addresses.length-1].value !== '') {
+						var address = document.createElement('paper-input');
+						address.label = 'Addresse';
+						address.classList.add('address');
+						this.$.addAddresses.appendChild(address);
+					}
+				}
+				this.$.addContactDialog.notifyResize();
+			},
+			
+			_clearDialog: function() {
+				this.fullname = '';
+				this.set('emails', ['']);
+				this.set('phones', ['']);
+				this.set('addresses', ['']);
+			},
+			
+			_addContact: function() {
+				this.getEmails();
+				this.fire('added-contact', {
+					fullname: this.fullname,
+					emails: this.getEmails(),
+					phones: this.getPhones(),
+					addresses: this.getAddresses()
+				});
+				this._clearDialog();
+			},
 
-      getEmails: function() {
-        var emailElements = document.getElementsByClassName('email');
-        var emails = [];
-        for (var i = 0; i < emailElements.length; i++) {
-          if (emailElements[i].value !== "") {
-            emails.push(emailElements[i].value);
-          }
-        }
-        return emails;
-      },
+			getEmails: function() {
+				var emailElements = document.getElementsByClassName('email');
+				var emails = [];
+				for (var i = 0; i < emailElements.length; i++) {
+					if (emailElements[i].value !== "") {
+						emails.push(emailElements[i].value);
+					}
+				}
+				return emails;
+			},
 
-      getPhones: function() {
-        var phoneElements = document.getElementsByClassName('phone');
-        var phones = [];
-        for (var i = 0; i < phoneElements.length; i++) {
-          if (phoneElements[i].value !== "") {
-            phones.push(phoneElements[i].value);
-          }
-        }
-        return phones;
-      },
+			getPhones: function() {
+				var phoneElements = document.getElementsByClassName('phone');
+				var phones = [];
+				for (var i = 0; i < phoneElements.length; i++) {
+					if (phoneElements[i].value !== "") {
+						phones.push(phoneElements[i].value);
+					}
+				}
+				return phones;
+			},
 
-      getAddresses: function() {
-        var addressElements = document.getElementsByClassName('address');
-        var addresses = [];
-        for (var i = 0; i < addressElements.length; i++) {
-          if (addressElements[i].value !== "") {
-            addresses.push(addressElements[i].value);
-          }
-        }
-        return addresses;
-      },
+			getAddresses: function() {
+				var addressElements = document.getElementsByClassName('address');
+				var addresses = [];
+				for (var i = 0; i < addressElements.length; i++) {
+					if (addressElements[i].value !== "") {
+						addresses.push(addressElements[i].value);
+					}
+				}
+				return addresses;
+			},
 
-      _findClass: function(classes, target) {
-        for (var i = 0; i < classes.length; i++) {
-          if(classes[i] === target)
-            return true;
-        }
-        return false;
-      }      
-    });
-  </script>
+			_findClass: function(classes, target) {
+				for (var i = 0; i < classes.length; i++) {
+					if(classes[i] === target)
+						return true;
+				}
+				return false;
+			}
+		});
+	</script>
 </dom-module>

@@ -1,87 +1,87 @@
 <dom-module id="contacts-list">
-  <style>
-    span {
-      flex-basis: 100%;
-      margin: auto;
-    }
-  </style>
-  <template>
-    <contact-dialog opened="{{opened}}" contact="{{selected}}" on-contact-changed="_contactChanged"></contact-dialog>
-    <template is="dom-if" if="{{contacts}}">
-      <template is="dom-repeat" 
-                items={{contacts}}
-                as="contact"
-                id="contactList">
-        <contact-item on-tap="select" contact="{{contact}}"></contact-item>
-      </template>
-    </template>
-    <template is="dom-if" if="{{!contacts}}">
-      <paper-item style="display:flex;">
-        <p style="width: 100%;text-align: center;">
-          Noch keine Kontakte eingetragen!
-        </p>
-      </paper-item>
-      <!-- TODO: display when not logged in instead of no contact registered -->
-      <paper-button on-tap="_openAddContactDialog" style="display:block;">Kontakt eintragen</paper-button>
-      <paper-button style="display:block;">Kontakte importieren</paper-button>
-    </template>
-  </template>
-  <script>
-    Polymer({
-      is: 'contacts-list',
-      
-      properties: {
-        contacts: {
-          notify: true
-        },
-        selected: {
-          type: Object,
-          notify: true
-        },
-        oldSpySelection: Object,
-        opened: {
-          notify: true,
-          type: Boolean
-        }
-      },
+	<style>
+		span {
+			flex-basis: 100%;
+			margin: auto;
+		}
+	</style>
+	<template>
+		<contact-dialog opened="{{opened}}" contact="{{selected}}" on-contact-changed="_contactChanged"></contact-dialog>
+		<template is="dom-if" if="{{contacts}}">
+			<template is="dom-repeat" 
+								items={{contacts}}
+								as="contact"
+								id="contactList">
+				<contact-item on-tap="select" contact="{{contact}}"></contact-item>
+			</template>
+		</template>
+		<template is="dom-if" if="{{!contacts}}">
+			<paper-item style="display:flex;">
+				<p style="width: 100%;text-align: center;">
+					Noch keine Kontakte eingetragen!
+				</p>
+			</paper-item>
+			<!-- TODO: display when not logged in instead of no contact registered -->
+			<paper-button on-tap="_openAddContactDialog" style="display:block;">Kontakt eintragen</paper-button>
+			<paper-button style="display:block;">Kontakte importieren</paper-button>
+		</template>
+	</template>
+	<script>
+		Polymer({
+			is: 'contacts-list',
+			
+			properties: {
+				contacts: {
+					notify: true
+				},
+				selected: {
+					type: Object,
+					notify: true
+				},
+				oldSpySelection: Object,
+				opened: {
+					notify: true,
+					type: Boolean
+				}
+			},
 
-      select: function(e) {
-        console.log(e.target);
-        var item = document.querySelector('#contactList').itemForElement(e.target);
-        this.set('oldSpySelection', item.__firebaseKey__);
-        this._updateSelection(this.oldSpySelection);
-      },
+			select: function(e) {
+				console.log(e.target);
+				var item = document.querySelector('#contactList').itemForElement(e.target);
+				this.set('oldSpySelection', item.__firebaseKey__);
+				this._updateSelection(this.oldSpySelection);
+			},
 
-      _updateSelection: function(key) {
-        var selected;
-        var opened = this.contacts.some(function(contact) {
-          if (contact.__firebaseKey__ === key) {
-            selected = contact;
-            return true;
-          }
-        });
-        this.set('selected', selected);
-        this.set('opened', opened);
-        console.log(this.selected);
-      },
+			_updateSelection: function(key) {
+				var selected;
+				var opened = this.contacts.some(function(contact) {
+					if (contact.__firebaseKey__ === key) {
+						selected = contact;
+						return true;
+					}
+				});
+				this.set('selected', selected);
+				this.set('opened', opened);
+				console.log(this.selected);
+			},
 
-      _contactChanged: function(e) {
-        var contact = e.detail.contact;
-        var i = 0;
-        if (contact) {
-          this.contacts.some(function(b) {
-            if (b.__firebaseKey__ === contact.__firebaseKey__) {
-              return true;
-            }
-            i++;
-          });
-          this.set('contacts.' + i, contact);
-        }
-      },
-      
-      _openAddContactDialog: function () {
-        this.fire('add-contact');
-      }
-    });
-  </script>
+			_contactChanged: function(e) {
+				var contact = e.detail.contact;
+				var i = 0;
+				if (contact) {
+					this.contacts.some(function(b) {
+						if (b.__firebaseKey__ === contact.__firebaseKey__) {
+							return true;
+						}
+						i++;
+					});
+					this.set('contacts.' + i, contact);
+				}
+			},
+			
+			_openAddContactDialog: function () {
+				this.fire('add-contact');
+			}
+		});
+	</script>
 </dom-module>

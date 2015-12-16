@@ -1,84 +1,84 @@
 <dom-module id="books-section">
-  <style>
-    paper-fab {
-      position: fixed;
-      bottom: 24px;
-      right: 44px;
-    }
-    @media (max-width: 380px) {
-      paper-material {
-        padding: 10px;
-      }
-    }
-  </style>
-  <template>
-    <book-add opened="{{opened}}" on-added-book="_addBook"></book-add>
+	<style>
+		paper-fab {
+			position: fixed;
+			bottom: 24px;
+			right: 44px;
+		}
+		@media (max-width: 380px) {
+			paper-material {
+				padding: 10px;
+			}
+		}
+	</style>
+	<template>
+		<book-add opened="{{opened}}" on-added-book="_addBook"></book-add>
 
-    <paper-material>
-      <books-list
-        on-add-book="_openAddBookDialog"
-        books="{{books}}">
-      </books-list>
-    </paper-material>
-    <paper-fab icon="add" on-tap="_openAddBookDialog"></paper-fab>
-  </template>
-  <script>
-    Polymer({
-      is: 'books-section',
-      
-      properties: {
-        books: {
-          notify: true
-        },
-        id: {
-          type: Number
-        },
-        opened: {
-          notify: true,
-          type: Boolean
-        }
-      },
-      
-      observers: [
-        '_booksChanged(books.*)'
-      ],
-      
-      _booksChanged: function(books) {
-        var id = this._computeID(books.value);
-        this.id = id;
-      },
-      
-      _computeID: function(books) {
-        var id=1;
-        for(var i=0; i<books.length; i++) {
-          if(books[i].id>id) {
-            id = books[i].id;
-          }
-        }
-        id++;
-    
-        return id;
-      },
-      
-      _openAddBookDialog: function() {
-        this.set('opened', true);
-      },
-      
-      _addBook: function(e) {
-        for(var i=0; i<e.detail.amount; i++) {
-          this.push('books', {
-            id: this.id,
-            author: e.detail.author,
-            original: e.detail.original,
-            title: e.detail.title,
-            language: e.detail.language,
-            tags: e.detail.tags,
-            price: e.detail.price,
-            status: 'Verfügbar',
-            dedication: e.detail.dedication
-          });
-        }
-      }
-    });
-  </script>
+		<paper-material>
+			<books-list
+				on-add-book="_openAddBookDialog"
+				books="{{books}}">
+			</books-list>
+		</paper-material>
+		<paper-fab icon="add" on-tap="_openAddBookDialog"></paper-fab>
+	</template>
+	<script>
+		Polymer({
+			is: 'books-section',
+			
+			properties: {
+				books: {
+					notify: true
+				},
+				id: {
+					type: Number
+				},
+				opened: {
+					notify: true,
+					type: Boolean
+				}
+			},
+			
+			observers: [
+				'_booksChanged(books.*)'
+			],
+			
+			_booksChanged: function(books) {
+				var id = this._computeID(books.value);
+				this.id = id;
+			},
+			
+			_computeID: function(books) {
+				var id=1;
+				for(var i=0; i<books.length; i++) {
+					if(books[i].id>id) {
+						id = books[i].id;
+					}
+				}
+				id++;
+		
+				return id;
+			},
+			
+			_openAddBookDialog: function() {
+				this.set('opened', true);
+			},
+			
+			_addBook: function(e) {
+				for(var i=0; i<e.detail.amount; i++) {
+					this.push('books', {
+						id: this.id,
+						author: e.detail.author,
+						original: e.detail.original,
+						title: e.detail.title,
+						language: e.detail.language,
+						tags: e.detail.tags,
+						price: e.detail.price,
+						status: 'Verfügbar',
+						dedication: e.detail.dedication
+					});
+				}
+			}
+		});
+	</script>
 </dom-module>

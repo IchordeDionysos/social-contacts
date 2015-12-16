@@ -1,119 +1,119 @@
 <dom-module id="feedback-section">
-  <style>
-    paper-checkbox.red {
-      --paper-checkbox-checked-color: #D50000;
-      --paper-checkbox-unchecked-color: #D50000;
-    }
+	<style>
+		paper-checkbox.red {
+			--paper-checkbox-checked-color: #D50000;
+			--paper-checkbox-unchecked-color: #D50000;
+		}
 
-    paper-checkbox.green {
-      --paper-checkbox-checked-color: #4CAF50;
-      --paper-checkbox-unchecked-color: #4CAF50;
-    }
+		paper-checkbox.green {
+			--paper-checkbox-checked-color: #4CAF50;
+			--paper-checkbox-unchecked-color: #4CAF50;
+		}
 
-    paper-checkbox.pink {
-      --paper-checkbox-checked-color: #E91E63;
-      --paper-checkbox-unchecked-color: #E91E63;
-    }
+		paper-checkbox.pink {
+			--paper-checkbox-checked-color: #E91E63;
+			--paper-checkbox-unchecked-color: #E91E63;
+		}
 
-    paper-checkbox.purple {
-      --paper-checkbox-checked-color: #AB47BC;
-      --paper-checkbox-unchecked-color: #AB47BC;
-    }
+		paper-checkbox.purple {
+			--paper-checkbox-checked-color: #AB47BC;
+			--paper-checkbox-unchecked-color: #AB47BC;
+		}
 
-    paper-checkbox.blue {
-      --paper-checkbox-checked-color: #0D47A1;
-      --paper-checkbox-unchecked-color: #0D47A1;
-    }
+		paper-checkbox.blue {
+			--paper-checkbox-checked-color: #0D47A1;
+			--paper-checkbox-unchecked-color: #0D47A1;
+		}
 
-    paper-checkbox.light-blue {
-      --paper-checkbox-checked-color: #03A9F4;
-      --paper-checkbox-unchecked-color: #03A9F4;
-    }
+		paper-checkbox.light-blue {
+			--paper-checkbox-checked-color: #03A9F4;
+			--paper-checkbox-unchecked-color: #03A9F4;
+		}
 
-    paper-button {
-      margin-top: 10px;
-    }
+		paper-button {
+			margin-top: 10px;
+		}
 
-    paper-button.green {
-      color: #4CAF50;
-    }
-  </style>
-  <template>
-  	<paper-material>
-      <form is="iron-form" id="form" method="post" action="../../scripts/feedback.php">
-        <p>Feedback</p>
-        <paper-input id="issueTitle" 
-                     label="Titel" 
-                     name="title"
-                     required>
-        </paper-input>
-        <paper-input id="issueEmail" 
-                     label="Email (notwendig zur Kontaktaufnahme)" 
-                     name="email">
-        </paper-input>
-        <paper-textarea id="issueBody" 
-                        label="Body" 
-                        name="body">
-        </paper-textarea>
-        <p>Wähle alle passende Labels aus:</p>
-        <paper-checkbox id="bug" 
-                        class="red" 
-                        name="labels"
-                        value="bug">
-          Bug
-        </paper-checkbox>
-        <paper-checkbox id="help" 
-                        class="green" 
-                        name="labels"
-                        value="help">
-          Hilfe
-        </paper-checkbox>
-        <paper-checkbox id="question" 
-                        class="pink"
-                        name="labels" 
-                        value="question">
-          Frage
-        </paper-checkbox>
-        <paper-checkbox id="feature" 
-                        class="purple"
-                        name="labels"
-                        value="feature">
-          Feature
-        </paper-checkbox>
-        <paper-checkbox id="enhancement" 
-                        class="blue"
-                        name="labels"
-                        value="enhancement">
-          Verbesserung
-        </paper-checkbox>
-        <paper-checkbox id="design" 
-                        class="light-blue" 
-                        name="labels"
-                        value="design">
-          Design Vorschlag
-        </paper-checkbox>
-        <paper-button class="green ripple" onclick="submitHandler(event)" raised>Absenden</paper-button>
-      </form>
-    </paper-material>
-  </template>
-  <script>
-    Polymer({
-      is: 'feedback-section'      	
-    });
+		paper-button.green {
+			color: #4CAF50;
+		}
+	</style>
+	<template>
+		<paper-material>
+			<form is="iron-form" id="form" method="post" action="../../scripts/feedback.php">
+				<p>Feedback</p>
+				<paper-input id="issueTitle" 
+										 label="Titel" 
+										 name="title"
+										 required>
+				</paper-input>
+				<paper-input id="issueEmail" 
+										 label="Email (notwendig zur Kontaktaufnahme)" 
+										 name="email">
+				</paper-input>
+				<paper-textarea id="issueBody" 
+												label="Body" 
+												name="body">
+				</paper-textarea>
+				<p>Wähle alle passende Labels aus:</p>
+				<paper-checkbox id="bug" 
+												class="red" 
+												name="labels"
+												value="bug">
+					Bug
+				</paper-checkbox>
+				<paper-checkbox id="help" 
+												class="green" 
+												name="labels"
+												value="help">
+					Hilfe
+				</paper-checkbox>
+				<paper-checkbox id="question" 
+												class="pink"
+												name="labels" 
+												value="question">
+					Frage
+				</paper-checkbox>
+				<paper-checkbox id="feature" 
+												class="purple"
+												name="labels"
+												value="feature">
+					Feature
+				</paper-checkbox>
+				<paper-checkbox id="enhancement" 
+												class="blue"
+												name="labels"
+												value="enhancement">
+					Verbesserung
+				</paper-checkbox>
+				<paper-checkbox id="design" 
+												class="light-blue" 
+												name="labels"
+												value="design">
+					Design Vorschlag
+				</paper-checkbox>
+				<paper-button class="green ripple" onclick="submitHandler(event)" raised>Absenden</paper-button>
+			</form>
+		</paper-material>
+	</template>
+	<script>
+		Polymer({
+			is: 'feedback-section'      	
+		});
 
-    function submitHandler(event) {
-      console.log('fire post request');
-      Polymer.dom(event).localTarget.parentElement.submit();
-      document.querySelector('#issueTitle').value = '';
-      document.querySelector('#issueEmail').value = '';
-      document.querySelector('#issueBody').value = '';
-      document.querySelector('#issueCreated').show();
-      document.querySelector('#bug').checked = false;
-      document.querySelector('#help').checked = false;
-      document.querySelector('#question').checked = false;
-      document.querySelector('#feature').checked = false;
-      document.querySelector('#enhancement').checked = false;
-      document.querySelector('#design').checked = false;
-    }
-  </script>
+		function submitHandler(event) {
+			console.log('fire post request');
+			Polymer.dom(event).localTarget.parentElement.submit();
+			document.querySelector('#issueTitle').value = '';
+			document.querySelector('#issueEmail').value = '';
+			document.querySelector('#issueBody').value = '';
+			document.querySelector('#issueCreated').show();
+			document.querySelector('#bug').checked = false;
+			document.querySelector('#help').checked = false;
+			document.querySelector('#question').checked = false;
+			document.querySelector('#feature').checked = false;
+			document.querySelector('#enhancement').checked = false;
+			document.querySelector('#design').checked = false;
+		}
+	</script>
 </dom-module>

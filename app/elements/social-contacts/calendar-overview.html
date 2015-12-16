@@ -16,10 +16,10 @@
 			}
 		</style>
 		<google-client-loader id="calendar"
-  							  name="calendar"
-  							  version="v3"
-  							  on-google-api-load="onApiLoaded">
-  		</google-client-loader>
+							  name="calendar"
+							  version="v3"
+							  on-google-api-load="onApiLoaded">
+		</google-client-loader>
 		<template is="dom-if" if={{apiLoaded}}>
 			<paper-dropdown-menu label="Wähle Kalendar" selected-item="{{activeCalendar}}">
 				<paper-menu class="dropdown-content">	
@@ -98,12 +98,12 @@
 				});
 
 				request.execute(function(resp) {
-		          if (resp.error) {
-		            console.error("Error with calendarList.list", resp.message)
-		          } else {
-		            this.upComingEvents = resp.items;
-		          }
-		        }.bind(this));
+					if (resp.error) {
+						console.error("Error with calendarList.list", resp.message)
+					} else {
+						this.upComingEvents = resp.items;
+					}
+				}.bind(this));
 			},
 
 			onApiLoaded: function() {
@@ -129,13 +129,13 @@
 			getCalendarList: function() {
 				var request = this.$.calendar.api.calendarList.list({"key": ""});
 
-		        request.execute(function(resp) {
-		          if (resp.error) {
-		            console.error("Error with calendarList.list", resp.message)
-		          } else {
-		            this.calendars = resp.items;
-		          }
-		        }.bind(this));
+				request.execute(function(resp) {
+				  if (resp.error) {
+					console.error("Error with calendarList.list", resp.message)
+				  } else {
+					this.calendars = resp.items;
+				  }
+				}.bind(this));
 			},
 
 			_computeDate: function(start) {

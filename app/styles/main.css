@@ -8,13 +8,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 body {
-  background: #fafafa;
-  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #333;
+	background: #fafafa;
+	font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color: #333;
 }
 
 paper-drawer-panel:not([narrow]) #menu-arrow-back {
-    display: none;
+		display: none;
 }
 
 paper-material {
@@ -27,14 +27,14 @@ paper-checkbox {
 }
 
 div#scrollable {
-    width: 100%;
-    padding: 0;
+		width: 100%;
+		padding: 0;
 }
 
 #profileImage {
 	height: 60px;
 	border-radius: 50%;
 	position: absolute;
-    top: 2px;
-    right: 8px;
+		top: 2px;
+		right: 8px;
 }
