@@ -18,9 +18,9 @@
 		<google-client-loader id="calendar"
   							  name="calendar"
   							  version="v3"
-  							  on-google-api-load="apiLoaded">
+  							  on-google-api-load="onApiLoaded">
   		</google-client-loader>
-		<template is="dom-if" if={{loggedIn}}>
+		<template is="dom-if" if={{apiLoaded}}>
 			<paper-dropdown-menu label="Wähle Kalendar" selected-item="{{activeCalendar}}">
 				<paper-menu class="dropdown-content">	
 					<paper-item></paper-item>			
@@ -37,13 +37,10 @@
 					</paper-item>
 				</a>
 			</template>
+			<template is="dom-if" if={{!signedIn}}>
+				<paper-item>Log dich bitte zu erst ein!</paper-item>
+			</template>
 		</template>
-		<br>
-		<google-signin client-id="699732304446-e45ap2fr5flavps567q6a23dqh35oe13.apps.googleusercontent.com" 
-					   scopes="https://www.googleapis.com/auth/calendar.readonly"
-					   api-key="AIzaSyDoVBLsoq9t59oDMiKi38BTGABFZbkrF2I"
-					   is-authorized="{{loggedIn}}">
-		</google-signin>
 	</template>
 	<script>
 		Polymer({
@@ -62,6 +59,14 @@
 				},
 				upComingEvents: {
 					type: Array
+				},
+				signedIn: {
+					type: Boolean,
+					observer: 'loginStatusChanged'
+				},
+				apiLoaded: {
+					type: Boolean,
+					value: false
 				}
 			},
 
@@ -70,15 +75,17 @@
 			],
 
 			activeCalendarChanged: function(newVal) {
-				var object = document.querySelector('#calendarList').itemForElement(newVal.value);
-				if (object !== undefined)
-					this.activeCalendarId = document.querySelector('#calendarList').itemForElement(newVal.value).id;
-				else 
-					this.activeCalendarId = undefined;
+				if(newVal.value !== null && newVal.value !== undefined) {
+					var object = document.querySelector('#calendarList').itemForElement(newVal.value);
+					if (object !== undefined)
+						this.activeCalendarId = document.querySelector('#calendarList').itemForElement(newVal.value).id;
+					else 
+						this.activeCalendarId = undefined;
+				}
 			},
 
 			calendarIdChanged: function(newVal) {
-				if (newVal === undefined) {
+				if (newVal === undefined || newVal === null) {
 					this.upComingEvents = undefined;
 					return;
 				}
@@ -99,7 +106,27 @@
 		        }.bind(this));
 			},
 
-			apiLoaded: function() {
+			onApiLoaded: function() {
+				console.log(this.signedIn);
+				if(this.signedIn)
+					this.getCalendarList();
+				this.apiLoaded = true;
+			},
+
+			loginStatusChanged: function() {
+				console.log(this.signedIn);
+				console.log(this.apiLoaded);
+				if(this.signedIn && this.apiLoaded)
+					this.getCalendarList();
+				if(!this.signedIn) {
+					this.calendars = null;
+					this.activeCalendar = null;
+					this.activeCalendarId = null;
+					this.upComingEvents = null;
+				}
+			},
+
+			getCalendarList: function() {
 				var request = this.$.calendar.api.calendarList.list({"key": ""});
 
 		        request.execute(function(resp) {

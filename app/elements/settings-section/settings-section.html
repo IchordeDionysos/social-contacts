@@ -3,11 +3,23 @@
 
   </style>
   <template>
-
+  	<paper-material>
+  		<paper-item on-tap="openDrivePicker">Bücher aus Google Tabellen importieren</paper-item>
+  	</paper-material>
   </template>
   <script>
     Polymer({
       is: 'settings-section',
+
+      properties: {
+      	settings: {
+      		type: Object
+      	}
+      },
+
+      openDrivePicker: function() {
+
+      }
 
     });
   </script>

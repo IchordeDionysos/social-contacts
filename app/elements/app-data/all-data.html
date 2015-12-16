@@ -17,7 +17,8 @@
 		<app-data location="https://social-contacts.firebaseio.com"
 				  directory="users"
 				  authData="{{authData}}"
-				  data="{{user}}">
+				  data="{{user}}"
+				  id="firebaseAuth">
 		</app-data>
 	</template>
 	<script>
@@ -26,8 +27,7 @@
 
 			properties: {
 				authData: {
-					notify: true,
-					observer: 'authDataChanged'
+					notify: true
 				},
 				user: {
 					notify: true

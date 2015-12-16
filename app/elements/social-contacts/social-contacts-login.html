@@ -1,0 +1,56 @@
+<dom-module id="social-contacts-login">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+		<google-signin id="googleAuth" client-id="699732304446-e45ap2fr5flavps567q6a23dqh35oe13.apps.googleusercontent.com" 
+					   scopes="https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/drive"
+					   api-key="AIzaSyDoVBLsoq9t59oDMiKi38BTGABFZbkrF2I"
+					   is-authorized="{{loggedIn}}"
+					   signed-in="{{signedIn}}"
+					   style="display: none;">
+		</google-signin>
+
+		<paper-button id="authButton" on-tap="auth">[[authMessage]]</paper-button>
+	</template>
+	<script>
+		Polymer({
+			is: 'social-contacts-login',
+
+			properties: {
+				signedIn: {
+					type: Boolean,
+					observer: 'loginStatusChanged',
+					notify: true
+				},
+				authMessage: {
+					type: String,
+					value: 'sign in'
+				}
+			},
+
+			loginStatusChanged: function(newVal) {
+				if (newVal) {
+					document.querySelector('#firebaseAuth').signIn();
+					this.authMessage = 'sign out';
+				}
+				else if(document.querySelector('#firebaseAuth')) {
+					document.querySelector('#firebaseAuth').logout();
+					this.authMessage = 'sign in';
+				}
+			},
+
+			auth: function() {
+				if(this.authMessage === 'sign in') {
+					this.$.googleAuth.signIn();
+					//this.fire('signin');
+				} else {
+					this.$.googleAuth.signOut();
+					//this.fire('signout');
+				}
+			}
+		});
+	</script>
+</dom-module>

@@ -37,7 +37,8 @@
     <firebase-auth id="auth" 
                    user="{{authData}}"
                    location="{{location}}"
-                   provider="google">
+                   provider="google"
+                   on-logout="logout">
     </firebase-auth>
     
     <firebase-collection location="{{userLocation}}"
@@ -51,20 +52,6 @@
                        value="{{backupData}}">
     </iron-localstorage>
     -->
-    <paper-dialog modal
-                  opened="{{!authData}}"
-                  entry-animation="scale-up-animation"
-                  exit-animation="fade-out-animation">
-      <h2>Oh hai! Please sign in</h2>
-      <div>
-        <div class="google-sign-in"
-             tabindex="0"
-             on-tap="signIn">
-          <span class="google-sign-in-icon"></span>
-          <span class="google-sign-in-label">Google</span>
-        </div>
-      </div>
-    </paper-dialog>
   </template>
   <script>
     Polymer({
@@ -90,9 +77,9 @@
         this.$.auth.login();
       },
       
-      signOut: function() {
-        this.ref.unauth();
-        this.authData = null;
+      logout: function() {
+        this.$.auth.logout();
+        this.data = null;
       },
       
       _authDataChanged: function(authData) {
