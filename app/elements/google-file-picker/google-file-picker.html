@@ -1,0 +1,113 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="..\..\bower_components/polymer/polymer.html">
+<link rel="import" href="..\..\bower_components/paper-button/paper-button.html">
+
+<dom-module id="google-file-picker">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+		<paper-button on-tap="open">Pick file</paper-button>
+	</template>
+	<script>
+		Polymer({
+			is: 'google-file-picker',
+
+			properties: {
+				apiKey: {
+					type: String,
+					observer: 'pickerInit'
+				},
+				apiLoaded: {
+					type: Boolean,
+					value: false
+				},
+				picker: {
+					type: Object
+				},
+				signedIn: {
+					type: Boolean,
+					observer: 'pickerInit'
+				},
+				that: {
+					type: Object,
+					value: function() {
+						return this;
+					}
+				}
+			},
+
+			attached: function() {
+				var script = document.createElement('script');
+				script.async = true;
+				script.src = 'https://apis.google.com/js/api.js';
+				script.onload = this.onApiLoad();
+				document.head.appendChild(script);
+				createFilePickerElement(this);
+			},
+
+			open: function() {
+				try {
+					this.picker.setVisible(true);
+				} catch(e) {
+					console.error('Picker couldn\'t be built');
+				}
+			},
+
+			pickerInit: function() {
+				var oAuth2 = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+
+				console.log(this.apiLoaded && this.apiKey != undefined && this.signedIn);
+				console.log(this.that);
+
+				if(this.apiLoaded && this.apiKey != undefined && this.signedIn) {
+					var picker = new google.picker.PickerBuilder()
+						.addView(google.picker.ViewId.SPREADSHEETS)
+						.addView(new google.picker.DocsUploadView())
+						.addView(google.picker.ViewId.RECENTLY_PICKED)
+						.setLocale('de')
+						.setOAuthToken(oAuth2)
+						.setDeveloperKey(this.apiKey)
+						.setCallback(this.onSelect)
+						.build();
+					this.picker = picker;
+				}
+			},
+
+			onApiLoad: function() {
+				console.log('apiLoaded');
+				this.apiLoaded = true;
+				gapi.load(
+				    'picker',
+				    {'callback': this.pickerInit.bind(this)}
+				);
+			},
+
+			onSelect: function(file) {
+				 if(file[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+				 	var doc = file[google.picker.Response.DOCUMENTS][0];
+					filePickerElement.fire('file-selected', {
+						id: doc[google.picker.Document.ID]
+					});
+				}
+			}
+		});
+		
+		var filePickerElement;
+
+		function createFilePickerElement(that) {
+			filePickerElement = that;
+		}
+	</script>
+</dom-module>

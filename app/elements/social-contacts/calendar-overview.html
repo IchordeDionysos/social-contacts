@@ -107,15 +107,12 @@
 			},
 
 			onApiLoaded: function() {
-				console.log(this.signedIn);
 				if(this.signedIn)
 					this.getCalendarList();
 				this.apiLoaded = true;
 			},
 
 			loginStatusChanged: function() {
-				console.log(this.signedIn);
-				console.log(this.apiLoaded);
 				if(this.signedIn && this.apiLoaded)
 					this.getCalendarList();
 				if(!this.signedIn) {

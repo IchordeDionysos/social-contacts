@@ -3,8 +3,18 @@
 
 	</style>
 	<template>
+		<google-client-loader id="drive"
+							  name="drive"
+							  version="v3"
+							  on-google-api-load="onApiLoaded">
+		</google-client-loader>
 		<paper-material>
-			<paper-item on-tap="openDrivePicker">Bücher aus Google Tabellen importieren</paper-item>
+			<paper-item on-tap="openDrivePicker">Bücher aus Google Tabellen importieren 
+			<google-file-picker api-key="AIzaSyCihT3iCzaHCuFg2lI2RWfn2iYV_HrCjdI" 
+								on-file-selected="fileSelected" 
+								signed-in="[[signedIn]]">
+			</google-file-picker>
+		</paper-item>
 		</paper-material>
 	</template>
 	<script>
@@ -14,11 +24,18 @@
 			properties: {
 				settings: {
 					type: Object
+				},
+				signedIn: {
+					type: Boolean
 				}
 			},
 
 			openDrivePicker: function() {
+				var oAuth2 = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+			},
 
+			fileSelected: function(e) {
+				console.log(e.detail.id);
 			}
 
 		});
