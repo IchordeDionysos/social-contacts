@@ -1,40 +1,49 @@
 <dom-module id="contact-add">
 	<style>
+		paper-dialog {
+			padding: 0 16px;
+			padding-bottom: 16px;
+		}
 		#pdpid {
-		 margin-top: 63px;
+			margin-top: 63px;
+			overflow-y: auto;
+			scroll-behavior: auto;
+			width: 100%;
+			max-height: 600px;
+			padding: 0;
 		}
 	</style>
 	<template>
-		<paper-dialog entry-animation="scale-up-animation"
-									exit-animation="fade-out-animation"
-									opened="{{opened}}"
-									id="addContactDialog">
+		<paper-dialog 
+			entry-animation="scale-up-animation"
+			exit-animation="fade-out-animation"
+			opened="{{opened}}"
+			id="addContactDialog">
 			<div id="pdpbd">
-				<paper-icon-button icon="clear" 
-													 on-tap="_clearDialog" 
-													 dialog-dismiss 
-													 style="float: left;">
+				<paper-icon-button 
+					icon="clear" 
+					on-tap="_clearDialog" 
+					dialog-dismiss 
+					style="float: left; left: -28px;">
 				</paper-icon-button>
-				<paper-button dialog-confirm 
-											on-tap="_addContact" 
-											style="float: right;"
-											raised>
-					Add
+				<paper-button 
+					dialog-confirm 
+					on-tap="_addContact" 
+					style="float: right;"
+					raised>Add
 				</paper-button>
 			</div>
-			<div id="pdpid">
-				<paper-dialog-scrollable>
-					<paper-input value="{{fullname}}" label="Namen hinzufügen"></paper-input>
-					<div id="addEmails">
-						<gold-email-input class="email" label="Email"></gold-email-input>
-					</div>
-					<div id="addPhones">
-						<gold-phone-input country-code="49" class="phone" label="Telefon"></gold-phone-input>
-					</div>
-					<div id="addAddresses">
-						<paper-input class="address" label="Addresse"></paper-input>
-					</div>
-				</paper-dialog-scrollable>
+			<div id="pdpid" >
+				<paper-input value="{{fullname}}" label="Namen hinzufügen"></paper-input>
+				<div id="addEmails">
+					<gold-email-input class="email" label="Email"></gold-email-input>
+				</div>
+				<div id="addPhones">
+					<gold-phone-input country-code="49" class="phone" label="Telefon"></gold-phone-input>
+				</div>
+				<div id="addAddresses">
+					<paper-input class="address" label="Addresse"></paper-input>
+				</div>
 			</div>
 		</paper-dialog>
 	</template>
