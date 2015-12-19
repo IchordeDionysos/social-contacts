@@ -13,6 +13,22 @@ body {
 	color: #333;
 }
 
+::-webkit-scrollbar {
+    height: 12px;
+    width: 8px;
+    background: #F1F1F1;
+}
+
+::-webkit-scrollbar-corner {
+    background: #F1F1F1;
+    -webkit-border-radius: 1ex;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #BCBCBC;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.41);
+}
+
 paper-drawer-panel:not([narrow]) #menu-arrow-back {
 		display: none;
 }
