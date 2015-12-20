@@ -1,0 +1,59 @@
+<dom-module id="contact-phone">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			iron-icon {
+				color: var(--secondary-text-color);
+			}
+			paper-dropdown-menu {
+				width: 130px;
+			}
+			gold-phone-input {
+				display: inline-block;
+				width: 250px;
+			}
+		</style>
+		<iron-icon icon="communication:phone"></iron-icon>
+		<paper-dropdown-menu label="Label" selected-item-label="{{label}}">
+			<paper-menu class="dropdown-content">
+				<paper-item label="private">Privat</paper-item>
+				<paper-item label="business">Geschäftlich</paper-item>
+				<paper-item label="mobile">Mobil</paper-item>
+				<paper-item label="landline">Festnetz</paper-item>
+				<paper-item label="faxPrivate">Fax (privat)</paper-item>
+				<paper-item label="faxBuisness">Fax (geschäftlich)</paper-item>
+				<paper-item label="googleVoice">Google Voice</paper-item>
+			</paper-menu>
+		</paper-dropdown-menu>
+		<gold-phone-input country-code="49" label="Telefon" value="{{phone}}"></gold-phone-input>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-phone',
+
+			properties: {
+				phone: {
+					type: String,
+					observer: 'phoneChanged',
+					notify: true
+				},
+				label: {
+					type: String,
+					observer: 'phoneChanged',
+					notify: true
+				}
+			},
+
+			observers: ['phoneChanged(phone, label)'],
+
+			phoneChanged: function() {
+				this.fire('phone', {
+					phone: this.phone,
+					label: this.label
+				});
+			}
+		});
+	</script>
+</dom-module>

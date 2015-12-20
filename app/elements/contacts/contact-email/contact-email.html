@@ -1,0 +1,54 @@
+<dom-module id="contact-email">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			iron-icon {
+				color: var(--secondary-text-color);
+			}
+			paper-dropdown-menu {
+				width: 130px;
+			}
+			gold-email-input {
+				display: inline-block;
+				width: 250px;
+			}
+		</style>
+		<iron-icon icon="communication:email"></iron-icon>
+		<paper-dropdown-menu label="Label" selected-item-label="{{label}}">
+			<paper-menu class="dropdown-content">
+				<paper-item label="private">Privat</paper-item>
+				<paper-item label="business">Geschäftlich</paper-item>
+			</paper-menu>
+		</paper-dropdown-menu>
+		<gold-email-input label="Email" value="{{email}}"></gold-email-input>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-email',
+
+			properties: {
+				email: {
+					type: String,
+					observer: 'emailChanged',
+					notify: true
+				},
+				label: {
+					type: String,
+					observer: 'emailChanged',
+					notify: true
+				}
+			},
+
+			observers: ['emailChanged(email, label)'],
+
+			emailChanged: function() {
+				this.fire('email', {
+					email: this.email,
+					label: this.label
+				});
+			}
+		});
+	</script>
+</dom-module>

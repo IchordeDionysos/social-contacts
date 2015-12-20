@@ -30,7 +30,7 @@ body {
 }
 
 paper-drawer-panel:not([narrow]) #menu-arrow-back {
-		display: none;
+	display: none;
 }
 
 paper-material {
@@ -43,14 +43,14 @@ paper-checkbox {
 }
 
 div#scrollable {
-		width: 100%;
-		padding: 0;
+	width: 100%;
+	padding: 0;
 }
 
 #profileImage {
 	height: 60px;
 	border-radius: 50%;
 	position: absolute;
-		top: 2px;
-		right: 8px;
+	top: 2px;
+	right: 8px;
 }

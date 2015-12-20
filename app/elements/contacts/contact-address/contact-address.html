@@ -1,0 +1,54 @@
+<dom-module id="contact-address">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			iron-icon {
+				color: var(--secondary-text-color);
+			}
+			paper-dropdown-menu {
+				width: 130px;
+			}
+			paper-input {
+				display: inline-block;
+				width: 250px;
+			}
+		</style>
+		<iron-icon icon="communication:location-on"></iron-icon>
+		<paper-dropdown-menu label="Label" selected-item-label="{{label}}">
+			<paper-menu class="dropdown-content">
+				<paper-item label="private">Privat</paper-item>
+				<paper-item label="business">Geschäftlich</paper-item>
+			</paper-menu>
+		</paper-dropdown-menu>
+		<paper-input label="Addresse" value="{{address}}"></paper-input>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-address',
+
+			properties: {
+				address: {
+					type: String,
+					observer: 'addressChanged',
+					notify: true
+				},
+				label: {
+					type: String,
+					observer: 'addressChanged',
+					notify: true
+				}
+			},
+
+			observers: ['addressChanged(address, label)'],
+
+			addressChanged: function() {
+				this.fire('address', {
+					address: this.address,
+					label: this.label
+				});
+			}
+		});
+	</script>
+</dom-module>

@@ -4,6 +4,13 @@
 			padding: 0 16px;
 			padding-bottom: 16px;
 		}
+		iron-icon {
+			color: var(--secondary-text-color);
+		}
+		paper-input {
+			display: inline-block;
+			width: calc(100% - 28px);
+		}
 		#pdpid {
 			margin-top: 63px;
 			overflow-y: auto;
@@ -33,16 +40,17 @@
 					raised>Add
 				</paper-button>
 			</div>
-			<div id="pdpid" >
-				<paper-input value="{{fullname}}" label="Namen hinzufügen"></paper-input>
+			<div id="pdpid">
+				<iron-icon icon="social:person"></iron-icon>
+				<paper-input value="{{fullname}}" label="Vollständiger Name"></paper-input>
 				<div id="addEmails">
-					<gold-email-input class="email" label="Email"></gold-email-input>
+					<contact-email></contact-email>
 				</div>
 				<div id="addPhones">
-					<gold-phone-input country-code="49" class="phone" label="Telefon"></gold-phone-input>
+					<contact-phone></contact-phone>
 				</div>
 				<div id="addAddresses">
-					<paper-input class="address" label="Addresse"></paper-input>
+					<contact-address></contact-address>
 				</div>
 			</div>
 		</paper-dialog>
@@ -59,72 +67,77 @@
 			},
 
 			listeners: {
-				'input': '_changeEvent'
+				'email': '_onEmail',
+				'phone': '_onPhone',
+				'address': '_onAddress'
 			},
 
-			_changeEvent: function(e) {
-				var t = e.target;
-
-				if (this._findClass(t.classList, 'gold-email-input')) {
-					var emails = document.getElementsByClassName('email');
-					for (var i = 0; i < emails.length-1; i++) {
-						if(emails[i].value === '') {
-							emails[i].remove();
-							emails.splice(i, 1);
-						}
-					}
-					if (emails[emails.length-1].value !== '') {
-						var email = document.createElement('gold-email-input');
-						email.label = 'Email';
-						email.classList.add('email');
-						this.$.addEmails.appendChild(email);
+			_onEmail: function() {
+				var emails = Array.prototype.slice.call(this.querySelectorAll('contact-email'));
+				for (var i = 0; i < emails.length-1; i++) {
+					if(emails[i].email === '') {
+						emails[i].remove();
+						emails.splice(i, 1);
 					}
 				}
+				if (emails[emails.length-1].email !== '') {
+					var email = document.createElement('contact-email');
+					this.$.addEmails.appendChild(email);
+				}
+				this.$.addContactDialog.notifyResize();
+			},
 
-				if (this._findClass(t.classList, 'gold-phone-input')) {
-					var phones = document.getElementsByClassName('phone');
-					for (var i = 0; i < phones.length-1; i++) {
-						if(phones[i].value === '') {
-							phones[i].remove();
-							phones.splice(i, 1);
-						}
-					}
-					if (phones[phones.length-1].value !== '') {
-						var phone = document.createElement('gold-phone-input');
-						phone.label = 'Telefon';
-						phone.classList.add('phone');
-						phone.countryCode = 49;
-						this.$.addPhones.appendChild(phone);
+			_onPhone: function() {
+				var phones = Array.prototype.slice.call(this.querySelectorAll('contact-phone'));
+				for (var i = 0; i < phones.length-1; i++) {
+					if(phones[i].phone === '') {
+						phones[i].remove();
+						phones.splice(i, 1);
 					}
 				}
+				if (phones[phones.length-1].phone !== '') {
+					var phone = document.createElement('contact-phone');
+					this.$.addPhones.appendChild(phone);
+				}
+				this.$.addContactDialog.notifyResize();
+			},
 
-				if (this._findClass(t.classList, 'paper-input')) {
-					var addresses = document.getElementsByClassName('address');
-					for (var i = 0; i < addresses.length-1; i++) {
-						if(addresses[i].value === '') {
-							addresses[i].remove();
-							addresses.splice(i, 1);
-						}
+			_onAddress: function() {
+				var addresses = Array.prototype.slice.call(this.querySelectorAll('contact-address'));
+				for (var i = 0; i < addresses.length-1; i++) {
+					if(addresses[i].address === '') {
+						addresses[i].remove();
+						addresses.splice(i, 1);
 					}
-					if (addresses[addresses.length-1].value !== '') {
-						var address = document.createElement('paper-input');
-						address.label = 'Addresse';
-						address.classList.add('address');
-						this.$.addAddresses.appendChild(address);
-					}
+				}
+				if (addresses[addresses.length-1].address !== '') {
+					var address = document.createElement('contact-address');
+					this.$.addAddresses.appendChild(address);
 				}
 				this.$.addContactDialog.notifyResize();
 			},
 			
 			_clearDialog: function() {
 				this.fullname = '';
-				this.set('emails', ['']);
-				this.set('phones', ['']);
-				this.set('addresses', ['']);
+
+				var email = document.createElement('contact-email');
+				var phone = document.createElement('contact-phone');
+				var address = document.createElement('contact-address');
+
+				var emailWrapper = document.querySelector('#addEmails');
+				var phoneWrapper = document.querySelector('#addPhones');
+				var addressWrapper = document.querySelector('#addAddresses');
+
+				emailWrapper.innerHTML = '';
+				phoneWrapper.innerHTML = '';
+				addressWrapper.innerHTML = '';
+
+				emailWrapper.appendChild(email);
+				phoneWrapper.appendChild(phone);
+				addressWrapper.appendChild(address);
 			},
 			
 			_addContact: function() {
-				this.getEmails();
 				this.fire('added-contact', {
 					fullname: this.fullname,
 					emails: this.getEmails(),
@@ -135,44 +148,45 @@
 			},
 
 			getEmails: function() {
-				var emailElements = document.getElementsByClassName('email');
+				var emailElements = this.querySelectorAll('contact-email');
 				var emails = [];
 				for (var i = 0; i < emailElements.length; i++) {
-					if (emailElements[i].value !== "") {
-						emails.push(emailElements[i].value);
+					if (emailElements[i].email !== "") {
+						emails.push({
+							label: emailElements[i].label,
+							email: emailElements[i].email
+						});
 					}
 				}
 				return emails;
 			},
 
 			getPhones: function() {
-				var phoneElements = document.getElementsByClassName('phone');
+				var phoneElements = this.querySelectorAll('contact-phone');
 				var phones = [];
 				for (var i = 0; i < phoneElements.length; i++) {
-					if (phoneElements[i].value !== "") {
-						phones.push(phoneElements[i].value);
+					if (phoneElements[i].phone !== "") {
+						phones.push({
+							label: phoneElements[i].label,
+							phone: phoneElements[i].phone
+						});
 					}
 				}
 				return phones;
 			},
 
 			getAddresses: function() {
-				var addressElements = document.getElementsByClassName('address');
+				var addressElements = this.querySelectorAll('contact-address');
 				var addresses = [];
 				for (var i = 0; i < addressElements.length; i++) {
-					if (addressElements[i].value !== "") {
-						addresses.push(addressElements[i].value);
+					if (addressElements[i].address !== "") {
+						addresses.push({
+							label: addressElements[i].label,
+							address: addressElements[i].address
+						});
 					}
 				}
 				return addresses;
-			},
-
-			_findClass: function(classes, target) {
-				for (var i = 0; i < classes.length; i++) {
-					if(classes[i] === target)
-						return true;
-				}
-				return false;
 			}
 		});
 	</script>
