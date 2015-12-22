@@ -36,18 +36,31 @@
 				},
 				label: {
 					type: String,
-					observer: 'addressChanged',
+					observer: 'labelChanged',
 					notify: true
 				}
 			},
-
-			observers: ['addressChanged(address, label)'],
 
 			addressChanged: function() {
 				this.fire('address', {
 					address: this.address,
 					label: this.label
 				});
+			},
+
+			labelChanged: function(newVal, oldVal) {
+				var attrVal;
+				switch(newVal) {
+					case 'Privat': attrVal = 'private'; break;
+					case 'Geschäftlich': attrVal = 'business'; break;
+				}
+				if(oldVal == undefined && attrVal) {
+					eventFire(this.querySelector('paper-item[label=' + attrVal + ']'), 'click');
+				}
+				this.fire('address', {
+					address: this.address,
+					label: this.label
+				})
 			}
 		});
 	</script>

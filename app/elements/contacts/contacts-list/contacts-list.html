@@ -6,12 +6,13 @@
 		}
 	</style>
 	<template>
-		<contact-dialog opened="{{opened}}" contact="{{selected}}" on-contact-changed="_contactChanged"></contact-dialog>
+		<contact-dialog opened="{{opened}}" contact="{{selected}}" on-contact="_contactChanged"></contact-dialog>
 		<template is="dom-if" if="{{contacts}}">
-			<template is="dom-repeat" 
-								items={{contacts}}
-								as="contact"
-								id="contactList">
+			<template 
+				is="dom-repeat"
+				id="contactList"
+				items={{contacts}}
+				as="contact">
 				<contact-item on-tap="select" contact="{{contact}}"></contact-item>
 			</template>
 		</template>
@@ -46,7 +47,6 @@
 			},
 
 			select: function(e) {
-				console.log(e.target.is);
 				if(e.target.is === 'paper-item') {
 					var item = document.querySelector('#contactList').itemForElement(e.target);
 					this.set('oldSpySelection', item.__firebaseKey__);
@@ -64,7 +64,6 @@
 				});
 				this.set('selected', selected);
 				this.set('opened', opened);
-				console.log(this.selected);
 			},
 
 			_contactChanged: function(e) {

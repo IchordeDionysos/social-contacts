@@ -41,18 +41,36 @@
 				},
 				label: {
 					type: String,
-					observer: 'phoneChanged',
+					observer: 'labelChanged',
 					notify: true
 				}
 			},
-
-			observers: ['phoneChanged(phone, label)'],
 
 			phoneChanged: function() {
 				this.fire('phone', {
 					phone: this.phone,
 					label: this.label
 				});
+			},
+
+			labelChanged: function(newVal, oldVal) {
+				var attrVal;
+				switch(newVal) {
+					case 'Privat': attrVal = 'private'; break;
+					case 'Geschäftlich': attrVal = 'business'; break;
+					case 'Mobil': attrVal = 'mobile'; break;
+					case 'Festnetz': attrVal = 'landline'; break;
+					case 'Fax (privat)': attrVal = 'faxPrivate'; break;
+					case 'Fax (geschäftlich)': attrVal = 'faxBuisness'; break;
+					case 'Google Voice': attrVal = 'googleVoice'; break;
+				}
+				if(oldVal == undefined && attrVal) {
+					eventFire(this.querySelector('paper-item[label=' + attrVal + ']'), 'click');
+				}
+				this.fire('phone', {
+					phone: this.phone,
+					label: this.label
+				})
 			}
 		});
 	</script>

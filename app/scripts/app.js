@@ -87,3 +87,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	};
 
 })(document);
+
+function eventFire(el, etype){
+  if (el.fireEvent) {
+    el.fireEvent('on' + etype);
+  } else {
+    var evObj = document.createEvent('Events');
+    evObj.initEvent(etype, true, false);
+    el.dispatchEvent(evObj);
+  }
+}

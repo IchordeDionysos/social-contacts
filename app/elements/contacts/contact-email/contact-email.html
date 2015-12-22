@@ -36,18 +36,35 @@
 				},
 				label: {
 					type: String,
-					observer: 'emailChanged',
+					observer: 'labelChanged',
 					notify: true
 				}
 			},
 
-			observers: ['emailChanged(email, label)'],
+			attached: function() {
+				console.log('attached');
+			},
 
 			emailChanged: function() {
 				this.fire('email', {
 					email: this.email,
 					label: this.label
 				});
+			},
+
+			labelChanged: function(newVal, oldVal) {
+				var attrVal;
+				switch(newVal) {
+					case 'Privat': attrVal = 'private'; break;
+					case 'Geschäftlich': attrVal = 'business'; break;
+				}
+				if(oldVal == undefined && attrVal) {
+					eventFire(this.querySelector('paper-item[label=' + attrVal + ']'), 'click');
+				}
+				this.fire('email', {
+					email: this.email,
+					label: this.label
+				})
 			}
 		});
 	</script>

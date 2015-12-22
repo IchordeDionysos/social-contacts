@@ -4,9 +4,13 @@
 			:host {
 				display: block;
 			}
-			paper-dialog-scrollable {
-				padding-left: 8px;
-				padding-right: 8px;
+			#pdpid {
+				margin-top: 63px;
+				overflow-y: auto;
+				scroll-behavior: auto;
+				width: 100%;
+				max-height: 600px;
+				padding: 0;
 			}
 		</style>
 		<paper-dialog entry-animation="scale-up-animation"
@@ -20,14 +24,15 @@
 				</paper-icon-button>
 				<span>[[contact.fullname]]</span>
 			</paper-item>
-			<paper-dialog-scrollable>
+			<div id="pdpbd">
+				<paper-input label="Vollständiger Name" value="{{contact.fullname}}"></paper-input>
 				<div id="emailList">
 				</div>
 				<div id="phoneList">
 				</div>
 				<div id="addressList">
 				</div>
-			</paper-dialog-scrollable>
+			</div>
 		</paper-dialog>
 	</template>
 	<script>
@@ -41,152 +46,155 @@
 				},
 				opened: {
 					type: Boolean,
-					notify: true
+					notify: true,
+					observer: '_updateContact'
 				}
 			},
 
 			listeners: {
-				'input': '_changeEvent',
-				'iron-overlay-closed': '_updateContact'
+				'email': '_onEmail',
+				'phone': '_onPhone',
+				'address': '_onAddress'
 			},
 
 			closeDialog: function () {
 				this.opened = false;
 			},
 
-			_updateContact: function() {
-				this.set('contact.emails', this.getEmails());
-				this.set('contact.phones', this.getPhones());
-				this.set('contact.addresses', this.getAddresses());
-				this.fire('contact-changed', {
-					contact: this.contact
-				});
+			_updateContact: function(newVal, oldVal) {
+				if(newVal === false && oldVal === true) {
+					this.set('contact.emails', this.getEmails());
+					this.set('contact.phones', this.getPhones());
+					this.set('contact.addresses', this.getAddresses());
+					console.log(this.contact);
+					this.fire('contact', {
+						contact: this.contact
+					});
+				}
 			},
 
 			_setUp: function(newVal, oldVal) {
-				console.log('setUp');
-				console.log(this.get('contact.emails'));
-				console.log(this.contact.emails);
-				for (var i = 0; i < this.get('contact.emails').length; i++) {
-					var email = document.createElement('gold-email-input');
-					email.label = 'Email';
-					email.classList.add('email');
-					email.value = this.get('contact.emails')[i];
-					this.$.emailList.appendChild(email);
+				this.$.emailList.innerHTML = '';
+				this.$.phoneList.innerHTML = '';
+				this.$.addressList.innerHTML = '';
+
+				if(this.contact.emails) {
+					for (var i = 0; i < this.get('contact.emails').length; i++) {
+						var email = document.createElement('contact-email');
+						this.$.emailList.appendChild(email);
+						email.label = this.get('contact.emails.' + i + '.label');
+						email.email = this.get('contact.emails.' + i + '.value');
+					}
 				}
-				for (var i = 0; i < this.get('contact.phones').length; i++) {
-					var phone = document.createElement('gold-phone-input');
-					phone.label = 'Telefon';
-					phone.classList.add('phone');
-					phone.value = this.get('contact.phones')[i];
-					this.$.phoneList.appendChild(phone);
+				this._onEmail();
+
+				if(this.contact.phones) {
+					for (var i = 0; i < this.get('contact.phones').length; i++) {
+						var phone = document.createElement('contact-phone');
+						this.$.phoneList.appendChild(phone);
+						phone.label = this.get('contact.phones.' + i + '.label');
+						phone.phone = this.get('contact.phones.' + i + '.value');
+					}
 				}
-				for (var i = 0; i < this.get('contact.addresses').length; i++) {
-					var address = document.createElement('paper-input');
-					address.label = 'Address';
-					address.classList.add('address');
-					address.value = this.get('contact.addresses')[i];
-					this.$.addressList.appendChild(address);
+				this._onPhone();
+
+				if(this.contact.addresses) {
+					for (var i = 0; i < this.get('contact.addresses').length; i++) {
+						var address = document.createElement('contact-address');
+						this.$.addressList.appendChild(address);
+						address.label = this.get('contact.addresses.' + i + '.label');
+						address.address = this.get('contact.addresses.' + i + '.value');
+					}
 				}
+				this._onAddress();
 			},
 
-			_changeEvent: function(e) {
-				console.log('changed');
-				var t = e.target;
-				console.log(e.target);
-
-				if (this._findClass(t.classList, 'gold-email-input')) {
-					var emails = document.querySelectorAll('.email');
-					console.log(emails);
-					for (var i = 0; i < emails.length-1; i++) {
-						console.log(emails[i]);
-						if(emails[i].value === '') {
-							emails[i].remove();
-							console.log(emails);
-							emails.splice(i, 1);
-						}
-					}
-					if (emails[emails.length-1].value !== '') {
-						var email = document.createElement('gold-email-input');
-						email.label = 'Email';
-						email.classList.add('email');
-						this.$.addEmails.appendChild(email);
+			_onEmail: function() {
+				var emails = Array.prototype.slice.call(this.querySelectorAll('contact-email'));
+				for (var i = 0; i < emails.length-1; i++) {
+					if(emails[i].email === '') {
+						emails[i].remove();
+						emails.splice(i, 1);
 					}
 				}
+				if (emails.length === 0 || emails[emails.length-1].email !== '') {
+					var email = document.createElement('contact-email');
+					this.$.emailList.appendChild(email);
+				}
+				this.$.contactDetailDialog.notifyResize();
+			},
 
-				if (this._findClass(t.classList, 'gold-phone-input')) {
-					var phones = document.getElementsByClassName('phone');
-					for (var i = 0; i < phones.length-1; i++) {
-						if(phones[i].value === '') {
-							phones[i].remove();
-							phones.splice(i, 1);
-						}
-					}
-					if (phones[phones.length-1].value !== '') {
-						var phone = document.createElement('gold-phone-input');
-						phone.label = 'Telefon';
-						phone.classList.add('phone');
-						this.$.addPhones.appendChild(phone);
+			_onPhone: function() {
+				var phones = Array.prototype.slice.call(this.querySelectorAll('contact-phone'));
+				for (var i = 0; i < phones.length-1; i++) {
+					if(phones[i].phone === '') {
+						phones[i].remove();
+						phones.splice(i, 1);
 					}
 				}
+				if (phones.length === 0 || phones[phones.length-1].phone !== '') {
+					var phone = document.createElement('contact-phone');
+					this.$.phoneList.appendChild(phone);
+				}
+				this.$.contactDetailDialog.notifyResize();
+			},
 
-				if (this._findClass(t.classList, 'paper-input')) {
-					var addresses = document.getElementsByClassName('address');
-					for (var i = 0; i < addresses.length-1; i++) {
-						if(addresses[i].value === '') {
-							addresses[i].remove();
-							addresses.splice(i, 1);
-						}
-					}
-					if (addresses[addresses.length-1].value !== '') {
-						var address = document.createElement('paper-input');
-						address.label = 'Addresse';
-						address.classList.add('address');
-						this.$.addAddresses.appendChild(address);
+			_onAddress: function() {
+				var addresses = Array.prototype.slice.call(this.querySelectorAll('contact-address'));
+				for (var i = 0; i < addresses.length-1; i++) {
+					if(addresses[i].address === '') {
+						addresses[i].remove();
+						addresses.splice(i, 1);
 					}
 				}
+				if (addresses.length === 0 || addresses[addresses.length-1].address !== '') {
+					var address = document.createElement('contact-address');
+					this.$.addressList.appendChild(address);
+				}
+				this.$.contactDetailDialog.notifyResize();
 			},
 
 			getEmails: function() {
-				var emailElements = document.getElementsByClassName('email');
+				var emailElements = this.querySelectorAll('contact-email');
 				var emails = [];
 				for (var i = 0; i < emailElements.length; i++) {
-					if (emailElements[i].value !== "") {
-						emails.push(emailElements[i].value);
+					if (emailElements[i].email !== "") {
+						emails.push({
+							label: emailElements[i].label,
+							value: emailElements[i].email
+						});
 					}
 				}
 				return emails;
 			},
 
 			getPhones: function() {
-				var phoneElements = document.getElementsByClassName('phone');
+				var phoneElements = this.querySelectorAll('contact-phone');
 				var phones = [];
 				for (var i = 0; i < phoneElements.length; i++) {
-					if (phoneElements[i].value !== "") {
-						phones.push(phoneElements[i].value);
+					if (phoneElements[i].phone !== "") {
+						phones.push({
+							label: phoneElements[i].label,
+							value: phoneElements[i].phone
+						});
 					}
 				}
 				return phones;
 			},
 
 			getAddresses: function() {
-				var addressElements = document.getElementsByClassName('address');
+				var addressElements = this.querySelectorAll('contact-address');
 				var addresses = [];
 				for (var i = 0; i < addressElements.length; i++) {
-					if (addressElements[i].value !== "") {
-						addresses.push(addressElements[i].value);
+					if (addressElements[i].address !== "") {
+						addresses.push({
+							label: addressElements[i].label,
+							value: addressElements[i].address
+						});
 					}
 				}
 				return addresses;
-			 },
-
-			_findClass: function(classes, target) {
-				for (var i = 0; i < classes.length; i++) {
-					if(classes[i] === target)
-						return true;
-					}
-				return false;
-			} 
+			}
 		});
 	</script>
 </dom-module>
