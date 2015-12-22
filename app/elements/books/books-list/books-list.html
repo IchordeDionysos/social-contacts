@@ -29,16 +29,19 @@
 		.divider {
 			border-top: 1px solid var(--divider-color);
 		}
+		.caption {
+			font-weight: 500;
+		}
 	</style>
 	<template>
 		<book-dialog opened="{{opened}}" book="{{selected}}" on-book-changed="_bookChanged"></book-dialog>
 		<template is="dom-if" if="{{books}}">
 			<paper-item display="flex">
-				<span class="small">ID</span>
-				<span class="hide middle">Author</span>
-				<span class="large">Originaltitel</span>
-				<span class="hide middle">Sprache</span>
-				<span class="middle">Status</span>
+				<span class="small caption">ID</span>
+				<span class="hide middle caption">Author</span>
+				<span class="large caption">Originaltitel</span>
+				<span class="hide middle caption">Sprache</span>
+				<span class="middle caption">Status</span>
 			</paper-item>
 			<template is="dom-repeat" items={{books}} as="book" id="bookList">
 				<paper-item class="divider" display="flex" on-tap="select">

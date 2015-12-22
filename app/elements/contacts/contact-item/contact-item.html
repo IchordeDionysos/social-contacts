@@ -5,9 +5,12 @@
 				display: none;
 			}
 		}
+		.divider {
+			border-top: 1px solid var(--divider-color);
+		}
 	</style>
 	<template>
-		<paper-item>
+		<paper-item class="divider">
 			<span>[[contact.fullname]]</span>
 			<selector-email emails="[[contact.emails]]"></selector-email>
 			<selector-phone phones="[[contact.phones]]"></selector-phone>

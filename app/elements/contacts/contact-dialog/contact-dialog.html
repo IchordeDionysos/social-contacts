@@ -82,7 +82,6 @@
 			},
 
 			_updateContact: function(newVal, oldVal) {
-				console.log(this.cleared);
 				if(newVal === false && oldVal === true && !this.cleared) {
 					this.set('contact.emails', this.getEmails());
 					this.set('contact.phones', this.getPhones());

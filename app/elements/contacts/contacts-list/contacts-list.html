@@ -4,10 +4,14 @@
 			flex-basis: 100%;
 			margin: auto;
 		}
+		.caption {
+			font-weight: 500;
+		}
 	</style>
 	<template>
 		<contact-dialog opened="{{opened}}" contact="{{selected}}" on-contact="_contactChanged"></contact-dialog>
 		<template is="dom-if" if="{{contacts}}">
+			<paper-item class="caption">Alle Kontakte</paper-item>
 			<template 
 				is="dom-repeat"
 				id="contactList"
