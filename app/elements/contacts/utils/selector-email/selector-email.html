@@ -5,7 +5,7 @@
 				display: block;
 			}
 			#emailPreview {
-				width: 260px;
+				width: 280px;
 			}
 			@media (max-width: 560px) {
 				#emailPreview {
@@ -16,7 +16,7 @@
 		<paper-dropdown-menu id="emailPreview" label="Keine Emails" no-label-float>
 			<paper-menu class="dropdown-content">
 				<template is="dom-repeat" items={{_tempEmails}} as="email">
-					<paper-item>[[email]]</paper-item>
+					<paper-item>[[email.value]]</paper-item>
 				</template>
 			</paper-menu>
 		</paper-dropdown-menu>
@@ -46,7 +46,7 @@
 				for (var prop in this.emails) {
 					arr.push(this.emails[prop]);
 				}
-				this.$.emailPreview.label = arr[arr.length-1];
+				this.$.emailPreview.label = arr[arr.length-1].value;
 				this.set('_tempEmails', arr);
 				this.$.emailPreview.disabled = true;
 				if (this._tempEmails === undefined) {
