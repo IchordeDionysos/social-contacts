@@ -11,6 +11,11 @@
 				display: inline-block;
 				width: calc(100% - 28px);
 			}
+			#topName {
+				font-size: larger;
+				top: 10px;
+				position: relative;
+			}
 			#pdpid {
 				margin-top: 63px;
 				overflow-y: auto;
@@ -24,13 +29,20 @@
 					  exit-animation="fade-out-animation"
 					  id="contactDetailDialog"
 					  opened="{{opened}}">
-			<paper-item style="padding-left: 11px;" class="header">
+			<div id="pdpbd" class="header">
 				<paper-icon-button 
-							icon="icons:arrow-back" 
-							on-tap="closeDialog">
+					icon="clear" 
+					on-tap="clearDialog" 
+					style="float: left; left: -8px;">
 				</paper-icon-button>
-				<span>[[contact.fullname]]</span>
-			</paper-item>
+				<span id="topName">[[contact.fullname]]</span>
+				<paper-button 
+					dialog-confirm 
+					on-tap="closeDialog" 
+					style="float: right;"
+					raised>Save
+				</paper-button>
+			</div>
 			<div id="pdpbd">
 				<iron-icon icon="social:person"></iron-icon>
 				<paper-input label="Vollständiger Name" value="{{contact.fullname}}"></paper-input>
@@ -70,7 +82,8 @@
 			},
 
 			_updateContact: function(newVal, oldVal) {
-				if(newVal === false && oldVal === true) {
+				console.log(this.cleared);
+				if(newVal === false && oldVal === true && !this.cleared) {
 					this.set('contact.emails', this.getEmails());
 					this.set('contact.phones', this.getPhones());
 					this.set('contact.addresses', this.getAddresses());
@@ -78,6 +91,12 @@
 						contact: this.contact
 					});
 				}
+				this.cleared = false;
+			},
+
+			clearDialog: function() {
+				this.cleared = true;
+				this.opened = false;
 			},
 
 			_setUp: function(newVal, oldVal) {
