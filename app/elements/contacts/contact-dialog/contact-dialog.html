@@ -25,12 +25,14 @@
 				padding: 0;
 			}
 		</style>
-		<paper-dialog entry-animation="scale-up-animation"
-					  exit-animation="fade-out-animation"
-					  id="contactDetailDialog"
-					  opened="{{opened}}">
+		<paper-dialog 
+			entry-animation="scale-up-animation"
+			exit-animation="fade-out-animation"
+			id="contactDetailDialog"
+			opened="{{opened}}">
 			<div id="pdpbd" class="header">
-				<paper-icon-button 
+				<paper-icon-button
+					id="closeDialog"
 					icon="clear" 
 					on-tap="clearDialog" 
 					style="float: left; left: -8px;">
@@ -59,6 +61,8 @@
 		Polymer({
 			is: 'contact-dialog',
 
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
+
 			properties: {
 				contact: {
 					type:Object,
@@ -68,6 +72,18 @@
 					type: Boolean,
 					notify: true,
 					observer: '_updateContact'
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'rotateIcon': {
+								name: 'transform-animation',
+								node: this.$.closeDialog,
+							  	transformFrom: 'rotate(0deg)',
+								transformTo: 'rotate(360deg)'
+							}
+						}
+					}
 				}
 			},
 
@@ -90,10 +106,13 @@
 						contact: this.contact
 					});
 				}
+				if(newVal)
+					this.playAnimation('rotateIcon');
 				this.cleared = false;
 			},
 
 			clearDialog: function() {
+				this.playAnimation('rotateIcon');
 				this.cleared = true;
 				this.opened = false;
 			},

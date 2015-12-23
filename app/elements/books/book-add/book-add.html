@@ -5,20 +5,24 @@
 		}
 	</style>
 	<template>
-		<paper-dialog entry-animation="scale-up-animation"
-									exit-animation="fade-out-animation"
-									opened="{{opened}}"
-									id="addBookDialog">
+		<paper-dialog 
+			entry-animation="scale-up-animation"
+			exit-animation="fade-out-animation"
+			opened="{{opened}}"
+			id="addBookDialog">
 			<div id="pdpbd">
-				<paper-icon-button icon="clear" 
-													 on-tap="_clearDialog" 
-													 dialog-dismiss 
-													 style="float: left;">
+				<paper-icon-button
+					id="clearDialog"
+					icon="clear" 
+					on-tap="_clearDialog" 
+					dialog-dismiss 
+					style="float: left;">
 				</paper-icon-button>
-				<paper-button dialog-confirm 
-											on-tap="_addBook" 
-											style="float: right;"
-											raised>
+				<paper-button 
+					dialog-confirm 
+					on-tap="_addBook" 
+					style="float: right;"
+					raised>
 					Add
 				</paper-button>
 			</div>
@@ -49,6 +53,8 @@
 	<script>
 		Polymer({
 			is: 'book-add',
+
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
 			
 			properties: {
 				dedication: {
@@ -59,10 +65,23 @@
 				opened: {
 					type: Boolean,
 					notify: true
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'rotateIcon': {
+								name: 'transform-animation',
+								node: this.$.clearDialog,
+							  	transformFrom: 'rotate(0deg)',
+								transformTo: 'rotate(360deg)'
+							}
+						}
+					}
 				}
 			},
 			
 			_clearDialog: function() {
+				this.playAnimation('rotateIcon');
 				this.author = '';
 				this.original = '';
 				this.title = '';

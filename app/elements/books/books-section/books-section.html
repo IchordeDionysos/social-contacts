@@ -20,11 +20,13 @@
 				books="{{books}}">
 			</books-list>
 		</paper-material>
-		<paper-fab icon="add" on-tap="_openAddBookDialog"></paper-fab>
+		<paper-fab id="bookAddFab" icon="add" on-tap="_openAddBookDialog"></paper-fab>
 	</template>
 	<script>
 		Polymer({
 			is: 'books-section',
+
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
 			
 			properties: {
 				books: {
@@ -35,13 +37,36 @@
 				},
 				opened: {
 					notify: true,
-					type: Boolean
+					type: Boolean,
+					observer: '_updateFabRotation'
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'rotateToX': {
+								name: 'transform-animation',
+								node: this.$.bookAddFab,
+							  	transformFrom: 'rotate(0deg)',
+								transformTo: 'rotate(45deg)'
+							},
+							'rotateToPlus': {
+								name: 'transform-animation',
+								node: this.$.bookAddFab,
+							  	transformFrom: 'rotate(45deg)',
+								transformTo: 'rotate(0deg)'
+							}
+						}
+					}
 				}
 			},
 			
 			observers: [
 				'_booksChanged(books.*)'
 			],
+
+			listeners: {
+				'neon-animation-finish': '_onNeonAnimationFinish'
+			},
 			
 			_booksChanged: function(books) {
 				var id = this._computeID(books.value);
@@ -61,7 +86,26 @@
 			},
 			
 			_openAddBookDialog: function() {
-				this.set('opened', true);
+				if(this.opened)
+					this.set('opened', false);
+				else
+					this.set('opened', true);
+			},
+
+			_updateFabRotation: function(newVal) {
+				if(newVal) {
+					this.playAnimation('rotateToX');
+					this.querySelector('book-add')._clearDialog();
+				} else {
+					this.playAnimation('rotateToPlus');
+				}
+			},
+
+			_onNeonAnimationFinish: function() {
+				if(this.opened)
+					this.$.bookAddFab.style.transform = 'rotate(45deg)';
+				else
+					this.$.bookAddFab.style.transform = 'rotate(0deg)';
 			},
 			
 			_addBook: function(e) {

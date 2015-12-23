@@ -3,6 +3,20 @@
 		#pdpid {
 			margin: 0;
 		}
+		paper-icon-button:hover {
+			animation: 3s ease-in 0s 1 reverse both paused rotate;
+		}
+		@keyframe rotate {
+			0% {
+				transform: rotate(0deg);
+			}
+			50% {
+				transform: rotate(180deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
 	</style>
 	<template>
 			<paper-dialog entry-animation="scale-up-animation"
@@ -12,8 +26,9 @@
 						  opened="{{opened}}">
 				<paper-item style="padding-left: 11px;">
 					<paper-icon-button 
-								icon="icons:arrow-back" 
-								on-tap="closeDialog">
+						id="closeDialog"
+						icon="icons:arrow-back" 
+						on-tap="closeDialog">
 					</paper-icon-button>
 					<span>Buch&nbsp;</span>
 					<span>[[book.id]]</span>
@@ -29,12 +44,15 @@
 	<script>
 		Polymer({
 			is: 'book-dialog',
+
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
 			
 			properties: {
 				book: Object,
 				opened: {
 					type: Boolean,
-					notify: true
+					notify: true,
+					observer: 'openedChanged'
 				},
 				lendView: {
 					type: Boolean,
@@ -51,11 +69,28 @@
 				datePicker: {
 					type: Boolean,
 					value: false
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'rotateOnHover': {
+								name: 'transform-animation',
+								node: this.$.closeDialog,
+							  	transformFrom: 'rotate(0deg)',
+								transformTo: 'rotate(360deg)'
+							}
+						}
+					}
 				}
 			},
 
 			listeners: {
 				'iron-overlay-closed': '_updateBook'
+			},
+
+			openedChanged: function(newVal) {
+				if (newVal) 
+					this.playAnimation('rotateOnHover');
 			},
 
 			sold: function(e) {
@@ -120,6 +155,7 @@
 			},
 			
 			closeDialog: function () {
+				this.playAnimation('rotateOnHover');
 				this.opened = false;
 			}
 		});

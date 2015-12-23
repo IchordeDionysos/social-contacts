@@ -15,11 +15,13 @@
 				contacts="{{contacts}}">
 			</contacts-list>
 		</paper-material>
-		<paper-fab icon="social:person-add" on-tap="_openAddContactDialog"></paper-fab>
+		<paper-fab id="contactAddFab" icon="[[fabIcon]]" on-tap="_openAddContactDialog"></paper-fab>
 	</template>
 	<script>
 		Polymer({
 			is: 'contacts-section',
+
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
 			
 			properties: {
 				contacts: {
@@ -27,12 +29,61 @@
 				},
 				opened: {
 					notify: true,
-					type: Boolean
+					type: Boolean,
+					observer: '_updateFabRotation'
+				},
+				fabIcon: {
+					type: String,
+					value: 'social:person-add'
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'rotateToX': {
+								name: 'transform-animation',
+								node: this.$.contactAddFab,
+							  	transformFrom: 'rotate(0deg)',
+								transformTo: 'rotate(45deg)'
+							},
+							'rotateToPlus': {
+								name: 'transform-animation',
+								node: this.$.contactAddFab,
+							  	transformFrom: 'rotate(45deg)',
+								transformTo: 'rotate(0deg)'
+							}
+						}
+					}
 				}
 			},
 
+			listeners: {
+				'neon-animation-finish': '_onNeonAnimationFinish'
+			},
+
 			_openAddContactDialog: function() {
-				this.set('opened', true);
+				if(this.opened)
+					this.set('opened', false);
+				else
+					this.set('opened', true);
+			},
+
+			_updateFabRotation: function(newVal) {
+				if(newVal) {
+					this.fabIcon = 'add';
+					this.playAnimation('rotateToX');
+					this.querySelector('contact-add')._clearDialog();
+				} else {
+					this.playAnimation('rotateToPlus');
+				}
+			},
+
+			_onNeonAnimationFinish: function() {
+				if(this.opened)
+					this.$.contactAddFab.style.transform = 'rotate(45deg)';
+				else {
+					this.$.contactAddFab.style.transform = 'rotate(0deg)';
+					this.fabIcon = 'social:person-add';
+				}
 			},
 			
 			_addContact: function(e) {

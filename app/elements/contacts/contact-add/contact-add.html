@@ -28,6 +28,7 @@
 			id="addContactDialog">
 			<div id="pdpbd">
 				<paper-icon-button 
+					id="clearDialog"
 					icon="clear" 
 					on-tap="_clearDialog" 
 					dialog-dismiss 
@@ -58,11 +59,25 @@
 	<script>
 		Polymer({
 			is: 'contact-add',
+
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
 			
 			properties: {
 				opened: {
 					type: Boolean,
 					notify: true
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'rotateIcon': {
+								name: 'transform-animation',
+								node: this.$.clearDialog,
+							  	transformFrom: 'rotate(0deg)',
+								transformTo: 'rotate(360deg)'
+							}
+						}
+					}
 				}
 			},
 
@@ -118,6 +133,7 @@
 			},
 			
 			_clearDialog: function() {
+				this.playAnimation('rotateIcon');
 				this.fullname = '';
 
 				var email = document.createElement('contact-email');
