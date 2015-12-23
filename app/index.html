@@ -163,10 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			</paper-scroll-header-panel>
 		</paper-drawer-panel>
 
-		<all-data user="{{user}}" contacts="{{contacts}}" books="{{books}}"
-		
-		<paper-toast id="issueCreated" text="Feedback send">
-		</paper-toast>
+		<all-data user="{{user}}" contacts="{{contacts}}" books="{{books}}"></all-data>
 
 		<!-- Uncomment next block to enable Service Worker support (1/2) -->
 		<paper-toast id="caching-complete"
@@ -174,12 +171,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 								 text="Caching complete! This app will work offline.">
 		</paper-toast>
 
+		<social-contacts-toasts></social-contacts-toasts>
+
 		<platinum-sw-register auto-register
-													clients-claim
-													skip-waiting
-													on-service-worker-installed="displayInstalledToast">
-			<platinum-sw-cache default-cache-strategy="fastest"
-												 cache-config-file="cache-config.json">
+			clients-claim
+			skip-waiting
+			on-service-worker-installed="displayInstalledToast">
+			<platinum-sw-cache 
+				default-cache-strategy="fastest"
+				cache-config-file="cache-config.json">
 			</platinum-sw-cache>
 		</platinum-sw-register>
 	</template>

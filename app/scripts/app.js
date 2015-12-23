@@ -88,7 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 })(document);
 
-function eventFire(el, etype){
+function eventFire(el, etype) {
   if (el.fireEvent) {
     el.fireEvent('on' + etype);
   } else {
@@ -96,4 +96,23 @@ function eventFire(el, etype){
     evObj.initEvent(etype, true, false);
     el.dispatchEvent(evObj);
   }
+}
+
+function getWelcomeMessage() {
+	var welcomeMessagesCount = 8;
+	var index = Math.floor(Math.random() * welcomeMessagesCount);
+	console.log(index);
+	switch(index) {
+		case 0: return 'It\'s great to see you!';
+		case 1: return 'Schön dich zu sehen';
+		case 2: return 'Do you like the service? Give us feedback!';
+		case 3: return 'Gefällt dir der Service? Lass doch ein Feedback da!';
+		case 4: return 'What a wonderful day!';
+		case 5: return 'Ein wundervoller Tag heute, oder?';
+		case 6: return 'It\'s always good to have a smile!';
+		case 7: return 'Lächeln ist immer gut!';
+		case 0: return '';
+		case 0: return '';
+		case 0: return '';
+	}
 }

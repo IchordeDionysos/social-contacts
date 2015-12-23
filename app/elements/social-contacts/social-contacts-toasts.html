@@ -1,0 +1,30 @@
+<dom-module id="social-contacts-toasts">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+		<paper-toast id="welcomeMessage" text="[[welcomeMessage]]"></paper-toast>
+		<paper-toast id="issueCreated" text="Feedback send"></paper-toast>
+	</template>
+	<script>
+		Polymer({
+			is: 'social-contacts-toasts',
+
+			properties: {
+				welcomeMessage: {
+					type: String,
+					value: function() {
+						return getWelcomeMessage();
+					}
+				}
+			},
+
+			attached: function() {
+				var that = this;
+				window.setTimeout(function() {that.$.welcomeMessage.show();}, 4000);
+			}
+		});
+	</script>
+</dom-module>
