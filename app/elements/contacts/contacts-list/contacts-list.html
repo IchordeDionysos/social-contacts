@@ -51,11 +51,20 @@
 			},
 
 			select: function(e) {
-				if(e.target.is === 'paper-item') {
+				if(this._isContactItem(e.target)) {
 					var item = document.querySelector('#contactList').itemForElement(e.target);
 					this.set('oldSpySelection', item.__firebaseKey__);
 					this._updateSelection(this.oldSpySelection);
 				}
+			},
+
+			_isContactItem: function(element) {
+				var classes = element.classList;
+				for(var i=0; i<classes.length; i++) {
+					if(classes[i] === 'contact-item') 
+						return true;
+				}
+				return false;
 			},
 
 			_updateSelection: function(key) {
