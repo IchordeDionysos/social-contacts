@@ -46,17 +46,15 @@
 				for (var prop in this.emails) {
 					arr.push(this.emails[prop]);
 				}
-				this.$.emailPreview.label = arr[arr.length-1].value;
+
 				this.set('_tempEmails', arr);
 				this.$.emailPreview.disabled = true;
-				if (this._tempEmails === undefined) {
+				if (this._tempEmails === undefined ||this._tempEmails.length === 0) {
 					this.$.emailPreview.label = 'Keine Emails';
 					return;
 				}
-				if (this._tempEmails.length === 0) 
-					this.$.emailPreview.label = 'Keine Emails';
-				if (this._tempEmails.length !== 0)
-					this.$.emailPreview.disabled = false;
+				this.$.emailPreview.disabled = false;
+				this.$.emailPreview.label = this._tempEmails[this._tempEmails.length-1].value;
 			}
 		});
 	</script>

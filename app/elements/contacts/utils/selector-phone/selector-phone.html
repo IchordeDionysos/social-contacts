@@ -41,17 +41,15 @@
 				for (var prop in this.phones) {
 					arr.push(this.phones[prop]);
 				}
-				this.$.phonePreview.label = arr[arr.length-1].value;
+
 				this.set('_tempPhones', arr);
 
-				if (this._tempPhones === undefined) {
+				if (this._tempPhones === undefined || this._tempPhones.length === 0) {
 					this.$.emailPreview.label = 'Keine Telefone';
 					return;
 				}
-				if (this._tempPhones.length === 0)
-					this.$.emailPreview.label = 'Keine Telefone';
-				if (this._tempPhones.length !== 0)
-					this.$.phonePreview.disabled = false;
+				this.$.phonePreview.disabled = false;
+				this.$.phonePreview.label = this._tempPhones[this._tempPhones.length-1].value;
 			}
 		});
 	</script>
