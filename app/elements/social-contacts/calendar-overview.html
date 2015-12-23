@@ -38,7 +38,7 @@
 				</a>
 			</template>
 			<template is="dom-if" if={{!signedIn}}>
-				<paper-item>Log dich bitte zu erst ein!</paper-item>
+				<paper-item on-tap="_signIn">Log dich bitte zu erst ein!</paper-item>
 			</template>
 		</template>
 	</template>
@@ -133,6 +133,10 @@
 					this.calendars = resp.items;
 				  }
 				}.bind(this));
+			},
+
+			_signIn: function() {
+				document.querySelector('social-contacts-login').auth();
 			},
 
 			_computeDate: function(start) {

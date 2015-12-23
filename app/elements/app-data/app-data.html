@@ -35,16 +35,17 @@
 	</style>
 	<template>
 		<firebase-auth id="auth" 
-									 user="{{authData}}"
-									 location="{{location}}"
-									 provider="google"
-									 on-logout="logout">
+			user="{{authData}}"
+			location="{{location}}"
+			provider="google"
+			on-logout="logout">
 		</firebase-auth>
 		
-		<firebase-collection location="{{userLocation}}"
-												 ref="{{ref}}"
-												 data="{{fbData}}"
-												 on-firebase-value="_firebaseLoaded">
+		<firebase-collection 
+			location="{{userLocation}}"
+			ref="{{ref}}"
+			data="{{fbData}}"
+			on-firebase-value="_firebaseLoaded">
 		</firebase-collection>
 		<!--
 		<iron-localstorage name="social-contacts"

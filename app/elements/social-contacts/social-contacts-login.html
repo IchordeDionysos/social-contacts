@@ -6,7 +6,7 @@
 			}
 		</style>
 		<google-signin id="googleAuth" client-id="699732304446-e45ap2fr5flavps567q6a23dqh35oe13.apps.googleusercontent.com" 
-					   scopes="https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/drive"
+					   scopes="https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/drive https://spreadsheets.google.com/feeds"
 					   api-key="AIzaSyDoVBLsoq9t59oDMiKi38BTGABFZbkrF2I"
 					   is-authorized="{{loggedIn}}"
 					   signed-in="{{signedIn}}"
@@ -33,7 +33,9 @@
 
 			loginStatusChanged: function(newVal) {
 				if (newVal) {
-					document.querySelector('#firebaseAuth').signIn();
+					var firebaseAuth = document.querySelector('#firebaseAuth').authData;
+					if(!firebaseAuth)
+						document.querySelector('#firebaseAuth').signIn();
 					this.authMessage = 'sign out';
 				}
 				else if(document.querySelector('#firebaseAuth')) {
