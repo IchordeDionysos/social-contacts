@@ -12,6 +12,11 @@
 			display: inline-block;
 			width: calc(100% - 36px);
 		}
+		.addItem {
+			color: var(--default-primary-color);
+			margin-left: 36px;
+			cursor: pointer;
+		}
 		#pdpid {
 			margin-top: 63px;
 			overflow-y: auto;
@@ -45,6 +50,8 @@
 			<div id="pdpid">
 				<iron-icon icon="social:person"></iron-icon>
 				<paper-input value="{{fullname}}" label="Vollständiger Name"></paper-input>
+				<div id="addOccupations"></div>
+				<div class="addItem" on-tap="addOccupation">Tätigkeit hinzufügen</div>
 				<div id="addEmails">
 					<contact-email></contact-email>
 				</div>
@@ -83,9 +90,19 @@
 			},
 
 			listeners: {
+				'removeOccupation': '_onOccupationRemove',
 				'email': '_onEmail',
 				'phone': '_onPhone',
 				'address': '_onAddress'
+			},
+
+			addOccupation: function() {
+				var occupation = document.createElement('contact-occupation');
+				this.$.addOccupations.appendChild(occupation);
+			},
+
+			_onOccupationRemove: function(e) {
+				e.target.remove();
 			},
 
 			_onEmail: function() {
@@ -141,10 +158,12 @@
 				var phone = document.createElement('contact-phone');
 				var address = document.createElement('contact-address');
 
-				var emailWrapper = document.querySelector('#addEmails');
-				var phoneWrapper = document.querySelector('#addPhones');
-				var addressWrapper = document.querySelector('#addAddresses');
+				var occupationWrapper = this.$.addOccupations;
+				var emailWrapper = this.$.addEmails;
+				var phoneWrapper = this.$.addPhones;
+				var addressWrapper = this.$.addAddresses;
 
+				occupationWrapper.innerHTML = '';
 				emailWrapper.innerHTML = '';
 				phoneWrapper.innerHTML = '';
 				addressWrapper.innerHTML = '';
@@ -157,11 +176,26 @@
 			_addContact: function() {
 				this.fire('added-contact', {
 					fullname: this.fullname,
+					occupations: this.getOccupations(),
 					emails: this.getEmails(),
 					phones: this.getPhones(),
 					addresses: this.getAddresses()
 				});
 				this._clearDialog();
+			},
+
+			getOccupations: function() {
+				var occupationElements = this.querySelectorAll('contact-occupation');
+				var occupations = [];
+				for (var i = 0; i < occupationElements.length; i++) {
+					if (occupationElements[i].occupation !== "" || occupationElements[i].company) {
+						occupations.push({
+							occupation: occupationElements[i].occupation,
+							company: occupationElements[i].company
+						});
+					}
+				}
+				return occupations;
 			},
 
 			getEmails: function() {

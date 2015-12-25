@@ -1,0 +1,81 @@
+<dom-module id="contact-occupation">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			iron-icon {
+				color: var(--secondary-text-color);
+				margin-right: 8px;
+			}
+			paper-input {
+				display: inline-block;
+			}
+			span {
+				visibility: hidden;
+			}
+		</style>
+		<iron-icon id="occupationItem" icon="[[icon]]" on-tap="removeSelf"></iron-icon>
+		<paper-input label="Job" value="{{occupation}}"></paper-input>
+		<span> bei </span>
+		<paper-input label="Firma" value="{{company}}"></paper-input>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-occupation',
+
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
+
+			properties: {
+				occupation: {
+					type: String,
+					observer: 'occupationChanged',
+					notify: true
+				},
+				company: {
+					type: String,
+					observer: 'occupationChanged',
+					notify: true
+				},
+				icon: {
+					type: String,
+					value: 'work'
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'rotateIcon': {
+								name: 'transform-animation',
+								node: this.$.occupationItem,
+							  	transformFrom: 'rotate(0deg)',
+								transformTo: 'rotate(360deg)'
+							}
+						}
+					}
+				}
+			},
+
+			occupationChanged: function() {
+				if(this.occupation !== '' && this.company !== '')
+					this.querySelector('span').style.visibility = 'visible';
+				else
+					this.querySelector('span').style.visibility = 'hidden';
+				if(this.occupation !== '' || this.company !== '')
+					this.icon = 'work';
+				else
+					this.icon = 'clear';
+				this.fire('occupation', {
+					occupation: this.occupation,
+					company: this.company
+				});
+			},
+
+			removeSelf: function() {
+				if(this.icon === 'clear') {
+					this.fire('removeOccupation');
+					// this.playAnimation('rotateIcon'); //TODO: unluckily not working DON'T KNOW WHY
+				}
+			}
+		});
+	</script>
+</dom-module>
