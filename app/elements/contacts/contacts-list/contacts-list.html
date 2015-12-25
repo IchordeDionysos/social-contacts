@@ -40,6 +40,7 @@
 					notify: true
 				},
 				oldSpySelection: Object,
+				oldSpySelection: String,
 				opened: {
 					notify: true,
 					type: Boolean
@@ -50,6 +51,7 @@
 				if(this._isContactItem(e.target)) {
 					var item = document.querySelector('#contactList').itemForElement(e.target);
 					this.set('oldSpySelection', item.__firebaseKey__);
+					this.oldSpySelection = item.__firebaseKey__;
 					this._updateSelection(this.oldSpySelection);
 				}
 			},

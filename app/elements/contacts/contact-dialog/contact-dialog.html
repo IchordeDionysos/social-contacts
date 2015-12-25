@@ -138,9 +138,16 @@
 				if(newVal) {
 					this.style.display = 'block';
 					this.playAnimation('open');
+					this.playAnimation('rotateIcon');
+					this.oFullname = this.contact.fullname;
+					this.oOccupations = this.contact.occupations;
+					this.oEmails = this.contact.emails;
+					this.oPhones = this.contact.phones;
+					this.oAddresses = this.contact.addresses;
 				}
-				else if(!newVal)
+				else if(!newVal) {
 					this.playAnimation('close');
+				}
 				if(newVal === false && oldVal === true && !this.cleared) {
 					this.set('contact.occupations', this.getOccupations());
 					this.set('contact.emails', this.getEmails());
@@ -150,8 +157,6 @@
 						contact: this.contact
 					});
 				}
-				if(newVal)
-					this.playAnimation('rotateIcon');
 				this.cleared = false;
 			},
 
@@ -159,52 +164,61 @@
 				this.playAnimation('rotateIcon');
 				this.cleared = true;
 				this.opened = false;
+				this.contact = {
+					fullname: this.oFullname,
+					occupations: this.oOccupations,
+					emails: this.oEmails,
+					phones: this.oPhones,
+					addresses: this.oAddresses
+				}
 			},
 
 			_setUp: function(newVal, oldVal) {
-				this.$.occupationList.innerHTML = '';
-				this.$.emailList.innerHTML = '';
-				this.$.phoneList.innerHTML = '';
-				this.$.addressList.innerHTML = '';
+				if(newVal) {
+					this.$.occupationList.innerHTML = '';
+					this.$.emailList.innerHTML = '';
+					this.$.phoneList.innerHTML = '';
+					this.$.addressList.innerHTML = '';
 
-				if(this.contact.occupations) {
-					for (var i = 0; i < this.get('contact.occupations').length; i++) {
-						var occupation = document.createElement('contact-occupation');
-						this.$.occupationList.appendChild(occupation);
-						occupation.occupation = this.get('contact.occupations.' + i + '.occupation');
-						occupation.company = this.get('contact.occupations.' + i + '.company');
+					if(this.contact.occupations) {
+						for (var i = 0; i < this.get('contact.occupations').length; i++) {
+							var occupation = document.createElement('contact-occupation');
+							this.$.occupationList.appendChild(occupation);
+							occupation.occupation = this.get('contact.occupations.' + i + '.occupation');
+							occupation.company = this.get('contact.occupations.' + i + '.company');
+						}
 					}
-				}
 
-				if(this.contact.emails) {
-					for (var i = 0; i < this.get('contact.emails').length; i++) {
-						var email = document.createElement('contact-email');
-						this.$.emailList.appendChild(email);
-						email.label = this.get('contact.emails.' + i + '.label');
-						email.email = this.get('contact.emails.' + i + '.value');
+					if(this.contact.emails) {
+						for (var i = 0; i < this.get('contact.emails').length; i++) {
+							var email = document.createElement('contact-email');
+							this.$.emailList.appendChild(email);
+							email.label = this.get('contact.emails.' + i + '.label');
+							email.email = this.get('contact.emails.' + i + '.value');
+						}
 					}
-				}
-				this._onEmail();
+					this._onEmail();
 
-				if(this.contact.phones) {
-					for (var i = 0; i < this.get('contact.phones').length; i++) {
-						var phone = document.createElement('contact-phone');
-						this.$.phoneList.appendChild(phone);
-						phone.label = this.get('contact.phones.' + i + '.label');
-						phone.phone = this.get('contact.phones.' + i + '.value');
+					if(this.contact.phones) {
+						for (var i = 0; i < this.get('contact.phones').length; i++) {
+							var phone = document.createElement('contact-phone');
+							this.$.phoneList.appendChild(phone);
+							phone.label = this.get('contact.phones.' + i + '.label');
+							phone.phone = this.get('contact.phones.' + i + '.value');
+						}
 					}
-				}
-				this._onPhone();
+					this._onPhone();
 
-				if(this.contact.addresses) {
-					for (var i = 0; i < this.get('contact.addresses').length; i++) {
-						var address = document.createElement('contact-address');
-						this.$.addressList.appendChild(address);
-						address.label = this.get('contact.addresses.' + i + '.label');
-						address.address = this.get('contact.addresses.' + i + '.value');
+					if(this.contact.addresses) {
+						for (var i = 0; i < this.get('contact.addresses').length; i++) {
+							var address = document.createElement('contact-address');
+							this.$.addressList.appendChild(address);
+							address.label = this.get('contact.addresses.' + i + '.label');
+							address.address = this.get('contact.addresses.' + i + '.value');
+						}
 					}
+					this._onAddress();
 				}
-				this._onAddress();
 			},
 
 			addOccupation: function() {
