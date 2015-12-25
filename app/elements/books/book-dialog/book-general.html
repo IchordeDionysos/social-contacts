@@ -5,11 +5,17 @@
 				display: block;
 				margin: 8px;
 			}
+			@media (max-width: 355px) {
+				.buttons {
+					padding-left: 2px;
+					padding-right: 2px;
+				}
+			}
 		</style>
 		<paper-input hidden$="{{!lent}}" label="An" value="[[book.lending.name]]" disabled></paper-input>
 		<paper-input hidden$="{{!lent}}" label="Bis" value="[[book.lending.till]]" disabled></paper-input>
 		<paper-input hidden$="{{!sold}}" label="An" value="[[book.sale.name]]" disabled></paper-input>
-		<paper-input hidden$="{{!sold}}" label="Preis" value="[[book.sale.price]]" disabled>
+		<paper-input hidden$="{{!sold}}" label="Preis" value="[[book.sale.price]]">
 			<div suffix>€</div>
 		</paper-input>
 		<paper-input label="Author" value="{{book.author}}"></paper-input>

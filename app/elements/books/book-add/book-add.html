@@ -1,7 +1,15 @@
 <dom-module id="book-add">
 	<style>
-		#pdpid {
-		 margin-top: 63px;
+		#head {
+			height: calc(64px - 16px);
+			background: var(--default-primary-color);
+			color: white;
+			padding: 8px;
+			margin: 0;
+		}
+		paper-dialog-scrollable {
+			margin: 8px 16px;
+			margin-top: 0; 
 		}
 	</style>
 	<template>
@@ -10,7 +18,7 @@
 			exit-animation="fade-out-animation"
 			opened="{{opened}}"
 			id="addBookDialog">
-			<div id="pdpbd">
+			<div id="head">
 				<paper-icon-button
 					id="clearDialog"
 					icon="clear" 
@@ -21,32 +29,29 @@
 				<paper-button 
 					dialog-confirm 
 					on-tap="_addBook" 
-					style="float: right;"
-					raised>
+					style="float: right;">
 					Add
 				</paper-button>
 			</div>
-			<div id="pdpid">
-				<paper-dialog-scrollable>
-					<paper-input value="{{author}}" label="Author"></paper-input>
-					<paper-input value="{{original}}" label="Originaltitel"></paper-input>
-					<paper-input value="{{title}}" label="Buchtitel"></paper-input>
-					<paper-input value="{{language}}" label="Sprache"></paper-input>
-					<paper-input value="{{tags}}" label="Tags"></paper-input>
-					<paper-input value="{{amount}}" label="Menge" 
-											 type="number" min="1" 
-											 error-message="Nur natürliche Zahlen" 
-											 auto-validate>
-					</paper-input>
-					<paper-input value="{{price}}" label="Preis" 
-											 type="number" min="0" step="0.01"
-											 error-message="Nur gültige Geldbeträge" 
-											 auto-validate>
-						<div suffix>€</div>
-					</paper-input>
-					<paper-checkbox id="in-dedication" checked="{{dedication}}">Widmung</paper-checkbox>
-				<paper-dialog-scrollable>
-			</div>
+			<paper-dialog-scrollable>
+				<paper-input value="{{author}}" label="Author"></paper-input>
+				<paper-input value="{{original}}" label="Originaltitel"></paper-input>
+				<paper-input value="{{title}}" label="Buchtitel"></paper-input>
+				<paper-input value="{{language}}" label="Sprache"></paper-input>
+				<paper-input value="{{tags}}" label="Tags"></paper-input>
+				<paper-input value="{{amount}}" label="Menge" 
+										 type="number" min="1" 
+										 error-message="Nur natürliche Zahlen" 
+										 auto-validate>
+				</paper-input>
+				<paper-input value="{{price}}" label="Preis" 
+										 type="number" min="0" step="0.01"
+										 error-message="Nur gültige Geldbeträge" 
+										 auto-validate>
+					<div suffix>€</div>
+				</paper-input>
+				<paper-checkbox id="in-dedication" checked="{{dedication}}">Widmung</paper-checkbox>
+			<paper-dialog-scrollable>
 		</paper-dialog>
 									
 	</template>
