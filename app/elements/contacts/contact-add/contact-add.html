@@ -1,8 +1,16 @@
 <dom-module id="contact-add">
 	<style>
-		paper-dialog {
-			padding: 0 16px;
-			padding-bottom: 16px;
+		:host {
+			display: block;
+			position: fixed;
+			background: white;
+			@apply(--shadow-elevation-16dp);
+			width: 450px;
+			height: 100%;
+			left: 50%;
+			top: 0;
+			z-index: 55;
+			margin-left: -225px;
 		}
 		iron-icon {
 			color: var(--secondary-text-color);
@@ -12,57 +20,58 @@
 			display: inline-block;
 			width: calc(100% - 36px);
 		}
+		#head {
+			height: calc(64px - 16px);
+			background: var(--default-primary-color);
+			color: white;
+			padding: 8px;
+		}
+		#content {
+			overflow-y: scroll;
+			padding: 8px;
+			height: calc(100% - 56px);
+		}
 		.addItem {
 			color: var(--default-primary-color);
 			margin-left: 36px;
 			cursor: pointer;
 		}
-		#pdpid {
-			margin-top: 63px;
-			overflow-y: auto;
-			scroll-behavior: auto;
-			width: 100%;
-			max-height: 600px;
-			padding: 0;
+		@media (max-width: 450px) {
+			:host {
+				width: 100%;
+				margin-left: -50%;
+			}
 		}
 	</style>
 	<template>
-		<paper-dialog 
-			entry-animation="scale-up-animation"
-			exit-animation="fade-out-animation"
-			opened="{{opened}}"
-			id="addContactDialog">
-			<div id="pdpbd">
-				<paper-icon-button 
-					id="clearDialog"
-					icon="clear" 
-					on-tap="_clearDialog" 
-					dialog-dismiss 
-					style="float: left; left: -28px;">
-				</paper-icon-button>
-				<paper-button 
-					dialog-confirm 
-					on-tap="_addContact" 
-					style="float: right;"
-					raised>Add
-				</paper-button>
+		<div id="head">
+			<paper-icon-button 
+				id="clearDialog"
+				icon="clear" 
+				on-tap="closeDialog" 
+				style="float: left; left: -8px;">
+			</paper-icon-button>
+			<paper-button 
+				on-tap="_addContact" 
+				style="float: right;">
+				Add
+			</paper-button>
+		</div>
+		<div id="content">
+			<iron-icon icon="social:person"></iron-icon>
+			<paper-input id="name" value="{{fullname}}" label="Vollständiger Name"></paper-input>
+			<div id="addOccupations"></div>
+			<div class="addItem" on-tap="addOccupation">Tätigkeit hinzufügen</div>
+			<div id="addEmails">
+				<contact-email></contact-email>
 			</div>
-			<div id="pdpid">
-				<iron-icon icon="social:person"></iron-icon>
-				<paper-input value="{{fullname}}" label="Vollständiger Name"></paper-input>
-				<div id="addOccupations"></div>
-				<div class="addItem" on-tap="addOccupation">Tätigkeit hinzufügen</div>
-				<div id="addEmails">
-					<contact-email></contact-email>
-				</div>
-				<div id="addPhones">
-					<contact-phone></contact-phone>
-				</div>
-				<div id="addAddresses">
-					<contact-address></contact-address>
-				</div>
+			<div id="addPhones">
+				<contact-phone></contact-phone>
 			</div>
-		</paper-dialog>
+			<div id="addAddresses">
+				<contact-address></contact-address>
+			</div>
+		</div>
 	</template>
 	<script>
 		Polymer({
@@ -73,11 +82,22 @@
 			properties: {
 				opened: {
 					type: Boolean,
-					notify: true
+					notify: true,
+					value: false,
+					observer: '_playAnimations'
 				},
 				animationConfig: {
 					value: function() {
 						return {
+							'open': {
+								name: 'scale-up-animation',
+								node: this,
+								axis: ''
+							},
+							'close': {
+								name: 'fade-out-animation',
+								node: this
+							},
 							'rotateIcon': {
 								name: 'transform-animation',
 								node: this.$.clearDialog,
@@ -90,10 +110,27 @@
 			},
 
 			listeners: {
+				'neon-animation-finish': '_onNeonAnimationFinish',
 				'removeOccupation': '_onOccupationRemove',
 				'email': '_onEmail',
 				'phone': '_onPhone',
 				'address': '_onAddress'
+			},
+
+			_playAnimations: function(newVal) {
+				if(newVal) {
+					this.style.visibility = 'visible';
+					this.playAnimation('open');
+				}
+				else if(!newVal)
+					this.playAnimation('close');
+			},
+
+			_onNeonAnimationFinish: function() {
+				if(this.opened)
+					this.style.visibility = 'visible';
+				else
+					this.style.visibility = 'collapse';
 			},
 
 			addOccupation: function() {
@@ -117,7 +154,6 @@
 					var email = document.createElement('contact-email');
 					this.$.addEmails.appendChild(email);
 				}
-				this.$.addContactDialog.notifyResize();
 			},
 
 			_onPhone: function() {
@@ -132,7 +168,6 @@
 					var phone = document.createElement('contact-phone');
 					this.$.addPhones.appendChild(phone);
 				}
-				this.$.addContactDialog.notifyResize();
 			},
 
 			_onAddress: function() {
@@ -147,7 +182,11 @@
 					var address = document.createElement('contact-address');
 					this.$.addAddresses.appendChild(address);
 				}
-				this.$.addContactDialog.notifyResize();
+			},
+
+			closeDialog: function() {
+				this.opened = false;
+				this._clearDialog();
 			},
 			
 			_clearDialog: function() {
@@ -174,14 +213,19 @@
 			},
 			
 			_addContact: function() {
-				this.fire('added-contact', {
-					fullname: this.fullname,
-					occupations: this.getOccupations(),
-					emails: this.getEmails(),
-					phones: this.getPhones(),
-					addresses: this.getAddresses()
-				});
-				this._clearDialog();
+				if(this.fullname) {
+					this.fire('added-contact', {
+						fullname: this.fullname,
+						occupations: this.getOccupations(),
+						emails: this.getEmails(),
+						phones: this.getPhones(),
+						addresses: this.getAddresses()
+					});
+					this._clearDialog();
+					this.opened = false;
+				} else {
+					document.querySelector('social-contacts-toasts').provideName();
+				}
 			},
 
 			getOccupations: function() {

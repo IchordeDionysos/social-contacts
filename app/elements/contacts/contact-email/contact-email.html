@@ -14,6 +14,14 @@
 				display: inline-block;
 				width: calc(100% - 162px);
 			}
+			@media (max-width: 410px) {
+				paper-dropdown-menu {
+					width: 100px;
+				}
+				gold-email-input {
+					width: calc(100% - 132px);
+				}
+			}
 		</style>
 		<iron-icon icon="communication:email"></iron-icon>
 		<paper-dropdown-menu label="Label" selected-item-label="{{label}}">

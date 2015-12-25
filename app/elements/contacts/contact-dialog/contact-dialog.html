@@ -2,7 +2,16 @@
 	<template>
 		<style>
 			:host {
-				display: block;
+				display: none;
+				position: fixed;
+				background: white;
+				@apply(--shadow-elevation-16dp);
+				width: 450px;
+				height: 100%;
+				left: 50%;
+				top: 0;
+				z-index: 55;
+				margin-left: -225px;
 			}
 			iron-icon {
 				color: var(--secondary-text-color);
@@ -12,71 +21,89 @@
 				display: inline-block;
 				width: calc(100% - 36px);
 			}
+			#head {
+				height: calc(64px - 16px);
+				background: var(--default-primary-color);
+				color: white;
+				padding: 8px;
+			}
 			#topName {
 				font-size: larger;
 				top: 10px;
 				position: relative;
 			}
-			#pdpid {
-				margin-top: 63px;
-				overflow-y: auto;
-				scroll-behavior: auto;
-				width: 100%;
-				max-height: 600px;
-				padding: 0;
+			#content {
+				overflow-y: scroll;
+				padding: 8px;
+				height: calc(100% - 56px);
+			}
+			.addItem {
+				color: var(--default-primary-color);
+				margin-left: 36px;
+				cursor: pointer;
+			}
+			@media (max-width: 450px) {
+				:host {
+					width: 100%;
+					margin-left: -50%;
+				}
 			}
 		</style>
-		<paper-dialog 
-			entry-animation="scale-up-animation"
-			exit-animation="fade-out-animation"
-			id="contactDetailDialog"
-			opened="{{opened}}">
-			<div id="pdpbd" class="header">
-				<paper-icon-button
-					id="closeDialog"
-					icon="clear" 
-					on-tap="clearDialog" 
-					style="float: left; left: -8px;">
-				</paper-icon-button>
-				<span id="topName">[[contact.fullname]]</span>
-				<paper-button 
-					dialog-confirm 
-					on-tap="closeDialog" 
-					style="float: right;"
-					raised>Save
-				</paper-button>
-			</div>
-			<div id="pdpbd">
-				<iron-icon icon="social:person"></iron-icon>
-				<paper-input label="Vollständiger Name" value="{{contact.fullname}}"></paper-input>
-				<div id="emailList">
-				</div>
-				<div id="phoneList">
-				</div>
-				<div id="addressList">
-				</div>
-			</div>
-		</paper-dialog>
+		<div id="head" class="header">
+			<paper-icon-button
+				id="closeDialog"
+				icon="clear" 
+				on-tap="clearDialog" 
+				style="float: left; left: -8px;">
+			</paper-icon-button>
+			<span id="topName">[[contact.fullname]]</span>
+			<paper-button 
+				on-tap="closeDialog" 
+				style="float: right; position: absolute; right: 0;">
+				Save
+			</paper-button>
+		</div>
+		<div id="content">
+			<iron-icon icon="social:person"></iron-icon>
+			<paper-input label="Vollständiger Name" value="{{contact.fullname}}"></paper-input>
+			<div id="occupationList"></div>
+			<div class="addItem" on-tap="addOccupation">Tätigkeit hinzufügen</div>
+			<div id="emailList"></div>
+			<div id="phoneList"></div>
+			<div id="addressList"></div>
+		</div>
 	</template>
 	<script>
 		Polymer({
 			is: 'contact-dialog',
 
-			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
+			behaviors: [
+				Polymer.NeonAnimationRunnerBehavior
+			],
 
 			properties: {
 				contact: {
-					type:Object,
+					type: Object,
 					observer: '_setUp'
 				},
 				opened: {
 					type: Boolean,
 					notify: true,
+					value: false,
 					observer: '_updateContact'
 				},
 				animationConfig: {
 					value: function() {
 						return {
+							'open': {
+								name: 'scale-up-animation',
+								node: this,
+								axis: ''
+							},
+							'close': {
+								name: 'fade-out-animation',
+								node: this
+							},
 							'rotateIcon': {
 								name: 'transform-animation',
 								node: this.$.closeDialog,
@@ -89,6 +116,8 @@
 			},
 
 			listeners: {
+				'neon-animation-finish': '_onNeonAnimationFinish',
+				'removeOccupation': '_onOccupationRemove',
 				'email': '_onEmail',
 				'phone': '_onPhone',
 				'address': '_onAddress'
@@ -98,8 +127,22 @@
 				this.opened = false;
 			},
 
+			_onNeonAnimationFinish: function() {
+				if(this.opened)
+					this.style.display = 'block';
+				else
+					this.style.display = 'none';
+			},
+
 			_updateContact: function(newVal, oldVal) {
+				if(newVal) {
+					this.style.display = 'block';
+					this.playAnimation('open');
+				}
+				else if(!newVal)
+					this.playAnimation('close');
 				if(newVal === false && oldVal === true && !this.cleared) {
+					this.set('contact.occupations', this.getOccupations());
 					this.set('contact.emails', this.getEmails());
 					this.set('contact.phones', this.getPhones());
 					this.set('contact.addresses', this.getAddresses());
@@ -119,9 +162,19 @@
 			},
 
 			_setUp: function(newVal, oldVal) {
+				this.$.occupationList.innerHTML = '';
 				this.$.emailList.innerHTML = '';
 				this.$.phoneList.innerHTML = '';
 				this.$.addressList.innerHTML = '';
+
+				if(this.contact.occupations) {
+					for (var i = 0; i < this.get('contact.occupations').length; i++) {
+						var occupation = document.createElement('contact-occupation');
+						this.$.occupationList.appendChild(occupation);
+						occupation.occupation = this.get('contact.occupations.' + i + '.occupation');
+						occupation.company = this.get('contact.occupations.' + i + '.company');
+					}
+				}
 
 				if(this.contact.emails) {
 					for (var i = 0; i < this.get('contact.emails').length; i++) {
@@ -154,6 +207,17 @@
 				this._onAddress();
 			},
 
+			addOccupation: function() {
+				var occupation = document.createElement('contact-occupation');
+				this.$.occupationList.appendChild(occupation);
+				// this.notifyResize();
+			},
+
+			_onOccupationRemove: function(e) {
+				e.target.remove();
+				// this.notifyResize();
+			},
+
 			_onEmail: function() {
 				var emails = Array.prototype.slice.call(this.querySelectorAll('contact-email'));
 				for (var i = 0; i < emails.length-1; i++) {
@@ -166,7 +230,7 @@
 					var email = document.createElement('contact-email');
 					this.$.emailList.appendChild(email);
 				}
-				this.$.contactDetailDialog.notifyResize();
+				// this.notifyResize();
 			},
 
 			_onPhone: function() {
@@ -181,7 +245,7 @@
 					var phone = document.createElement('contact-phone');
 					this.$.phoneList.appendChild(phone);
 				}
-				this.$.contactDetailDialog.notifyResize();
+				// this.notifyResize();
 			},
 
 			_onAddress: function() {
@@ -196,7 +260,21 @@
 					var address = document.createElement('contact-address');
 					this.$.addressList.appendChild(address);
 				}
-				this.$.contactDetailDialog.notifyResize();
+				// this.notifyResize();
+			},
+
+			getOccupations: function() {
+				var occupationElements = this.querySelectorAll('contact-occupation');
+				var occupations = [];
+				for (var i = 0; i < occupationElements.length; i++) {
+					if (occupationElements[i].occupation !== "" || occupationElements[i].company) {
+						occupations.push({
+							occupation: occupationElements[i].occupation,
+							company: occupationElements[i].company
+						});
+					}
+				}
+				return occupations;
 			},
 
 			getEmails: function() {
