@@ -7,6 +7,7 @@
 		</style>
 		<paper-toast id="welcomeMessage" text="[[welcomeMessage]]"></paper-toast>
 		<paper-toast id="issueCreated" text="Feedback send"></paper-toast>
+		<paper-toast id="noNameProvided" text="Bitte Namen angeben"></paper-toast>
 	</template>
 	<script>
 		Polymer({
@@ -15,15 +16,20 @@
 			properties: {
 				welcomeMessage: {
 					type: String,
-					value: function() {
-						return getWelcomeMessage();
-					}
+					value: 'Schön dich zu sehen!'
 				}
 			},
 
 			attached: function() {
 				var that = this;
-				window.setTimeout(function() {that.$.welcomeMessage.show();}, 4000);
+				window.setTimeout(function() {
+					that.welcomeMessage = getWelcomeMessage();
+					that.$.welcomeMessage.show();
+				}, 3000);
+			},
+
+			provideName: function() {
+				this.$.noNameProvided.show();
 			}
 		});
 	</script>
