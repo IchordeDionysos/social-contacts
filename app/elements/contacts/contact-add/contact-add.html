@@ -71,6 +71,8 @@
 			<div id="addAddresses">
 				<contact-address></contact-address>
 			</div>
+			<div id="addDate"></div>
+			<div class="addItem" on-tap="addDate">Datum hinzufügen</div>
 		</div>
 	</template>
 	<script>
@@ -182,6 +184,11 @@
 					var address = document.createElement('contact-address');
 					this.$.addAddresses.appendChild(address);
 				}
+			},
+
+			addDate: function() {
+				var date = document.createElement('contact-date');
+				this.$.addDate.appendChild(date);
 			},
 
 			closeDialog: function() {

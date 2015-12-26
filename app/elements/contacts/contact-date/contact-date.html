@@ -1,0 +1,147 @@
+<dom-module id="contact-date">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			iron-icon {
+				color: var(--secondary-text-color);
+			}
+			paper-icon-button {
+				color: var(--secondary-text-color);
+				    width: 35px;
+    height: 35px;
+			}
+			paper-dropdown-menu {
+				width: 130px;
+			}
+			paper-input-container {
+				display: inline-block;
+				width: calc(100% - 162px);
+			}
+			@media (max-width: 410px) {
+				paper-dropdown-menu {
+					width: 100px;
+				}
+				paper-input-container {
+					width: calc(100% - 132px);
+				}
+			}
+		</style>
+		<iron-icon id="dateItem" icon="[[icon]]" on-tap="removeSelf"></iron-icon>
+		<paper-dropdown-menu label="Label" selected-item-label="{{label}}">
+			<paper-menu class="dropdown-content">
+				<paper-item label="birthday">Geburtstag</paper-item>
+				<paper-item label="anniversary">Jahrestag</paper-item>
+			</paper-menu>
+		</paper-dropdown-menu>
+		<paper-input-container>
+			<label>Datum</label>
+			<input is="iron-input" bind-value="[[date]]" on-focus="openDatePicker"></input>
+			<template is="dom-if" if={{date}}>
+				<paper-icon-button icon="clear" suffix on-tap="clearDate"></paper-icon-button>
+			</template>
+		</paper-input-container>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-date',
+
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
+
+			properties: {
+				date: {
+					type: String,
+					observer: 'dateChanged',
+					notify: true
+				},
+				label: {
+					type: String,
+					observer: 'dateChanged',
+					notify: true
+				},
+				icon: {
+					type: String,
+					value: 'clear'
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'rotateIcon': {
+								name: 'transform-animation',
+								node: this.$.dateItem,
+							  	transformFrom: 'rotate(0deg)',
+								transformTo: 'rotate(360deg)'
+							}
+						}
+					}
+				}
+			},
+
+			listeners: {
+				'neon-animation-finish': '_onNeonAnimationFinish'
+			},
+
+			dateChanged: function() {
+				this.fire('date', {
+					date: this.date,
+					label: this.label
+				});
+				this.computeIcon(this.label, this.date);
+			},
+
+			clearDate: function() {
+				this.date = undefined;
+				this.computeIcon(this.label, this.date);
+			},
+
+			computeIcon: function(label, date) {
+				var newVal;
+				var oldVal = this.icon;
+				if(date == undefined || date === '') {
+					newVal = 'clear';
+				} else {
+					switch(label) {
+						case 'Geburtstag': newVal = 'social:cake'; break;
+						default: newVal = 'today';
+					}
+				}
+				if(newVal !== oldVal)
+					this.playAnimation('rotateIcon');
+				this.icon = newVal;
+			},
+
+			openDatePicker: function() {
+				if(date !== '' && date != undefined) {
+					var dateParts = this.date.split('.');
+					var day = dateParts[0];
+					var month = dateParts[1];
+					var year = dateParts[2];
+					var date = new Date(year, month, day);
+				}
+				document.querySelector('#datepicker').getDate(this, this.datePickerCallback, date);
+			},
+
+			datePickerCallback: function(root, date) {
+				var day = date.getDate();
+				var dayString = (day < 10) ? '0' + day : day;
+				var month = date.getMonth();
+				var monthString = (month < 10) ? '0' + month : month;
+				var year = date.getFullYear();
+				root.set('date', dayString + '.' + monthString + '.' + year);
+			},
+
+			removeSelf: function() {
+				if(this.icon === 'clear') {
+					this.shouldClose = true;
+					this.playAnimation('rotateIcon');
+				}
+			},
+
+			_onNeonAnimationFinish: function() {
+				if(this.shouldClose)
+					this.fire('removeElement');
+			}
+		});
+	</script>
+</dom-module>
