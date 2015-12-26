@@ -18,7 +18,7 @@
 		</style>
 		<iron-icon id="occupationItem" icon="[[icon]]" on-tap="removeSelf"></iron-icon>
 		<paper-input label="Job" value="{{occupation}}"></paper-input>
-		<span> bei </span>
+		<span id="connector"> bei </span>
 		<paper-input label="Firma" value="{{company}}"></paper-input>
 	</template>
 	<script>
@@ -40,7 +40,13 @@
 				},
 				icon: {
 					type: String,
-					value: 'work'
+					value: 'work',
+					computed: 'computeIcon(occupation, company)'
+				},
+				connector: {
+					type: Boolean,
+					value: false,
+					observer: 'updateConnector'
 				},
 				animationConfig: {
 					value: function() {
@@ -50,21 +56,41 @@
 								node: this.$.occupationItem,
 							  	transformFrom: 'rotate(0deg)',
 								transformTo: 'rotate(360deg)'
+							},
+							'textFadeIn': {
+								name: 'fade-in-animation',
+								node: this.$.connector
+							},
+							'textFadeOut': {
+								name: 'fade-out-animation',
+								node: this.$.connector
 							}
 						}
 					}
 				}
 			},
 
+			listeners: {
+				'neon-animation-finish': '_onNeonAnimationFinish'
+			},
+
+			computeIcon: function(occupation, company) {
+				var newVal;
+				var oldVal = this.icon;
+				if(occupation !== '' || company !== '')
+					newVal = 'work';
+				else 
+					newVal = 'clear';
+				if(newVal !== oldVal)
+					this.playAnimation('rotateIcon');
+				return newVal;
+			},
+
 			occupationChanged: function() {
 				if(this.occupation !== '' && this.company !== '')
-					this.querySelector('span').style.visibility = 'visible';
+					this.connector = true;
 				else
-					this.querySelector('span').style.visibility = 'hidden';
-				if(this.occupation !== '' || this.company !== '')
-					this.icon = 'work';
-				else
-					this.icon = 'clear';
+					this.connector = false;
 				this.fire('occupation', {
 					occupation: this.occupation,
 					company: this.company
@@ -73,9 +99,28 @@
 
 			removeSelf: function() {
 				if(this.icon === 'clear') {
-					this.fire('removeOccupation');
-					// this.playAnimation('rotateIcon'); //TODO: unluckily not working DON'T KNOW WHY
+					this.shouldClose = true;
+					this.playAnimation('rotateIcon');
 				}
+			},
+
+			updateConnector: function(newVal) {
+				if(newVal) {
+					this.playAnimation('textFadeIn');
+					this.querySelector('span').style.visibility = 'visible';
+				} else {
+					this.playAnimation('textFadeOut');
+				}
+
+			},
+
+			_onNeonAnimationFinish: function() {
+				if(this.shouldClose)
+					this.fire('removeElement');
+				if(this.connector)
+					this.querySelector('span').style.visibility = 'visible';
+				else
+					this.querySelector('span').style.visibility = 'hidden';
 			}
 		});
 	</script>
