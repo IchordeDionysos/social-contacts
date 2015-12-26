@@ -193,7 +193,6 @@
 
 			closeDialog: function() {
 				this.opened = false;
-				this._clearDialog();
 			},
 			
 			_clearDialog: function() {
@@ -208,11 +207,13 @@
 				var emailWrapper = this.$.addEmails;
 				var phoneWrapper = this.$.addPhones;
 				var addressWrapper = this.$.addAddresses;
+				var dateWrapper = this.$.addDate;
 
 				occupationWrapper.innerHTML = '';
 				emailWrapper.innerHTML = '';
 				phoneWrapper.innerHTML = '';
 				addressWrapper.innerHTML = '';
+				dateWrapper.innerHTML = '';
 
 				emailWrapper.appendChild(email);
 				phoneWrapper.appendChild(phone);
