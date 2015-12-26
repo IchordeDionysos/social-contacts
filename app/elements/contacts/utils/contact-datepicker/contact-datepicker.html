@@ -1,0 +1,54 @@
+<dom-module id="contact-datepicker">
+	<template>
+		<style is="custom-style" include="paper-date-picker-dialog-style">
+		section {
+			margin: 24px;
+		}
+		</style>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+		<paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
+			<paper-date-picker id="picker" date="{{date}}"></paper-date-picker>
+			<div class="buttons">
+				<paper-button dialog-dismiss>Cancel</paper-button>
+				<paper-button dialog-confirm>OK</paper-button>
+			</div>
+		</paper-dialog>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-datepicker',
+
+			properties: {
+				date: {
+					type: Date
+				}
+			},
+
+			getDate: function(root, callback, oldDate) {
+				this.$.dialog.open();
+				this.closed = false;
+				this.canceled = false;
+				if(oldDate)
+					this.date = oldDate;
+				var picker = this;
+				var interval = window.setInterval(function() {
+					if(picker.closed) {
+						clearInterval(interval);
+						if(!picker.canceled)
+							callback(root, picker.date);
+					}
+				}, 1000);
+			},
+
+			dismissDialog: function (e) {
+				if(!e.detail.confirmed)
+					this.canceled = true;
+				this.closed = true;
+			}
+		});
+	</script>
+</dom-module>

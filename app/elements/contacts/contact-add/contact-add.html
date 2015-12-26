@@ -9,7 +9,7 @@
 			height: 100%;
 			left: 50%;
 			top: 0;
-			z-index: 55;
+			z-index: 11;
 			margin-left: -225px;
 		}
 		iron-icon {
@@ -111,7 +111,7 @@
 
 			listeners: {
 				'neon-animation-finish': '_onNeonAnimationFinish',
-				'removeOccupation': '_onOccupationRemove',
+				'removeElement': '_onElementRemove',
 				'email': '_onEmail',
 				'phone': '_onPhone',
 				'address': '_onAddress'
@@ -133,13 +133,13 @@
 					this.style.visibility = 'collapse';
 			},
 
+			_onElementRemove: function(e) {
+				e.target.remove();
+			},
+
 			addOccupation: function() {
 				var occupation = document.createElement('contact-occupation');
 				this.$.addOccupations.appendChild(occupation);
-			},
-
-			_onOccupationRemove: function(e) {
-				e.target.remove();
 			},
 
 			_onEmail: function() {
