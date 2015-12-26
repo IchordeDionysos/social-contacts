@@ -1,0 +1,201 @@
+<dom-module id="contact-label">
+	<template>
+		<style>
+			:host {
+				display: inline-block;
+				position: relative;
+			}
+			paper-input-container {
+				padding: 8px;
+				cursor: pointer;
+			}
+			paper-material {
+				position: absolute;
+				visibility: collapse;
+				background: white;
+				z-index: 12;
+			}
+			iron-icon {
+				color: #bdbdbd;
+			}
+			#overlay {
+				visibility: collapse;
+				height: 100vh;
+				width: 100vw;
+				top: 0;
+				left: 0;
+				position: fixed;
+				margin-left: calc(var(--contact-dialog-widths)/2 - 50vw);
+				z-index: 11;
+				/*background: rgba(0, 0, 255, 0.55);*/ /*for debug purposes*/
+			}
+			@media (max-width: 450px) {
+				#overlay {
+					margin-left: 0;
+				}
+			}
+		</style>
+		<paper-input-container>
+			<label>Label</label>
+			<input id="input" is="iron-input" bind-value="{{displayedLabel}}" on-focus="openDropdown">
+			<iron-icon icon="arrow-drop-down" on-tap="openDropdown" suffix></iron-icon>
+			<paper-material id="dropdown" class="dropdown-content" elevation="1">
+				<template id="selectableList" is="dom-repeat" 
+					items={{selectables}} 
+					as="selectable">
+					<paper-item on-tap="select">[[selectable.value]]</paper-item>					
+				</template>
+				<template is="dom-if" if={{more}}>
+					<paper-item on-tap="selectMore">Weitere</paper-item>
+				</template>
+			</paper-material>
+		</paper-input-container>
+		<div id="overlay" on-tap="_handleOutsideClicks"></div>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-label',
+
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
+
+			properties: {
+				label: {
+					type: String,
+					notify: true,
+					observer: 'labelChanged'
+				},
+				displayedLabel: {
+					type: String,
+					observer: 'displayedLabelChanged'
+				},
+				selectables: {
+					type: Array,
+					value: function() {
+						return [];
+					}
+				},
+				more: {
+					type: Boolean,
+					value: false
+				},
+				opened: {
+					type: Boolean,
+					value: false
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'open': [
+								{
+									name: 'opaque-animation',
+									node: this.$.dropdown
+								},
+								{
+									name: 'fade-in-animation',
+									node: this.$.dropdown,
+									timing: {
+										delay: 100,
+										duration: 200
+									}
+								}
+							],
+							'close': [
+								{
+									name: 'fade-out-animation',
+									node: this.$.dropdown,
+									timing: {
+										duration: 150
+									}
+								}
+							]
+						}
+					}
+				},
+				target: {
+					type: Object,
+					value: function() {
+						return this.$.input;
+					}
+				}
+			},
+
+			listeners: {
+				'neon-animation-finish': '_onNeonAnimationFinish'
+			},
+
+			addLabel: function(label, displayedLabel) {
+				this.push('selectables', {
+					label: label,
+					value: displayedLabel
+				});
+			},
+
+			removeLabel: function(label) {
+				var index = this.findLabel(label);
+				if(index)
+					this.splice('selectables', index, 1);
+			},
+
+			findLabel: function(label) {
+				for(var i=0; i<this.selectables.length; i++) {
+					if(this.selectables[i].label === label)
+						return i;
+				}
+			},
+
+			labelChanged: function(label) {
+				for(var i=0; i<this.selectables.length; i++) {
+					if(this.selectables[i].label === label) {
+						this.displayedLabel = this.selectables[i].value;
+						return;
+					}
+				}
+				this.displayedLabel = label;
+			},
+
+			displayedLabelChanged: function(newVal) {
+				for(var i=0; i<this.selectables.length; i++) {
+					if(this.selectables[i].value === newVal) {
+						this.label = this.selectables[i].label;
+						return;
+					}
+				}
+				this.label = newVal;
+			},
+
+			select: function(e) {
+				var item = this.$.selectableList.itemForElement(e.target);
+				this.label = item.label;
+				this.closeDropdown();
+			},
+
+			selectMore: function() {
+				this.label = '';
+				this.$.input.focus();
+				this.closeDropdown();
+			},
+
+			openDropdown: function() {
+				this.playAnimation('open');
+				this.$.dropdown.style.visibility = 'visible';
+				this.$.overlay.style.visibility = 'visible';
+				this.opened = true;
+			},
+
+			closeDropdown: function() {
+				this.opened = false;
+				this.playAnimation('close');
+				this.$.overlay.style.visibility = 'collapse';
+			},
+
+			_handleOutsideClicks: function() {
+				this.closeDropdown();
+			},
+
+			_onNeonAnimationFinish: function() {
+				if(!this.opened)
+					this.$.dropdown.style.visibility = 'collapse';
+			}
+		});
+	</script>
+</dom-module>

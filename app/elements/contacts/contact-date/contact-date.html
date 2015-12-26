@@ -9,10 +9,10 @@
 			}
 			paper-icon-button {
 				color: var(--secondary-text-color);
-				    width: 35px;
-    height: 35px;
+				width: 35px;
+				height: 35px;
 			}
-			paper-dropdown-menu {
+			contact-label {
 				width: 130px;
 			}
 			paper-input-container {
@@ -20,7 +20,7 @@
 				width: calc(100% - 162px);
 			}
 			@media (max-width: 410px) {
-				paper-dropdown-menu {
+				contact-label {
 					width: 100px;
 				}
 				paper-input-container {
@@ -29,12 +29,7 @@
 			}
 		</style>
 		<iron-icon id="dateItem" icon="[[icon]]" on-tap="removeSelf"></iron-icon>
-		<paper-dropdown-menu label="Label" selected-item-label="{{label}}">
-			<paper-menu class="dropdown-content">
-				<paper-item label="birthday">Geburtstag</paper-item>
-				<paper-item label="anniversary">Jahrestag</paper-item>
-			</paper-menu>
-		</paper-dropdown-menu>
+		<contact-label id="label" label="{{label}}" more></contact-label>
 		<paper-input-container>
 			<label>Datum</label>
 			<input is="iron-input" bind-value="[[date]]" on-focus="openDatePicker"></input>
@@ -82,6 +77,11 @@
 				'neon-animation-finish': '_onNeonAnimationFinish'
 			},
 
+			ready: function() {
+				this.$.label.addLabel('birthday', 'Geburtstag');
+				this.$.label.addLabel('anniversary', 'Jahrestag');
+			},
+
 			dateChanged: function() {
 				this.fire('date', {
 					date: this.date,
@@ -102,7 +102,8 @@
 					newVal = 'clear';
 				} else {
 					switch(label) {
-						case 'Geburtstag': newVal = 'social:cake'; break;
+						case 'birthday': newVal = 'social:cake'; break;
+						case 'anniversary':
 						default: newVal = 'today';
 					}
 				}

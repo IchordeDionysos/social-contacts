@@ -7,6 +7,9 @@
 			iron-icon {
 				color: var(--secondary-text-color);
 			}
+			contact-label {
+				width: 130px;
+			}
 			paper-dropdown-menu {
 				width: 130px;
 			}
@@ -15,7 +18,7 @@
 				width: calc(100% - 162px);
 			}
 			@media (max-width: 410px) {
-				paper-dropdown-menu {
+				contact-label {
 					width: 100px;
 				}
 				gold-email-input {
@@ -24,12 +27,7 @@
 			}
 		</style>
 		<iron-icon icon="communication:email"></iron-icon>
-		<paper-dropdown-menu label="Label" selected-item-label="{{label}}">
-			<paper-menu class="dropdown-content">
-				<paper-item label="private">Privat</paper-item>
-				<paper-item label="business">Geschäftlich</paper-item>
-			</paper-menu>
-		</paper-dropdown-menu>
+		<contact-label id="label" label="{{label}}" more></contact-label>
 		<gold-email-input label="Email" value="{{email}}"></gold-email-input>
 	</template>
 	<script>
@@ -47,6 +45,11 @@
 					observer: 'labelChanged',
 					notify: true
 				}
+			},
+
+			ready: function() {
+				this.$.label.addLabel('private', 'Privat');
+				this.$.label.addLabel('business', 'Geschäftlich');
 			},
 
 			emailChanged: function() {

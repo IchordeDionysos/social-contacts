@@ -7,7 +7,7 @@
 			iron-icon {
 				color: var(--secondary-text-color);
 			}
-			paper-dropdown-menu {
+			contact-label {
 				width: 130px;
 			}
 			gold-phone-input {
@@ -15,7 +15,7 @@
 				width: calc(100% - 162px);
 			}
 			@media (max-width: 410px) {
-				paper-dropdown-menu {
+				contact-label {
 					width: 100px;
 				}
 				gold-phone-input {
@@ -24,17 +24,7 @@
 			}
 		</style>
 		<iron-icon icon="communication:phone"></iron-icon>
-		<paper-dropdown-menu label="Label" selected-item-label="{{label}}">
-			<paper-menu class="dropdown-content">
-				<paper-item label="private">Privat</paper-item>
-				<paper-item label="business">Geschäftlich</paper-item>
-				<paper-item label="mobile">Mobil</paper-item>
-				<paper-item label="landline">Festnetz</paper-item>
-				<paper-item label="faxPrivate">Fax (privat)</paper-item>
-				<paper-item label="faxBuisness">Fax (geschäftlich)</paper-item>
-				<paper-item label="googleVoice">Google Voice</paper-item>
-			</paper-menu>
-		</paper-dropdown-menu>
+		<contact-label id="label" label="{{label}}" more></contact-label>
 		<gold-phone-input country-code="49" label="Telefon" value="{{phone}}"></gold-phone-input>
 	</template>
 	<script>
@@ -52,6 +42,16 @@
 					observer: 'labelChanged',
 					notify: true
 				}
+			},
+
+			ready: function() {
+				this.$.label.addLabel('private', 'Privat');
+				this.$.label.addLabel('business', 'Geschäftlich');
+				this.$.label.addLabel('mobile', 'Mobil');
+				this.$.label.addLabel('landline', 'Festnetz');
+				this.$.label.addLabel('faxPrivate', 'Fax (privat)');
+				this.$.label.addLabel('faxBuisness', 'Fax (geschäftlich)');
+				this.$.label.addLabel('googleVoice', 'Google Voice');
 			},
 
 			phoneChanged: function() {
