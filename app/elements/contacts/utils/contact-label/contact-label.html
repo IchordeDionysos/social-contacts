@@ -132,7 +132,7 @@
 
 			removeLabel: function(label) {
 				var index = this.findLabel(label);
-				if(index)
+				if(index || index === 0)
 					this.splice('selectables', index, 1);
 			},
 
