@@ -126,7 +126,7 @@
 			datePickerCallback: function(root, date) {
 				var day = date.getDate();
 				var dayString = (day < 10) ? '0' + day : day;
-				var month = date.getMonth();
+				var month = date.getMonth() + 1;
 				var monthString = (month < 10) ? '0' + month : month;
 				var year = date.getFullYear();
 				root.set('date', dayString + '.' + monthString + '.' + year);

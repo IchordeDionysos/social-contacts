@@ -1,0 +1,118 @@
+<dom-module id="contact-custom">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			iron-icon {
+				color: var(--secondary-text-color);
+				margin-right: 8px;
+			}
+			#clearValue {
+				width: 19px;
+				height: 19px;
+			}
+			#label {
+				width: 130px;
+			}
+			paper-input {
+				display: inline-block;
+				width: calc(100% - 170px);
+			}
+			@media (max-width: 410px) {
+				#label {
+					width: 100px;
+				}
+				paper-input {
+					width: calc(100% - 140px);
+				}
+			}
+		</style>
+		<iron-icon id="customItem" icon="[[icon]]" on-tap="removeSelf"></iron-icon>
+		<paper-input id="label" label="Label" value="{{label}}"></paper-input>
+		<paper-input label="Wert" value="{{value}}">
+			<iron-icon id="clearValue" icon="clear" on-tap="clearValue" suffix></iron-icon>
+		</paper-input>
+	</template>
+	<script>
+		Polymer({
+			is: 'contact-custom',
+
+			behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
+
+			properties: {
+				value: {
+					type: String,
+					observer: 'valueChanged',
+					notify: true
+				},
+				label: {
+					type: String,
+					observer: 'valueChanged',
+					notify: true
+				},
+				icon: {
+					type: String,
+					value: 'clear'
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'rotateIcon': {
+								name: 'transform-animation',
+								node: this.$.customItem,
+							  	transformFrom: 'rotate(0deg)',
+								transformTo: 'rotate(360deg)'
+							}
+						}
+					}
+				}
+			},
+
+			listeners: {
+				'neon-animation-finish': '_onNeonAnimationFinish'
+			},
+
+			valueChanged: function() {
+				this.fire('custom', {
+					value: this.value,
+					label: this.label
+				});
+				this.computeIcon(this.label, this.value);
+			},
+
+			clearValue: function() {
+				this.value = undefined;
+				this.computeIcon(this.label, this.value);
+			},
+
+			computeIcon: function(label, value) {
+				var newVal;
+				var oldVal = this.icon;
+				if(value == undefined || value === '')
+					newVal = 'clear';
+				else 
+					newVal = 'label';
+				if(newVal !== oldVal)
+					this.playAnimation('rotateIcon');
+				this.icon = newVal;
+				if(this.value)
+					this.$.clearValue.style.visibility = 'visible';
+				else
+					this.$.clearValue.style.visibility = 'collapse';
+			},
+
+			removeSelf: function() {
+				if(this.icon === 'clear') {
+					this.shouldClose = true;
+					this.playAnimation('rotateIcon');
+				}
+			},
+
+			_onNeonAnimationFinish: function() {
+				if(this.shouldClose)
+					this.fire('removeElement');
+			}
+		});
+	</script>
+</dom-module>

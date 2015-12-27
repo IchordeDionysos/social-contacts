@@ -71,6 +71,10 @@
 			<div id="emailList"></div>
 			<div id="phoneList"></div>
 			<div id="addressList"></div>
+			<div id="dateList"></div>
+			<div class="addItem" on-tap="addDate">Datum hinzufügen</div>
+			<div id="customList"></div>
+			<div class="addItem" on-tap="addCustom">Personalisiertes Feld hinzufügen</div>
 		</div>
 	</template>
 	<script>
@@ -117,7 +121,7 @@
 
 			listeners: {
 				'neon-animation-finish': '_onNeonAnimationFinish',
-				'removeOccupation': '_onOccupationRemove',
+				'removeElement': '_onElementRemove',
 				'email': '_onEmail',
 				'phone': '_onPhone',
 				'address': '_onAddress'
@@ -134,6 +138,10 @@
 					this.style.display = 'none';
 			},
 
+			_onElementRemove: function(e) {
+				e.target.remove();
+			},
+
 			_updateContact: function(newVal, oldVal) {
 				if(newVal) {
 					this.style.display = 'block';
@@ -144,6 +152,8 @@
 					this.oEmails = this.contact.emails;
 					this.oPhones = this.contact.phones;
 					this.oAddresses = this.contact.addresses;
+					this.oDates = this.contact.dates;
+					this.oCustoms = this.contact.customs;
 				}
 				else if(!newVal) {
 					this.playAnimation('close');
@@ -153,6 +163,8 @@
 					this.set('contact.emails', this.getEmails());
 					this.set('contact.phones', this.getPhones());
 					this.set('contact.addresses', this.getAddresses());
+					this.set('contact.dates', this.getDates());
+					this.set('contact.customs', this.getCustoms());
 					this.fire('contact', {
 						contact: this.contact
 					});
@@ -169,7 +181,9 @@
 					occupations: this.oOccupations,
 					emails: this.oEmails,
 					phones: this.oPhones,
-					addresses: this.oAddresses
+					addresses: this.oAddresses,
+					dates: this.oDates,
+					customs: this.oCustoms
 				}
 			},
 
@@ -179,6 +193,8 @@
 					this.$.emailList.innerHTML = '';
 					this.$.phoneList.innerHTML = '';
 					this.$.addressList.innerHTML = '';
+					this.$.dateList.innerHTML = '';
+					this.$.customList.innerHTML = '';
 
 					if(this.contact.occupations) {
 						for (var i = 0; i < this.get('contact.occupations').length; i++) {
@@ -218,17 +234,30 @@
 						}
 					}
 					this._onAddress();
+
+					if(this.contact.dates) {
+						for (var i = 0; i < this.get('contact.dates').length; i++) {
+							var date = document.createElement('contact-date');
+							this.$.dateList.appendChild(date);
+							date.date = this.get('contact.dates.' + i + '.date');
+							date.label = this.get('contact.dates.' + i + '.label');
+						}
+					}
+
+					if(this.contact.customs) {
+						for (var i = 0; i < this.get('contact.customs').length; i++) {
+							var custom = document.createElement('contact-custom');
+							this.$.customList.appendChild(custom);
+							custom.value = this.get('contact.customs.' + i + '.value');
+							custom.label = this.get('contact.customs.' + i + '.label');
+						}
+					}
 				}
 			},
 
 			addOccupation: function() {
 				var occupation = document.createElement('contact-occupation');
 				this.$.occupationList.appendChild(occupation);
-				// this.notifyResize();
-			},
-
-			_onOccupationRemove: function(e) {
-				e.target.remove();
 				// this.notifyResize();
 			},
 
@@ -275,6 +304,16 @@
 					this.$.addressList.appendChild(address);
 				}
 				// this.notifyResize();
+			},
+
+			addDate: function() {
+				var date = document.createElement('contact-date');
+				this.$.dateList.appendChild(date);
+			},
+
+			addCustom: function() {
+				var custom = document.createElement('contact-custom');
+				this.$.customList.appendChild(custom);
 			},
 
 			getOccupations: function() {
@@ -331,6 +370,34 @@
 					}
 				}
 				return addresses;
+			},
+
+			getDates: function() {
+				var dateElements = this.querySelectorAll('contact-date');
+				var dates = [];
+				for (var i = 0; i < dateElements.length; i++) {
+					if (dateElements[i].date !== "") {
+						dates.push({
+							label: dateElements[i].label,
+							date: dateElements[i].date
+						});
+					}
+				}
+				return dates;
+			},
+
+			getCustoms: function() {
+				var customElements = this.querySelectorAll('contact-custom');
+				var customs = [];
+				for (var i = 0; i < customElements.length; i++) {
+					if (customElements[i].value !== "") {
+						customs.push({
+							label: customElements[i].label,
+							value: customElements[i].value
+						});
+					}
+				}
+				return customs;
 			}
 		});
 	</script>

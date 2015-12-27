@@ -11,7 +11,7 @@
 			}
 		</style>
 		<paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
-			<paper-date-picker id="picker" date="{{date}}"></paper-date-picker>
+			<paper-date-picker id="picker" min-date="[[minDate]]" date="{{date}}"></paper-date-picker>
 			<div class="buttons">
 				<paper-button dialog-dismiss>Cancel</paper-button>
 				<paper-button dialog-confirm>OK</paper-button>
@@ -25,6 +25,12 @@
 			properties: {
 				date: {
 					type: Date
+				},
+				minDate: {
+					type: Date,
+					value: function() {
+						return new Date(1900, 0, 0);
+					}
 				}
 			},
 

@@ -71,8 +71,11 @@
 			<div id="addAddresses">
 				<contact-address></contact-address>
 			</div>
+			<contact-groups groups="{{groups}}"></contact-groups>
 			<div id="addDate"></div>
 			<div class="addItem" on-tap="addDate">Datum hinzufügen</div>
+			<div id="addCustom"></div>
+			<div class="addItem" on-tap="addCustom">Personalisiertes Feld hinzufügen</div>
 		</div>
 	</template>
 	<script>
@@ -191,6 +194,11 @@
 				this.$.addDate.appendChild(date);
 			},
 
+			addCustom: function() {
+				var custom = document.createElement('contact-custom');
+				this.$.addCustom.appendChild(custom);
+			},
+
 			closeDialog: function() {
 				this.opened = false;
 			},
@@ -208,12 +216,14 @@
 				var phoneWrapper = this.$.addPhones;
 				var addressWrapper = this.$.addAddresses;
 				var dateWrapper = this.$.addDate;
+				var customWrapper = this.$.addCustom;
 
 				occupationWrapper.innerHTML = '';
 				emailWrapper.innerHTML = '';
 				phoneWrapper.innerHTML = '';
 				addressWrapper.innerHTML = '';
 				dateWrapper.innerHTML = '';
+				customWrapper.innerHTML = '';
 
 				emailWrapper.appendChild(email);
 				phoneWrapper.appendChild(phone);
@@ -227,7 +237,9 @@
 						occupations: this.getOccupations(),
 						emails: this.getEmails(),
 						phones: this.getPhones(),
-						addresses: this.getAddresses()
+						addresses: this.getAddresses(),
+						dates: this.getDates(),
+						customs: this.getCustoms()
 					});
 					this._clearDialog();
 					this.opened = false;
@@ -290,6 +302,34 @@
 					}
 				}
 				return addresses;
+			},
+
+			getDates: function() {
+				var dateElements = this.querySelectorAll('contact-date');
+				var dates = [];
+				for (var i = 0; i < dateElements.length; i++) {
+					if (dateElements[i].date !== "") {
+						dates.push({
+							label: dateElements[i].label,
+							date: dateElements[i].date
+						});
+					}
+				}
+				return dates;
+			},
+
+			getCustoms: function() {
+				var customElements = this.querySelectorAll('contact-custom');
+				var customs = [];
+				for (var i = 0; i < customElements.length; i++) {
+					if (customElements[i].value !== "") {
+						customs.push({
+							label: customElements[i].label,
+							value: customElements[i].value
+						});
+					}
+				}
+				return customs;
 			}
 		});
 	</script>
