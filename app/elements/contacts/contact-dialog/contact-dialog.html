@@ -6,10 +6,12 @@
 				position: fixed;
 				background: white;
 				@apply(--shadow-elevation-16dp);
+				width: var(--contact-dialog-widths);
 				height: 100%;
 				left: 50%;
 				top: 0;
 				z-index: 11;
+				margin-left: calc(-var(--contact-dialog-widths)/2);
 			}
 			iron-icon {
 				color: var(--secondary-text-color);
@@ -39,12 +41,6 @@
 				color: var(--default-primary-color);
 				margin-left: 36px;
 				cursor: pointer;
-			}
-			@media (min-width: 450px) {
-				:host {
-					width: var(--contact-dialog-widths);
-					margin-left: calc(-var(--contact-dialog-widths)/2);
-				}
 			}
 			@media (max-width: 450px) {
 				:host {
