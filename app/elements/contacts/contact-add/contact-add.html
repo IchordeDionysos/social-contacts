@@ -101,8 +101,7 @@
 						return {
 							'open': {
 								name: 'scale-up-animation',
-								node: this,
-								axis: ''
+								node: this
 							},
 							'close': {
 								name: 'fade-out-animation',
@@ -249,7 +248,7 @@
 					this._clearDialog();
 					this.opened = false;
 				} else {
-					document.querySelector('social-contacts-toasts').provideName();
+					toast('noNameProvided');
 				}
 			},
 
