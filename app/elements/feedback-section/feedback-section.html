@@ -39,81 +39,110 @@
 		}
 	</style>
 	<template>
+		<iron-ajax
+			id="ajax"
+			method="post"
+			content-type="application/json"
+		 	url="http://dennis.sese7.de/scripts/server/feedback.php"
+		 	handle-as="json">
+		 </iron-ajax>
 		<paper-material>
-			<form is="iron-form" id="form" method="post" action="../../scripts/feedback.php">
-				<p>Feedback</p>
-				<paper-input id="issueTitle" 
-										 label="Titel" 
-										 name="title"
-										 required>
-				</paper-input>
-				<paper-input id="issueEmail" 
-										 label="Email (notwendig zur Kontaktaufnahme)" 
-										 name="email">
-				</paper-input>
-				<paper-textarea id="issueBody" 
-												label="Body" 
-												name="body">
-				</paper-textarea>
-				<p>Wähle alle passende Labels aus:</p>
-				<paper-checkbox id="bug" 
-												class="red" 
-												name="labels"
-												value="bug">
-					Bug
-				</paper-checkbox>
-				<paper-checkbox id="help" 
-												class="green" 
-												name="labels"
-												value="help">
-					Hilfe
-				</paper-checkbox>
-				<paper-checkbox id="question" 
-												class="pink"
-												name="labels" 
-												value="question">
-					Frage
-				</paper-checkbox>
-				<paper-checkbox id="feature" 
-												class="purple"
-												name="labels"
-												value="feature">
-					Feature
-				</paper-checkbox>
-				<paper-checkbox id="enhancement" 
-												class="blue"
-												name="labels"
-												value="enhancement">
-					Verbesserung
-				</paper-checkbox>
-				<paper-checkbox id="design" 
-												class="light-blue" 
-												name="labels"
-												value="design">
-					Design Vorschlag
-				</paper-checkbox>
-				<paper-button class="green ripple" onclick="submitHandler(event)" raised>Absenden</paper-button>
-			</form>
+			<p style="font-weight: 500;">Feedback/Hilfe</p>
+			<paper-input id="issueTitle" 
+				label="Titel" 
+				name="title"
+				required>
+			</paper-input>
+			<paper-input id="issueEmail" 
+				label="Email (notwendig zur Kontaktaufnahme)" 
+				name="email">
+			</paper-input>
+			<paper-textarea id="issueBody" 
+				label="Body" 
+				name="body">
+			</paper-textarea>
+			<p>Wähle <span style="font-weight: 500;">alle</span> passende Labels aus:</p>
+			<paper-checkbox id="bug" 
+				class="red" 
+				name="labels"
+				value="bug">
+				Bug/Fehler
+			</paper-checkbox>
+			<paper-checkbox id="help" 
+				class="green" 
+				name="labels"
+				value="help">
+				Hilfe
+			</paper-checkbox>
+			<paper-checkbox id="question" 
+				class="pink"
+				name="labels" 
+				value="question">
+				Frage
+			</paper-checkbox>
+			<paper-checkbox id="feature" 
+				class="purple"
+				name="labels"
+				value="feature">
+				Feature
+			</paper-checkbox>
+			<paper-checkbox id="enhancement" 
+				class="blue"
+				name="labels"
+				value="enhancement">
+				Verbesserung
+			</paper-checkbox>
+			<paper-checkbox id="design" 
+				class="light-blue" 
+				name="labels"
+				value="design">
+				Design Vorschlag
+			</paper-checkbox>
+			<paper-button class="green ripple" on-tap="submitHandler" raised>Absenden</paper-button>
 		</paper-material>
 	</template>
 	<script>
 		Polymer({
-			is: 'feedback-section'      	
-		});
+			is: 'feedback-section',
 
-		function submitHandler(event) {
-			console.log('fire post request');
-			Polymer.dom(event).localTarget.parentElement.submit();
-			document.querySelector('#issueTitle').value = '';
-			document.querySelector('#issueEmail').value = '';
-			document.querySelector('#issueBody').value = '';
-			document.querySelector('#issueCreated').show();
-			document.querySelector('#bug').checked = false;
-			document.querySelector('#help').checked = false;
-			document.querySelector('#question').checked = false;
-			document.querySelector('#feature').checked = false;
-			document.querySelector('#enhancement').checked = false;
-			document.querySelector('#design').checked = false;
-		}
+			submitHandler: function() {
+				var labels = [];
+				if(this.$.bug.checked)
+					labels.push('bug');
+				if(this.$.design.checked)
+					labels.push('design');
+				if(this.$.enhancement.checked)
+					labels.push('enhancement');
+				if(this.$.feature.checked)
+					labels.push('feature');
+				if(this.$.help.checked)
+					labels.push('help');
+				if(this.$.question.checked)
+					labels.push('question');
+
+				var issueBody = this.$.issueBody.value + '\n' + this.$.issueEmail.value;
+
+				var body = {
+					title: this.$.issueTitle.value,
+					body: issueBody,
+					labels: labels
+				};
+
+				this.$.ajax.body = body;
+
+				this.$.ajax.generateRequest();
+
+				this.$.issueTitle.value = '';
+				this.$.issueEmail.value = '';
+				this.$.issueBody.value = '';
+				this.$.bug.checked = false;
+				this.$.help.checked = false;
+				this.$.question.checked = false;
+				this.$.feature.checked = false;
+				this.$.enhancement.checked = false;
+				this.$.design.checked = false;
+				toast('issueCreated');
+			}   	
+		});
 	</script>
 </dom-module>
