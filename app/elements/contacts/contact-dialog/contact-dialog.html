@@ -149,6 +149,7 @@
 			_updateContact: function(newVal, oldVal) {
 				if(newVal) {
 					this.style.display = 'block';
+					this.cancelAnimation();
 					this.playAnimation('open');
 					this.playAnimation('rotateIcon');
 					this.oFullname = this.contact.fullname;
@@ -160,6 +161,7 @@
 					this.oCustoms = this.contact.customs;
 				}
 				else if(!newVal) {
+					this.cancelAnimation();
 					this.playAnimation('close');
 				}
 				if(newVal === false && oldVal === true && !this.cleared) {
@@ -177,6 +179,7 @@
 			},
 
 			clearDialog: function() {
+				this.cancelAnimation();
 				this.playAnimation('rotateIcon');
 				this.cleared = true;
 				this.opened = false;

@@ -40,18 +40,56 @@
 				animationConfig: {
 					value: function() {
 						return {
-							'rotateToX': {
-								name: 'transform-animation',
-								node: this.$.contactAddFab,
-							  	transformFrom: 'rotate(0deg)',
-								transformTo: 'rotate(45deg)'
-							},
-							'rotateToPlus': {
-								name: 'transform-animation',
-								node: this.$.contactAddFab,
-							  	transformFrom: 'rotate(45deg)',
-								transformTo: 'rotate(0deg)'
-							}
+							'rotateToX': [
+								{
+									name: 'transform-animation',
+									node: this.$.contactAddFab,
+									transformFrom: 'rotate(0deg)',
+									transformTo: 'rotate(45deg)'
+								},
+								{
+									name: 'fade-out-animation',
+									node: this.$.contactAddFab.$.icon,
+									timing: {
+										duration: 250,
+										easing: 'cubic-bezier(0.6,0,1,1)'
+									}
+								},
+								{
+									name: 'fade-in-animation',
+									node: this.$.contactAddFab.$.icon,
+									timing: {
+										delay: 250,
+										duration: 250,
+										easing: 'cubic-bezier(0,0,0.4,1)'
+									}
+								}
+							],
+							'rotateToPlus': [
+								{
+									name: 'transform-animation',
+									node: this.$.contactAddFab,
+								  	transformFrom: 'rotate(45deg)',
+									transformTo: 'rotate(0deg)'
+								},
+								{
+									name: 'fade-out-animation',
+									node: this.$.contactAddFab.$.icon,
+									timing: {
+										duration: 250,
+										easing: 'cubic-bezier(0.6,0,1,1)'
+									}
+								},
+								{
+									name: 'fade-in-animation',
+									node: this.$.contactAddFab.$.icon,
+									timing: {
+										delay: 250,
+										duration: 250,
+										easing: 'cubic-bezier(0,0,0.4,1)'
+									}
+								}
+							]
 						}
 					}
 				}
@@ -70,11 +108,14 @@
 
 			_updateFabRotation: function(newVal) {
 				if(newVal) {
-					this.fabIcon = 'add';
+					this.cancelAnimation();
 					this.playAnimation('rotateToX');
+					this.changeFabIcon();
 					this.querySelector('contact-add')._clearDialog();
 				} else {
+					this.cancelAnimation();
 					this.playAnimation('rotateToPlus');
+					this.changeFabIcon();
 				}
 			},
 
@@ -83,7 +124,19 @@
 					this.$.contactAddFab.style.transform = 'rotate(45deg)';
 				else {
 					this.$.contactAddFab.style.transform = 'rotate(0deg)';
-					this.fabIcon = 'social:person-add';
+				}
+			},
+
+			changeFabIcon: function() {
+				var that = this;
+				if(this.opened) {
+					window.setTimeout(function() {
+						that.fabIcon = 'add';
+					}, 250);
+				} else {
+					window.setTimeout(function() {
+						that.fabIcon = 'social:person-add';
+					}, 250);
 				}
 			},
 			

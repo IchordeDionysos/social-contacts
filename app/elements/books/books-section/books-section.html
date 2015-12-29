@@ -94,9 +94,11 @@
 
 			_updateFabRotation: function(newVal) {
 				if(newVal) {
+					this.cancelAnimation();
 					this.playAnimation('rotateToX');
 					this.querySelector('book-add')._clearDialog();
 				} else {
+					this.cancelAnimation();
 					this.playAnimation('rotateToPlus');
 				}
 			},
