@@ -98,21 +98,85 @@ function eventFire(el, etype) {
   }
 }
 
+var DE = 'de';
+var EN = 'en';
+
 function getWelcomeMessage() {
-	var welcomeMessagesCount = 8;
-	var index = Math.floor(Math.random() * welcomeMessagesCount);
-	console.log(index);
+	var welcomeMessagesCount = 14;
+	var index = Math.floor(Math.random() * welcomeMessagesCount) + 1;
+	var name = getName();
+	var nameString = '';
+	if (name)
+		nameString = ', ' + name;
 	switch(index) {
-		case 0: return 'It\'s great to see you!';
-		case 1: return 'Schön dich zu sehen';
-		case 2: return 'Do you like the service? Give us feedback!';
-		case 3: return 'Gefällt dir der Service? Lass doch ein Feedback da!';
-		case 4: return 'What a wonderful day!';
-		case 5: return 'Ein wundervoller Tag heute, oder?';
-		case 6: return 'It\'s always good to have a smile!';
-		case 7: return 'Lächeln ist immer gut!';
-		case 0: return '';
-		case 0: return '';
-		case 0: return '';
+		case 1: return 'It\'s great to see you' + nameString + '!';
+		case 2: return 'Schön dich zu sehen' + nameString + '!';
+		case 3: return 'Do you like the service? Give us feedback!';
+		case 4: return 'Gefällt dir der Service? Lass doch ein Feedback da!';
+		case 5: return 'What a wonderful day!';
+		case 6: return 'Ein wundervoller Tag heute, oder?';
+		case 7: return 'It\'s always good to have a smile!';
+		case 8: return 'Lächeln ist immer gut!';
+		case 9: return 'Take care of yourself first!';
+		case 10: return 'Pass zuerst auf dich auf!';
+		case 11: return 'Life healthy!';
+		case 12: return 'Lebe gesund!';
+		case 13: return 'Good ' + getDayTimeString(EN) + nameString + '!';
+		case 14: return 'Guten ' + getDayTimeString(DE) + nameString + '!';
+		case 15: return '';
+		case 16: return '';
+		case 17: return '';
+		case 18: return '';
+		case 19: return '';
+		case 20: return '';
+		default: return 'Schön dich zu sehen!';
 	}
+}
+
+function getDayTimeString(locale) {
+	var date = new Date();
+	var hours = date.getHours();
+	if(hours < 4 && locale === EN)
+		return 'night session';
+	if(hours < 4 && locale === DE)
+		return 'Nacht Session';
+	if(hours < 13 && locale === EN)
+		return 'morning';
+	if(hours < 13 && locale === DE)
+		return 'Morgen';
+	if(hours < 15 && locale === EN)
+		return 'lunch break';
+	if(hours < 15 && locale === DE)
+		return 'Mittag';
+	if(hours < 18 && locale === EN)
+		return 'afternoon';
+	if(hours < 18 && locale === DE)
+		return 'Nachmittag';
+	if(hours < 23 && locale === EN)
+		return 'evening';
+	if(hours < 23 && locale === DE)
+		return 'Abend';
+	if(locale === EN)
+		return 'night session';
+	return 'Nacht Session';
+}
+
+function getName() {
+	if(gapi) {
+		var authInstance = gapi.auth2.getAuthInstance();
+		if(authInstance) {
+			var user = authInstance.currentUser.get();
+			if(user) {
+				var profile = user.getBasicProfile();
+				if(profile) {
+					return profile.Ph;
+				}
+			}
+		}
+	}
+}
+
+function toast(toast) {
+	var toasts = document.querySelector('social-contacts-toasts');
+	toasts.querySelector('#' + toast).show();
 }
